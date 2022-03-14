@@ -36,7 +36,7 @@ GL/glew.h
 windows.h
 -
 
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/external/glew-1.13.0/src/glew.c
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/external/glew-1.13.0/src/glew.c
 GL/glew.h
 -
 GL/wglew.h

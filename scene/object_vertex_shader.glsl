@@ -29,5 +29,10 @@ void main(){
         UV = vertexUV;
         normal = normalIn;
         pos = (model * vec4(vertices_position_modelspace,1)).xyz;
+
+
+        //gl_Position = projection * vec4(vertices_position_modelspace,1);
+
+
 }       
 

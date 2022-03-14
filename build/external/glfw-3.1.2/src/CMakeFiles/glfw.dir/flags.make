@@ -6,5 +6,5 @@ C_FLAGS = -fPIC   -Wall
 
 C_DEFINES = -DGLEW_STATIC -DTW_NO_DIRECT3D -DTW_NO_LIB_PRAGMA -DTW_STATIC -D_CRT_SECURE_NO_WARNINGS -D_GLFW_USE_CONFIG_H
 
-C_INCLUDES = -I/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/external/glfw-3.1.2/src -I/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/glfw-3.1.2/src 
+C_INCLUDES = -I/home/sylvain/Documents/MoteurDeJeu/Minecraft/external/glfw-3.1.2/src -I/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/glfw-3.1.2/src 
 

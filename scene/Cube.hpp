@@ -18,14 +18,19 @@ public:
         tmp.applyTranslation(pos);
 		tmp.applyTransformation(parent);
 
+        //glUseProgram(programID);
 
-		
+		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
+        glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
+		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+
         
         int p2 = 1;
         for(int i = 0 ; i< 6 ; i ++){
 
-            if(visibility & p2)
-            faces[i].draw(tmp);
+            if(visibility & p2){
+                faces[i].draw(tmp);
+            }
 
             p2*=2;
         }

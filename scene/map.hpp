@@ -22,8 +22,51 @@ class Chunk{
 
         map<int, map<int, map<int, int>>> bendel;
 
-    Chunk(const siv::PerlinNoise &perlin, int sx, int sy){
-        //cout<<"GENERATING !!"<<BENDEL;
+        vector<Cube>* c_types;
+
+        Mesh gigaMesh;
+
+        GLuint viewMatrix_uniform;
+        GLuint projectionMatrix_uniform;
+        GLuint viewPosUniform;
+
+
+    void makeGigaMesh(){
+        gigaMesh = Mesh();
+        int ind = 0;
+        for(int i = 0 ; i < cubes.size() ; i++){
+            int p2 = 1;
+            for(int j = 0 ; j< 6 ; j ++){
+                if(visibility[i] & p2){
+                    c_types->at(type[i]).faces[j];
+
+                    for(int k = 0 ; k < c_types->at(type[i]).faces[j].indices.size() ; k ++){
+                        gigaMesh.indices.push_back(c_types->at(type[i]).faces[j].indices[k] + ind);
+                    }
+
+                    for(int k = 0 ; k < c_types->at(type[i]).faces[j].indexed_vertices.size() ; k ++){
+                        ind++;
+                        vec3 pos = vec3(cubes[i][0], cubes[i][2], cubes[i][1]);  
+                        //cout<<c_types->at(type[i]).faces[j].indexed_vertices[k]+pos<<endl;
+                        //pos = vec3(0,0,0);
+                        gigaMesh.indexed_vertices.push_back(c_types->at(type[i]).faces[j].indexed_vertices[k]+pos);
+                        gigaMesh.normals.push_back(c_types->at(type[i]).faces[j].normals[k]);
+                        gigaMesh.uvs.push_back(c_types->at(type[i]).faces[j].uvs[k]);
+                    }
+                }
+                p2*=2;
+            }
+        }
+
+        // cout<<"gigaMesh.indices.size() "<<gigaMesh.indices.size()<<endl;
+        // cout<<"gigaMesh.normals.size() "<<gigaMesh.normals.size()<<endl;
+        // cout<<"gigaMesh.uvs.size() "<<gigaMesh.uvs.size()<<endl;
+
+    }
+
+    Chunk(const siv::PerlinNoise &perlin, int sx, int sy, vector<Cube>* c, GLuint programID){
+        c_types = c;
+        //cout<<"GENERATING !!"<<endl;
         startX = sx;
         startY = sy;
 
@@ -35,7 +78,8 @@ class Chunk{
                 //std::cout << noise << '\t';
                 double seaLevel = 0.25;
 
-                for(int k = 0 ; k < 2 ; k ++){
+                for(int k = 0 ; k < 10 ; k ++){
+                    
                     ivec3 pos = vec3(x,y,(noise>seaLevel?noise:seaLevel)*100-100-k);
                     cubes.push_back(pos);
                     type.push_back(noise<seaLevel?4:noise<0.3?3:noise<0.7?0:2);
@@ -121,13 +165,45 @@ class Chunk{
                 //     tmpVis = tmpVis & (~2);
                 // }
             //}
-
+            
             visibility.push_back(tmpVis);
         }
+
+        makeGigaMesh();
+        glUseProgram(programID);
+        gigaMesh.texture = c->at(0).mesh.texture;
+        gigaMesh.textureLocation0 = c->at(0).mesh.textureLocation0;
+
+        //gigaMes.h.loadTexture("../textures/minecraft/grass.bmp");
+    
+		
+        gigaMesh.loadOnGpu(programID);
+
+        gigaMesh.texture = c->at(0).faces[0].texture;
+        gigaMesh.textureLocation0 = c->at(0).faces[0].textureLocation0;
+
+        gigaMesh.texture = 6;
+
+		viewMatrix_uniform = glGetUniformLocation(programID,"view");
+		projectionMatrix_uniform = glGetUniformLocation(programID,"projection");
+		viewPosUniform = glGetUniformLocation(programID , "viewPos");
+
     }
 
     Chunk(){
 
+    }
+
+    void draw(Camera camera, GLuint programID){
+
+        glUseProgram(programID);
+
+		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
+        glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
+		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+        
+        Transform tmp = Transform();
+        gigaMesh.draw(tmp);
     }
 };
 
@@ -141,14 +217,12 @@ class Map {
     vector<Cube> c_types;
 
     int size = 100;
-    int renderDistance = 3; //chunks
+    int renderDistance = 15; //chunks
 
     const siv::PerlinNoise::seed_type seed = 123456u;
     const siv::PerlinNoise perlin{ seed };
 
     GLuint programID;
-
-
 
     Map(GLuint GameObjectShader){
         programID = GameObjectShader;
@@ -173,9 +247,8 @@ class Map {
     void draw(Camera camera){
         ivec2 playerChunk = vec2(camera.position[0]/16,camera.position[2]/16);
 
-        glUseProgram(programID);
-
-		camera.giveItToMe(programID);
+        //glUseProgram(programID);
+		//camera.giveItToMe(programID);
 
         for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
             for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
@@ -186,22 +259,30 @@ class Map {
                     chunks[ix] = map<int, Chunk>();
 
                 if(chunks[ix].find(iy) == chunks[ix].end()){
-                    chunks[ix][iy] = Chunk(perlin, x*16, y*16);
-                    //cout<<x<<" "<<y<<endl;
+                    chunks[ix][iy] = Chunk(perlin, x*16, y*16, &c_types,programID);
+                    //cout<<x<<" "<
+                    
+                   
                 }
 
-                for(int i = 0 ; i < chunks[ix][iy].cubes.size() ; i++){
-                    vec3 pos = vec3(chunks[ix][iy].cubes[i][0],chunks[ix][iy].cubes[i][2],chunks[ix][iy].cubes[i][1]);
-                    float dist = (length(pos-camera.position));
-                    float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
+                
+                //camera.giveItToMe(programID);
+                chunks[ix][iy].draw(camera, programID);
 
-                    //if(dist < (renderDistance-1)*16 &&  ang>cos(camera.fov)){
-                    if(ang>cos(camera.fov)){
-                        c_types[chunks[ix][iy].type[i]].pos = pos;
-                        c_types[chunks[ix][iy].type[i]].visibility = chunks[ix][iy].visibility[i];
-                        c_types[chunks[ix][iy].type[i]].draw(camera);
-                    }
-                }
+
+
+                // for(int i = 0 ; i < chunks[ix][iy].cubes.size() ; i++){
+                //     vec3 pos = vec3(chunks[ix][iy].cubes[i][0],chunks[ix][iy].cubes[i][2],chunks[ix][iy].cubes[i][1]);
+                //     float dist = (length(pos-camera.position));
+                //     float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
+
+                //     //if(dist < (renderDistance-1)*16 &&  ang>cos(camera.fov)){
+                //     if(ang>cos(camera.fov)){
+                //         c_types[chunks[ix][iy].type[i]].pos = pos;
+                //         c_types[chunks[ix][iy].type[i]].visibility = chunks[ix][iy].visibility[i];
+                //         c_types[chunks[ix][iy].type[i]].draw(camera);
+                //     }
+                // }
             }
         }
     }

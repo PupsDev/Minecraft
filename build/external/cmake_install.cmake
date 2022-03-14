@@ -1,4 +1,4 @@
-# Install script for directory: /home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/external
+# Install script for directory: /home/sylvain/Documents/MoteurDeJeu/Minecraft/external
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/glfw-3.1.2/cmake_install.cmake")
+  include("/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/glfw-3.1.2/cmake_install.cmake")
 
 endif()
 

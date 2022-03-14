@@ -46,4 +46,6 @@ void main(){
         color = result;
         //color = normalize(viewPos);
         //color = normal;
+
+        //color = vec3(1,0,0);
 }

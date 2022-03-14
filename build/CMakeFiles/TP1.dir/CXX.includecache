@@ -850,7 +850,7 @@ map
 scene/PerlinNoise.hpp
 ../scene/scene/PerlinNoise.hpp
 
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/Terrain.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/Terrain.hpp
 vector
 -
 iostream
@@ -858,7 +858,7 @@ iostream
 common/texture.hpp
 -
 
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/tp1.cpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/tp1.cpp
 stdio.h
 -
 stdlib.h
@@ -890,17 +890,17 @@ common/vboindexer.hpp
 common/texture.hpp
 -
 scene/Transform.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/Transform.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/Transform.hpp
 scene/Camera.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/Camera.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/Camera.hpp
 scene/Mesh.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/Mesh.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/Mesh.hpp
 scene/GameObject.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/GameObject.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/GameObject.hpp
 Terrain.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/Terrain.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/Terrain.hpp
 scene/Cube.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/Cube.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/Cube.hpp
 scene/map.hpp
-/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/TP1/scene/map.hpp
+/home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/scene/map.hpp
 

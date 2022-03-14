@@ -1,4 +1,4 @@
-# Install script for directory: /home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien
+# Install script for directory: /home/sylvain/Documents/MoteurDeJeu/Minecraft
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/cmake_install.cmake")
+  include("/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

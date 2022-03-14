@@ -1,9 +1,9 @@
 
-if (NOT EXISTS "/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/glfw-3.1.2/install_manifest.txt")
-  message(FATAL_ERROR "Cannot find install manifest: \"/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/glfw-3.1.2/install_manifest.txt\"")
+if (NOT EXISTS "/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/glfw-3.1.2/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: \"/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/glfw-3.1.2/install_manifest.txt\"")
 endif()
 
-file(READ "/home/e20180003416/Documents/Cours/M1/S2/moteurDeJeu/minecraft/versionbien/build/external/glfw-3.1.2/install_manifest.txt" files)
+file(READ "/home/sylvain/Documents/MoteurDeJeu/Minecraft/build/external/glfw-3.1.2/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

@@ -94,7 +94,7 @@ int main( void )
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( 900*(16.0/9.0), 900, "TP1 - GLFW", NULL, NULL);
+    window = glfwCreateWindow( 1920,1080, "TP1 - GLFW", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -150,6 +150,7 @@ int main( void )
     Camera camera(programID);
 
     Terrain myTerrain = Terrain(programID);
+
     myTerrain.setResolution(resolution);
     myTerrain.loadOnRam();
     myTerrain.loadOnGpu();
@@ -239,7 +240,7 @@ int main( void )
         // glm::mat4 tmp3 = glm::rotate(tmp, 0.05f, glm::vec3(1.0, 0.0, 0.0));
 
         
-        // //suz.draw(camera);
+        //suz.draw(camera);
         // //suz2.draw(camera);
         // //myTerrain.draw(camera);
 
