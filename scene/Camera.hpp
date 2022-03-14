@@ -4,7 +4,7 @@ public:
 	glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-	vec3 position; // TODO faudra faire ça bien un jour et faire les calculs dans la classe camera
+	vec3 position; // TODO faudra faire ça bien un jour et faire les calculs dans la classe camera (jai fais des truc)
     vec3 direction;
 
 	GLuint programID;
