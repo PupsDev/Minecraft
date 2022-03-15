@@ -18,7 +18,7 @@ public:
         tmp.applyTranslation(pos);
 		tmp.applyTransformation(parent);
 
-        //glUseProgram(programID);
+        glUseProgram(programID);
 
 		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
         glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
@@ -185,7 +185,7 @@ public:
 
         for(int j = 0 ; j < faces.size() ; j ++){
             for(int i = 0 ; i < faces[j].indexed_vertices.size() ; i++){
-                cout<<"i : "<<i<<endl;
+                //cout<<"i : "<<i<<endl;
                 faces[j].indices.push_back(i);
             }
         }

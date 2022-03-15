@@ -202,6 +202,7 @@ int main( void )
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        if(1/deltaTime<60)
         cout<<"fps : "<<1/deltaTime<<endl;
 
         // input
@@ -329,11 +330,11 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS){
         resolution += deltaTime*10;
-        cout<<"resolution : "<<(int)resolution<<endl;
+        //cout<<"resolution : "<<(int)resolution<<endl;
     }
     if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS){
         resolution -= deltaTime*10;
-        cout<<"resolution : "<<(int)resolution<<endl;
+        //cout<<"resolution : "<<(int)resolution<<endl;
     }
 
 

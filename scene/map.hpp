@@ -25,7 +25,7 @@ class Map {
     Cube c;
 
     int size = 100;
-    int renderDistance = 30; //chunks
+    int renderDistance = 15; //chunks
 
     const siv::PerlinNoise::seed_type seed = 123456u;
     const siv::PerlinNoise perlin{ seed };
@@ -69,6 +69,8 @@ class Map {
         //glUseProgram(programID);
 		//camera.giveItToMe(programID);
 
+        //cout<<"nbThread "<<nbThread<<endl;
+
         for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
             for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
                 int ix = (x<0 ? x*-2 +1 : x*2);
@@ -84,34 +86,25 @@ class Map {
                 //camera.giveItToMe(programID);
                 if(chunks[ix][iy].status == 0){
                     if(nbThread < maxThread){
-                        nbThread ++;
+                        //nbThread ++;
                         chunks[ix][iy].status = 1;
-                        chunks[ix][iy].myOwnThread = new thread(constructChunk, &chunks[ix][iy], perlin, x*16, y*16, &c);
+                        chunks[ix][iy].myOwnThread = new thread(constructChunk, &chunks[ix][iy], perlin, x*16, y*16, &c, &nbThread);
+                        
+                        
                     }
                 }
                 if(chunks[ix][iy].status == 2){
                     chunks[ix][iy].loadOnGpu(programID, gigaTexture);
-                    nbThread --;
+                    //nbThread --;
                 }
                 if(chunks[ix][iy].status == 3){
-                    //cout<<"ici 3"<<endl;
-                    chunks[ix][iy].draw(camera, programID);
+                    vec3 pos = vec3(chunks[ix][iy].startX+8,camera.position[1],chunks[ix][iy].startY+8);
+                    float dist = (length(pos-camera.position));
+                    float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
+                    if(dist<64 || ang>cos(camera.fov)){
+                        chunks[ix][iy].draw(camera, programID);
+                    }
                 }
-
-
-
-                // for(int i = 0 ; i < chunks[ix][iy].cubes.size() ; i++){
-                //     vec3 pos = vec3(chunks[ix][iy].cubes[i][0],chunks[ix][iy].cubes[i][2],chunks[ix][iy].cubes[i][1]);
-                //     float dist = (length(pos-camera.position));
-                //     float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
-
-                //     //if(dist < (renderDistance-1)*16 &&  ang>cos(camera.fov)){
-                //     if(ang>cos(camera.fov)){
-                //         c_types[chunks[ix][iy].type[i]].pos = pos;
-                //         c_types[chunks[ix][iy].type[i]].visibility = chunks[ix][iy].visibility[i];
-                //         c_types[chunks[ix][iy].type[i]].draw(camera);
-                //     }
-                // }
             }
         }
     }

@@ -77,12 +77,25 @@ class Chunk{
                 const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
                 //std::cout << noise << '\t';
                 double seaLevel = 0.25;
+                int z = (noise>seaLevel?noise:seaLevel)*100-seaLevel*100+5;
+                int baseType = 
+                    noise<seaLevel?4:
+                    noise<0.3?2:
+                    noise<0.7?0:
+                    3;
 
-                for(int k = 0 ; k < 10 ; k ++){
-                    
-                    ivec3 pos = vec3(x,y,(noise>seaLevel?noise:seaLevel)*100-100-k);
+                //cout<<z<<endl;
+
+                for(int k = 0 ; k <= z ; k ++){
+                    int realType =
+                        k == z ? baseType :
+                        baseType == 0 && k > z-3 ? 1 :
+                        baseType == 2 && k > z-3 ? 2 :
+                        baseType == 4 ? 4:
+                        3;
+                    ivec3 pos = vec3(x,y,k);
                     cubes.push_back(pos);
-                    type.push_back(noise<seaLevel?4:noise<0.3?3:noise<0.7?0:2);
+                    type.push_back(realType);
                     bendel[pos[0]][pos[1]][pos[2]] = i++;
                 };                
             }
@@ -162,7 +175,8 @@ class Chunk{
     }
 };
 
-void constructChunk(Chunk * self, const siv::PerlinNoise &perlin, int sx, int sy, Cube * c){
+void constructChunk(Chunk * self, const siv::PerlinNoise &perlin, int sx, int sy, Cube * c, int * nbThread){
+    (*nbThread)++;
     self->generate(perlin, sx, sy, c);
-
+    (*nbThread)--;
 }
