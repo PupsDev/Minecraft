@@ -99,6 +99,7 @@ CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../external/glm-0.9.7.1/glm/vec3.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../external/glm-0.9.7.1/glm/vec4.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../external/glm-0.9.7.1/glm/vector_relational.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../scene/Camera.hpp
+CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../scene/Chunk.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../scene/Cube.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../scene/GameObject.hpp
 CMakeFiles/TP1.dir/TP1/tp1.cpp.o: ../scene/Mesh.hpp

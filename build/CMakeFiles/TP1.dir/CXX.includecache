@@ -810,6 +810,8 @@ detail/func_vector_relational.hpp
 
 ../scene/Camera.hpp
 
+../scene/Chunk.hpp
+
 ../scene/Cube.hpp
 
 ../scene/GameObject.hpp
@@ -847,8 +849,12 @@ sstream
 -
 map
 -
+thread
+-
 scene/PerlinNoise.hpp
 ../scene/scene/PerlinNoise.hpp
+scene/Chunk.hpp
+../scene/scene/Chunk.hpp
 
 /home/sylvain/Documents/MoteurDeJeu/Minecraft/TP1/Terrain.hpp
 vector
