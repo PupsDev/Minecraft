@@ -11,9 +11,12 @@ class SceneGraphInterface
 
     public:
         //virtual ~SceneGraphInterface();
-        SceneGraphInterface();
+        SceneGraphInterface()
+        {
 
-        virtual void compute(Transform *t) = 0;
+        }
+
+        virtual void apply(Transform *t) = 0;
 
 
     
@@ -28,19 +31,44 @@ class SceneGraphInterface
 class SceneGraphLeaf : public SceneGraphInterface
 {
     public:
-        SceneGraphLeaf();
-        void compute(Transform *t) override;
+        SceneGraphLeaf()
+        {
+
+        }
+        void apply(Transform *t)
+        {
+           
+            gameObject->apply(t);
+        }
 
 
 };
 class SceneGraphComposite : public SceneGraphInterface
 {
     public:
-        SceneGraphComposite();
+        SceneGraphComposite()
+        {
 
-        void compute(Transform *t) override ;
+        }
 
-        void add(SceneGraphInterface* child);
+        void apply(Transform *t)
+        {
+
+            gameObject->apply(t);
+            Transform *tlocal= gameObject->t;
+            
+            for( auto& child : children ) {
+                
+                child->apply(tlocal);
+               
+
+            }
+        }
+
+        void add(SceneGraphInterface* child)
+        {
+            children.push_back(child);
+        }
 
 };
 #endif

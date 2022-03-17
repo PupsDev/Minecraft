@@ -30,9 +30,11 @@ using namespace std;
 
 
 #include "scene/Transform.hpp"
+
 #include "scene/Camera.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/GameObject.hpp"
+#include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
 
 
@@ -129,7 +131,7 @@ int init()
 
 }
 
-int gameLoop(Map map,GameObject suz,  Camera camera)
+int gameLoop(Map map,GameObject* suz, BoundingBox* bb, Camera camera)
 {
     bool displayFPS = false;
 
@@ -165,8 +167,11 @@ int gameLoop(Map map,GameObject suz,  Camera camera)
         camera.giveItToMe();
 
         map.draw(camera);
-  
-        suz.draw(camera);
+        
+        suz->draw(camera);
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        bb->draw(camera);
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
 
 
@@ -199,9 +204,18 @@ int main( void )
     myTerrain.loadOnRam();
     myTerrain.loadOnGpu();
 
-    GameObject suz = GameObject();
-    suz.loadMesh("suzanne.off");
-    suz.loadOnGpu(GameObjectShader);
+    GameObject* suz = new GameObject();
+    suz->loadMesh("suzanne.off");
+    suz->loadOnGpu(GameObjectShader);
+
+    BoundingBox* bb = new BoundingBox();
+    bb->loadOnGpu(GameObjectShader);
+
+    SceneGraphComposite* graphSuz = new SceneGraphComposite();
+    SceneGraphLeaf* graphBB = new SceneGraphLeaf();
+    graphSuz->gameObject = suz;
+    graphBB->gameObject = bb;
+    graphSuz->add(graphBB);
 
     Map map = Map(GameObjectShader,50,10);
 
@@ -209,9 +223,12 @@ int main( void )
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     Transform * translation = new Transform(glm::vec3(0.,10.,0.));
-    suz.apply(translation);
-    
-    gameLoop(map, suz,camera);
+    translation->model = translation->getMat4();
+
+
+    graphSuz->apply(translation);
+
+    gameLoop(map, suz,bb,camera);
 
     // Cleanup VBO and shader
     //glDeleteBuffers(1, &vertexbuffer);

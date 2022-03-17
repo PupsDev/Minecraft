@@ -95,7 +95,14 @@ public:
 
 
 		//tmp.applyTransformation(parent);
+
 		t->multiply(parent);
+		
+
+	}
+	void compute(Transform * t)
+	{
+
 	}
 	void loadMesh(std::string name){
 		mesh.loadFromFile(name);

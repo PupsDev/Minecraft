@@ -15,13 +15,14 @@ class Transform
         glm::mat3 m; // rotation
         glm::vec3 translation; // translate
 
-        glm::mat4 model = glm::mat4(1.f);
+        glm::mat4 model;
 
         Transform()
         {
             this->s =1.;
             this->m = glm::mat3(1.);
             this->translation = glm::vec3(0.);
+            this->model = glm::mat4(1.f);
         }
         Transform(glm::vec3 translation)
         {
@@ -156,7 +157,7 @@ class Transform
         void multiply(Transform* t)
         {
 
-            this->model = t->getMat4()*model;
+            this->model = t->model*model;
             
         }
         Transform * inverse()
