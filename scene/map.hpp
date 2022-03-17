@@ -36,10 +36,11 @@ class Map {
     int maxThread = 10;
     int nbThread = 0;
 
-    Map(GLuint GameObjectShader){
+    Map(GLuint GameObjectShader, int size=100, int renderDistance =15){
 
         gigaTexture = loadBMP_custom("../textures/minecraft/gigaTexture.bmp",false);
-
+        size=size;
+        renderDistance = renderDistance;
 
         programID = GameObjectShader;
         

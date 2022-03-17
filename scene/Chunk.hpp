@@ -70,14 +70,18 @@ class Chunk{
         startX = sx;
         startY = sy;
 
+        
         int i = 0;
-
+        int levelDivisor = 100;
+        
         for(int x = startX ; x < startX+16 ; x++){
             for(int y = startY ; y < startY+16 ; y ++){
                 const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
                 //std::cout << noise << '\t';
                 double seaLevel = 0.25;
                 int z = (noise>seaLevel?noise:seaLevel)*100-seaLevel*100+5;
+                //std::cout << z << '\t';
+                
                 int baseType = 
                     noise<seaLevel?4:
                     noise<0.3?2:
@@ -85,7 +89,7 @@ class Chunk{
                     3;
 
                 //cout<<z<<endl;
-
+                z/=levelDivisor -1;
                 for(int k = 0 ; k <= z ; k ++){
                     int realType =
                         k == z ? baseType :

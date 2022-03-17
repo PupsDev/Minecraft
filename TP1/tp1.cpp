@@ -68,16 +68,8 @@ float resolution = 64.0;
 float rotationSpeed = 1.0f;
 bool cameraMode = true;
 bool pvp = false;
-/*******************************************************************************/
 
-
-
-// ostream& operator<<(ostream& os, const glm::vec3& v){
-//     return(os<<v[0]<<", "<<v[1]<<", "<<v[2]);
-// }
-
-
-int main( void )
+int init()
 {
     // Initialise GLFW
     if( !glfwInit() )
@@ -94,7 +86,7 @@ int main( void )
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( 1920,1080, "TP1 - GLFW", NULL, NULL);
+    window = glfwCreateWindow( SCR_WIDTH  ,SCR_HEIGHT, "TP1 - GLFW", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -131,93 +123,27 @@ int main( void )
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
-    // Cull triangles which normal is not towards the camera
+}
 
-
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
-
-
-
-    // Create and compile our GLSL program from the shaders
-    //GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
-    GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
-    GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
-    
-
-
-    Camera camera(programID);
-
-    Terrain myTerrain = Terrain(programID);
-
-    myTerrain.setResolution(resolution);
-    myTerrain.loadOnRam();
-    myTerrain.loadOnGpu();
-
-    GameObject suz = GameObject();
-    suz.loadMesh("suzanne.off");
-    suz.loadOnGpu(GameObjectShader);
-
-    GameObject suz3 = GameObject();
-    suz3.loadMesh("suzanne.off");
-    suz3.loadOnGpu(GameObjectShader);
-
-    GameObject suz2 = GameObject();
-    suz2.loadMesh("suzanne.off");
-    suz2.loadOnGpu(GameObjectShader);
-
-    // Cube cube = Cube();
-    // cube.loadOnGpu(GameObjectShader); 
-    // cube.mesh.loadTexture("../textures/minecraft.bmp");
-
-    myTerrain.addChild(&suz2);
-
-
-    Map map = Map(GameObjectShader);
-
-    //Terrain myTerrain = Terrain();    
-
-
-    suz2.addChild(&suz);
-    suz.addChild(&suz3);
-
-    suz3.t.applyTranslation(glm::vec3(0.0 , 1.0 , 0.0));
-    //suz2.t.applyTranslation(glm::vec3(0.0 , 1.0 , 0.0));
-
-
-    // For speed computation
-    double lastTime = glfwGetTime();
-    int nbFrames = 0;
+int gameLoop(Map map,GameObject suz,  Camera camera)
+{
+    bool displayFPS = false;
 
     do{
-        //myTerrain.setResolution(resolution);
-        //myTerrain.recompute();
-
-
-        // Measure speed
-        // per-frame time logic
-        // --------------------
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        if(1/deltaTime<60)
-        cout<<"fps : "<<1/deltaTime<<endl;
+        if(1/deltaTime<60 && displayFPS)
+            cout<<"fps : "<<1/deltaTime<<endl;
 
         // input
         // -----
         processInput(window);
 
-
-        // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Use our shader
-        //glUseProgram(programID);
 
-        
-        //glm::mat4 modelMatrix;
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
 
@@ -234,23 +160,9 @@ int main( void )
         camera.projectionMatrix = projectionMatrix;
 
 
-
-        // glm::mat4 tmp = glm::mat4(1.0);
-
-        // glm::mat4 tmp2 = glm::rotate(tmp, 0.05f, glm::vec3(0.0, 1.0, 0.0));
-        // glm::mat4 tmp3 = glm::rotate(tmp, 0.05f, glm::vec3(1.0, 0.0, 0.0));
-
-        
-        //suz.draw(camera);
-        // //suz2.draw(camera);
-        // //myTerrain.draw(camera);
-
-        // //cube.draw(camera);
         map.draw(camera);
+        suz.draw(camera);
 
-        // suz.t.applyTranslation(glm::vec3(0.5*deltaTime, 0.0, 0.0));
-        // suz2.t.applyTransformation(Transform::convertMat4(tmp2));
-        // suz3.t.applyTransformation(Transform::convertMat4(tmp3));
 
 
         glfwSwapBuffers(window);
@@ -259,6 +171,43 @@ int main( void )
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
            glfwWindowShouldClose(window) == 0 );
+}
+int main( void )
+{
+    init();
+
+    GLuint VertexArrayID;
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
+
+    // Create and compile our GLSL program from the shaders
+    //GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
+    GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
+    GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
+    
+
+    Camera camera(programID);
+
+    Terrain myTerrain = Terrain(programID);
+
+    myTerrain.setResolution(resolution);
+    myTerrain.loadOnRam();
+    myTerrain.loadOnGpu();
+
+    GameObject suz = GameObject();
+    suz.loadMesh("suzanne.off");
+    suz.loadOnGpu(GameObjectShader);
+
+    myTerrain.addChild(&suz);
+
+
+    Map map = Map(GameObjectShader,50,10);
+
+    // For speed computation
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
+
+    gameLoop(map, suz,camera);
 
     // Cleanup VBO and shader
     //glDeleteBuffers(1, &vertexbuffer);
@@ -267,17 +216,11 @@ int main( void )
     glDeleteProgram(programID);
     glDeleteProgram(GameObjectShader);
 
-    //glDeleteVertexArrays(1, &VertexArrayID);
-
-    // Close OpenGL window and terminate GLFW
     glfwTerminate();
 
     return 0;
 }
 
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -360,13 +303,6 @@ void processInput(GLFWwindow *window)
         pvp = false;
     }
 
-    //cout<<cameraMode<<endl;
-
-    
-
-    
-
-    //TODO add translations
 
 }
 
