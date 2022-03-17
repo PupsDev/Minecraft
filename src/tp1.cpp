@@ -33,6 +33,10 @@ using namespace std;
 #include "scene/Camera.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/GameObject.hpp"
+#include "common/sceneGraph.hpp"
+
+
+
 
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
@@ -45,7 +49,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-glm::vec3 camera_position   = glm::vec3(0.0, 0.0, 0.0);
+glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
 //vec3(8.16655, 0.26985, -9.64445), vec3(7.8268, -0.136002, -8.79601)
 glm::vec3 camera_target = glm::vec3(1.0, 1.0, 1.0)-camera_position;
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
@@ -161,6 +165,7 @@ int gameLoop(Map map,GameObject suz,  Camera camera)
         camera.giveItToMe();
 
         map.draw(camera);
+  
         suz.draw(camera);
 
 
@@ -203,7 +208,9 @@ int main( void )
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
-
+    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
+    suz.apply(translation);
+    
     gameLoop(map, suz,camera);
 
     // Cleanup VBO and shader

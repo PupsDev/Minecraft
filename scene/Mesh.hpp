@@ -67,7 +67,7 @@ public:
 		textureLocation0 = glGetUniformLocation(programID,"myTextureSampler[0]");
     }
 
-    void draw(Transform mat){
+    void draw(Transform * mat){
 
 
     }

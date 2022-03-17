@@ -11,12 +11,13 @@ public:
     vector<Mesh> faces;
 
 
-    void draw(Camera camera, Transform parent = Transform()){ 
+    void draw(Camera camera, Transform *parent = new Transform()){ 
 		
 
-		Transform tmp = t;
-        //tmp.applyTranslation(pos);
-		//tmp.applyTransformation(parent);
+		Transform *tmp = t;
+        // wtf ?
+        //tmp->multiply (pos);
+		//tmp->multiply (parent);
 
         
         int p2 = 1;

@@ -2,7 +2,7 @@ class GameObject
 {
 public:
 
-	Transform t;
+	Transform* t;
 	Mesh mesh;
 	GLuint programID;
 
@@ -11,9 +11,8 @@ public:
 
 	GLuint viewPosUniform;
 
-    vector<GameObject*> childs;
 
-	void draw(Camera camera, Transform parent = Transform()){ 
+	void draw(Camera camera, Transform* parent = new Transform()){ 
 
 		glUseProgram(programID);
 
@@ -40,8 +39,9 @@ public:
 			
 
         // Index buffer
+		//t->printmat4();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.elementbuffer);
-        glUniformMatrix4fv(mesh.modelMatrix_uniform      , 1, false, glm::value_ptr(t.getMat4()));
+        glUniformMatrix4fv(mesh.modelMatrix_uniform      , 1, false, glm::value_ptr(t->model));
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferPlane);
         glVertexAttribPointer(
@@ -90,12 +90,12 @@ public:
 
 
 	}
-	void apply(Transform parent)
+	void apply(Transform* parent)
 	{
-		Transform tmp = t;
+
 
 		//tmp.applyTransformation(parent);
-		t = parent;
+		t->multiply(parent);
 	}
 	void loadMesh(std::string name){
 		mesh.loadFromFile(name);
@@ -114,14 +114,12 @@ public:
 
 
 	GameObject(){
-		t = Transform();
+		t = new  Transform();
 		mesh = Mesh();
-		childs = vector<GameObject*>(0);
 	}
 	GameObject(Mesh m_mesh){
-		t = Transform();
+		t = new Transform();
 		mesh = m_mesh;
-		childs = vector<GameObject*>(0);
 	}
 
 

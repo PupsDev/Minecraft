@@ -137,16 +137,16 @@ public:
 	    glBufferData(GL_ELEMENT_ARRAY_BUFFER, heightMap.size() * sizeof(GL_FLOAT), &heightMap[0] , GL_STATIC_DRAW);*/
 	}
 
-	void draw(Camera camera, Transform parent = Transform()){
+	void draw(Camera camera, Transform* parent = new Transform()){
 		
 
 		glUseProgram(programID);
 
-		Transform tmp = t;
+		Transform * tmp = t;
 
 		//tmp.applyTransformation(parent);
-
-		glUniformMatrix4fv(modelMatrix_uniform, 1, false, glm::value_ptr(tmp.getMat4()));
+		tmp->multiply(parent);
+		glUniformMatrix4fv(modelMatrix_uniform, 1, false, glm::value_ptr(tmp->getMat4()));
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

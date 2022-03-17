@@ -93,6 +93,21 @@ class Transform
             
 
          }
+        void printmat4()
+         {
+
+            for(int i = 0 ; i < 4;i++)
+            {
+                for(int j=0;j<4;j++)
+                {
+                    std::cout<<glm::value_ptr(model)[i*4+j]<<" ";
+                }
+                std::cout<<"\n";
+
+            }
+            
+
+         }
         static glm::mat3 convertMat4(glm::mat4 mat)
                 {
             const float *matrix = glm::value_ptr(mat);
@@ -130,13 +145,19 @@ class Transform
             result.s = this->s*k + t.s*(1-k);
             return result;
         }
-        Transform* multiply(Transform* t)
+        /*static Transform* multiply(Transform* t)
         {
             Transform * result = new Transform();
             result->s = this->s*t->s;
             result->m = this->m*t->m;
             result->translation = this->translation+t->translation;
             return result;
+        }*/
+        void multiply(Transform* t)
+        {
+
+            this->model = t->getMat4()*model;
+            
         }
         Transform * inverse()
         {

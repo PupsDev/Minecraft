@@ -179,7 +179,7 @@ class Chunk{
         glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
 		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
         
-        Transform tmp = Transform();
+        Transform * tmp = new  Transform();
         gigaObject.apply(tmp);
         gigaObject.draw(camera);
 
