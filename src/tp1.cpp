@@ -158,7 +158,7 @@ int gameLoop(Map map,GameObject suz,  Camera camera)
 
         camera.viewMatrix = viewMatrix;
         camera.projectionMatrix = projectionMatrix;
-
+        camera.giveItToMe();
 
         map.draw(camera);
         suz.draw(camera);
@@ -197,9 +197,6 @@ int main( void )
     GameObject suz = GameObject();
     suz.loadMesh("suzanne.off");
     suz.loadOnGpu(GameObjectShader);
-
-    myTerrain.addChild(&suz);
-
 
     Map map = Map(GameObjectShader,50,10);
 

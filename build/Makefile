@@ -162,17 +162,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named TP1
+# Target rules for targets named src
 
 # Build rule for target.
-TP1: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TP1
-.PHONY : TP1
+src: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src
+.PHONY : src
 
 # fast build rule for target.
-TP1/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/build
-.PHONY : TP1/fast
+src/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/build
+.PHONY : src/fast
 
 #=============================================================================
 # Target rules for targets named GLEW_1130
@@ -512,36 +512,36 @@ windows/fast:
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/windows.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/windows.dir/build
 .PHONY : windows/fast
 
-TP1/tp1.o: TP1/tp1.cpp.o
-.PHONY : TP1/tp1.o
+common/GameObject.o: common/GameObject.cpp.o
+.PHONY : common/GameObject.o
 
 # target to build an object file
-TP1/tp1.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/TP1/tp1.cpp.o
-.PHONY : TP1/tp1.cpp.o
+common/GameObject.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/GameObject.cpp.o
+.PHONY : common/GameObject.cpp.o
 
-TP1/tp1.i: TP1/tp1.cpp.i
-.PHONY : TP1/tp1.i
+common/GameObject.i: common/GameObject.cpp.i
+.PHONY : common/GameObject.i
 
 # target to preprocess a source file
-TP1/tp1.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/TP1/tp1.cpp.i
-.PHONY : TP1/tp1.cpp.i
+common/GameObject.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/GameObject.cpp.i
+.PHONY : common/GameObject.cpp.i
 
-TP1/tp1.s: TP1/tp1.cpp.s
-.PHONY : TP1/tp1.s
+common/GameObject.s: common/GameObject.cpp.s
+.PHONY : common/GameObject.s
 
 # target to generate assembly for a file
-TP1/tp1.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/TP1/tp1.cpp.s
-.PHONY : TP1/tp1.cpp.s
+common/GameObject.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/GameObject.cpp.s
+.PHONY : common/GameObject.cpp.s
 
 common/controls.o: common/controls.cpp.o
 .PHONY : common/controls.o
 
 # target to build an object file
 common/controls.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/controls.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/controls.cpp.o
 .PHONY : common/controls.cpp.o
 
 common/controls.i: common/controls.cpp.i
@@ -549,7 +549,7 @@ common/controls.i: common/controls.cpp.i
 
 # target to preprocess a source file
 common/controls.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/controls.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/controls.cpp.i
 .PHONY : common/controls.cpp.i
 
 common/controls.s: common/controls.cpp.s
@@ -557,7 +557,7 @@ common/controls.s: common/controls.cpp.s
 
 # target to generate assembly for a file
 common/controls.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/controls.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/controls.cpp.s
 .PHONY : common/controls.cpp.s
 
 common/objloader.o: common/objloader.cpp.o
@@ -565,7 +565,7 @@ common/objloader.o: common/objloader.cpp.o
 
 # target to build an object file
 common/objloader.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/objloader.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/objloader.cpp.o
 .PHONY : common/objloader.cpp.o
 
 common/objloader.i: common/objloader.cpp.i
@@ -573,7 +573,7 @@ common/objloader.i: common/objloader.cpp.i
 
 # target to preprocess a source file
 common/objloader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/objloader.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/objloader.cpp.i
 .PHONY : common/objloader.cpp.i
 
 common/objloader.s: common/objloader.cpp.s
@@ -581,15 +581,39 @@ common/objloader.s: common/objloader.cpp.s
 
 # target to generate assembly for a file
 common/objloader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/objloader.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/objloader.cpp.s
 .PHONY : common/objloader.cpp.s
+
+common/sceneGraph.o: common/sceneGraph.cpp.o
+.PHONY : common/sceneGraph.o
+
+# target to build an object file
+common/sceneGraph.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/sceneGraph.cpp.o
+.PHONY : common/sceneGraph.cpp.o
+
+common/sceneGraph.i: common/sceneGraph.cpp.i
+.PHONY : common/sceneGraph.i
+
+# target to preprocess a source file
+common/sceneGraph.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/sceneGraph.cpp.i
+.PHONY : common/sceneGraph.cpp.i
+
+common/sceneGraph.s: common/sceneGraph.cpp.s
+.PHONY : common/sceneGraph.s
+
+# target to generate assembly for a file
+common/sceneGraph.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/sceneGraph.cpp.s
+.PHONY : common/sceneGraph.cpp.s
 
 common/shader.o: common/shader.cpp.o
 .PHONY : common/shader.o
 
 # target to build an object file
 common/shader.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/shader.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/shader.cpp.o
 .PHONY : common/shader.cpp.o
 
 common/shader.i: common/shader.cpp.i
@@ -597,7 +621,7 @@ common/shader.i: common/shader.cpp.i
 
 # target to preprocess a source file
 common/shader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/shader.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/shader.cpp.i
 .PHONY : common/shader.cpp.i
 
 common/shader.s: common/shader.cpp.s
@@ -605,7 +629,7 @@ common/shader.s: common/shader.cpp.s
 
 # target to generate assembly for a file
 common/shader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/shader.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/shader.cpp.s
 .PHONY : common/shader.cpp.s
 
 common/texture.o: common/texture.cpp.o
@@ -613,7 +637,7 @@ common/texture.o: common/texture.cpp.o
 
 # target to build an object file
 common/texture.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/texture.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/texture.cpp.o
 .PHONY : common/texture.cpp.o
 
 common/texture.i: common/texture.cpp.i
@@ -621,7 +645,7 @@ common/texture.i: common/texture.cpp.i
 
 # target to preprocess a source file
 common/texture.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/texture.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/texture.cpp.i
 .PHONY : common/texture.cpp.i
 
 common/texture.s: common/texture.cpp.s
@@ -629,7 +653,7 @@ common/texture.s: common/texture.cpp.s
 
 # target to generate assembly for a file
 common/texture.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/texture.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/texture.cpp.s
 .PHONY : common/texture.cpp.s
 
 common/vboindexer.o: common/vboindexer.cpp.o
@@ -637,7 +661,7 @@ common/vboindexer.o: common/vboindexer.cpp.o
 
 # target to build an object file
 common/vboindexer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/vboindexer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/vboindexer.cpp.o
 .PHONY : common/vboindexer.cpp.o
 
 common/vboindexer.i: common/vboindexer.cpp.i
@@ -645,7 +669,7 @@ common/vboindexer.i: common/vboindexer.cpp.i
 
 # target to preprocess a source file
 common/vboindexer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/vboindexer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/vboindexer.cpp.i
 .PHONY : common/vboindexer.cpp.i
 
 common/vboindexer.s: common/vboindexer.cpp.s
@@ -653,8 +677,32 @@ common/vboindexer.s: common/vboindexer.cpp.s
 
 # target to generate assembly for a file
 common/vboindexer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TP1.dir/build.make CMakeFiles/TP1.dir/common/vboindexer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/common/vboindexer.cpp.s
 .PHONY : common/vboindexer.cpp.s
+
+src/tp1.o: src/tp1.cpp.o
+.PHONY : src/tp1.o
+
+# target to build an object file
+src/tp1.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/src/tp1.cpp.o
+.PHONY : src/tp1.cpp.o
+
+src/tp1.i: src/tp1.cpp.i
+.PHONY : src/tp1.i
+
+# target to preprocess a source file
+src/tp1.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/src/tp1.cpp.i
+.PHONY : src/tp1.cpp.i
+
+src/tp1.s: src/tp1.cpp.s
+.PHONY : src/tp1.s
+
+# target to generate assembly for a file
+src/tp1.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/src/tp1.cpp.s
+.PHONY : src/tp1.cpp.s
 
 # Help Target
 help:
@@ -670,7 +718,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... uninstall"
 	@echo "... GLEW_1130"
-	@echo "... TP1"
 	@echo "... boing"
 	@echo "... clipboard"
 	@echo "... cursor"
@@ -690,20 +737,24 @@ help:
 	@echo "... sharing"
 	@echo "... simple"
 	@echo "... splitview"
+	@echo "... src"
 	@echo "... tearing"
 	@echo "... threads"
 	@echo "... title"
 	@echo "... wave"
 	@echo "... windows"
-	@echo "... TP1/tp1.o"
-	@echo "... TP1/tp1.i"
-	@echo "... TP1/tp1.s"
+	@echo "... common/GameObject.o"
+	@echo "... common/GameObject.i"
+	@echo "... common/GameObject.s"
 	@echo "... common/controls.o"
 	@echo "... common/controls.i"
 	@echo "... common/controls.s"
 	@echo "... common/objloader.o"
 	@echo "... common/objloader.i"
 	@echo "... common/objloader.s"
+	@echo "... common/sceneGraph.o"
+	@echo "... common/sceneGraph.i"
+	@echo "... common/sceneGraph.s"
 	@echo "... common/shader.o"
 	@echo "... common/shader.i"
 	@echo "... common/shader.s"
@@ -713,6 +764,9 @@ help:
 	@echo "... common/vboindexer.o"
 	@echo "... common/vboindexer.i"
 	@echo "... common/vboindexer.s"
+	@echo "... src/tp1.o"
+	@echo "... src/tp1.i"
+	@echo "... src/tp1.s"
 .PHONY : help
 
 

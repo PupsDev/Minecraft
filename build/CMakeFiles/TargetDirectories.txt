@@ -1,4 +1,4 @@
-/home/pups/Documents/Minecraft/build/CMakeFiles/TP1.dir
+/home/pups/Documents/Minecraft/build/CMakeFiles/src.dir
 /home/pups/Documents/Minecraft/build/CMakeFiles/edit_cache.dir
 /home/pups/Documents/Minecraft/build/CMakeFiles/rebuild_cache.dir
 /home/pups/Documents/Minecraft/build/CMakeFiles/list_install_components.dir

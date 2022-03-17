@@ -19,8 +19,9 @@ class Chunk{
         map<int, map<int, map<int, int>>> bendel;
 
         Cube * cubeSample;
-
+        GameObject gigaObject;
         Mesh gigaMesh;
+        
 
         GLuint viewMatrix_uniform;
         GLuint projectionMatrix_uniform;
@@ -29,11 +30,14 @@ class Chunk{
 
     Chunk(){
         status = 0;
+        gigaMesh =  Mesh();
+        gigaObject =  GameObject();
     }
 
 
     void makeGigaMesh(){
-        gigaMesh = Mesh();
+        
+        
         int ind = 0;
         for(int i = 0 ; i < cubes.size() ; i++){
             int p2 = 1;
@@ -60,6 +64,7 @@ class Chunk{
                 p2*=2;
             }
         }
+        gigaObject.mesh = gigaMesh;
     }
 
     //Chunk(const siv::PerlinNoise &perlin, int sx, int sy, Cube * c, GLuint programID, GLuint texture){
@@ -89,7 +94,7 @@ class Chunk{
                     3;
 
                 //cout<<z<<endl;
-                z/=levelDivisor -1;
+                z= z /levelDivisor ;
                 for(int k = 0 ; k <= z ; k ++){
                     int realType =
                         k == z ? baseType :
@@ -155,8 +160,8 @@ class Chunk{
     void loadOnGpu(GLuint programID, GLuint texture){
         glUseProgram(programID);
 
-        gigaMesh.texture = texture;
-        gigaMesh.loadOnGpu(programID);
+        gigaObject.mesh.texture = texture;
+        gigaObject.mesh.loadOnGpu(programID);
 
 		viewMatrix_uniform = glGetUniformLocation(programID,"view");
 		projectionMatrix_uniform = glGetUniformLocation(programID,"projection");
@@ -175,7 +180,9 @@ class Chunk{
 		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
         
         Transform tmp = Transform();
-        gigaMesh.draw(tmp);
+        gigaObject.apply(tmp);
+        gigaObject.draw(camera);
+
     }
 };
 

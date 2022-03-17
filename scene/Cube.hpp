@@ -15,14 +15,8 @@ public:
 		
 
 		Transform tmp = t;
-        tmp.applyTranslation(pos);
-		tmp.applyTransformation(parent);
-
-        glUseProgram(programID);
-
-		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
-        glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
-		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+        //tmp.applyTranslation(pos);
+		//tmp.applyTransformation(parent);
 
         
         int p2 = 1;
@@ -35,9 +29,6 @@ public:
             p2*=2;
         }
 
-		for(int i = 0 ; i < childs.size() ; i ++){
-			childs[i]->draw(camera,tmp);
-		}
 	}
 
     void loadOnGpu(GLuint id){

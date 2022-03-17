@@ -144,9 +144,9 @@ public:
 
 		Transform tmp = t;
 
-		tmp.applyTransformation(parent);
+		//tmp.applyTransformation(parent);
 
-		glUniformMatrix4fv(modelMatrix_uniform, 1, false, glm::value_ptr(tmp.getMatrix()));
+		glUniformMatrix4fv(modelMatrix_uniform, 1, false, glm::value_ptr(tmp.getMat4()));
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

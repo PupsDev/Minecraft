@@ -15,36 +15,88 @@ public:
 
 	void draw(Camera camera, Transform parent = Transform()){ 
 
-		
-		
-
-		Transform tmp = t;
-
-		tmp.applyTransformation(parent);
-
-
 		glUseProgram(programID);
 
 		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
         glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
 		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+
+		glEnableVertexAttribArray(0);
+    	glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+
+		
+
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexbuffer);
+        glVertexAttribPointer(
+			0,                  // attribute
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
+
+			
+
+        // Index buffer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.elementbuffer);
+        glUniformMatrix4fv(mesh.modelMatrix_uniform      , 1, false, glm::value_ptr(t.getMat4()));
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferPlane);
+        glVertexAttribPointer(
+                    1,                  // attribute
+                    2,                  // size
+                    GL_FLOAT,           // type
+                    GL_FALSE,           // normalized?
+                    0,                  // stride
+                    (void*)0            // array buffer offset
+                    );
+
+
+					
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh.normalsBuffer);
+        glVertexAttribPointer(
+			2,                  // attribute
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
+			
+        
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mesh.texture);
+        glUniform1i(mesh.textureLocation0,0);
+
+		
+        // Draw the triangles !
+        glDrawElements(
+			GL_TRIANGLES,      // mode
+			mesh.indices.size(),    // count
+			GL_UNSIGNED_SHORT,   // type
+			(void*)0           // element array buffer offset
+			);
+		
+
+		glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		//mesh.draw(t);
 	
+		//cout<<"miaou"<<endl;
 
-		mesh.draw(tmp);
 
-		for(int i = 0 ; i < childs.size() ; i ++){
-			childs[i]->draw(camera,tmp);
-		}
 	}
+	void apply(Transform parent)
+	{
+		Transform tmp = t;
 
-	void addChild(GameObject * obj ){
-		childs.push_back(obj);
+		//tmp.applyTransformation(parent);
+		t = parent;
 	}
-
-	void setTransform(Transform tr){
-		t = tr;
-	}
-
 	void loadMesh(std::string name){
 		mesh.loadFromFile(name);
 	}
@@ -66,6 +118,12 @@ public:
 		mesh = Mesh();
 		childs = vector<GameObject*>(0);
 	}
+	GameObject(Mesh m_mesh){
+		t = Transform();
+		mesh = m_mesh;
+		childs = vector<GameObject*>(0);
+	}
+
 
 	//~GameObject();
 	

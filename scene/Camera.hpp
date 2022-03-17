@@ -16,7 +16,7 @@ public:
 	float fov;
 
 
-	void giveItToMe(GLuint programID){
+	void giveItToMe(){
 		glUseProgram(programID);
 
 		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(viewMatrix));
