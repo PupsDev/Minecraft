@@ -56,6 +56,8 @@ glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
 glm::vec3 camera_target = glm::vec3(1.0, 1.0, 1.0)-camera_position;
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
 
+//Suzie
+glm::vec3 suzie_transform = glm::vec3(0.0, 0.0, 0.0); 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame 
 float lastFrame = 0.0f;
@@ -75,6 +77,44 @@ float rotationSpeed = 1.0f;
 bool cameraMode = true;
 bool pvp = false;
 
+bool keyPressed = false;
+float dist(glm::vec3 a,glm::vec3 b)
+{
+    return sqrt( (a[0]-b[0])*(a[0]-b[0]) +  (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) );
+}
+bool collide(Map *map, GameObject* box)
+{
+    glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
+    //cout<<glm::to_string(pos)<<endl;
+    // to do do with renderdistance
+    int x = ((int)pos[0]+15)/15;
+    int y = ((int)pos[2]+15)/15;
+    //cout<<x<<" "<<y<<endl;
+    auto chunkX = map->chunks.find(x-1);
+   if( chunkX != map->chunks.end())
+   {
+           cout<<"Ligne chunk trouvé"<<endl;
+
+        auto chunkY = chunkX->second.find(y-1);
+        if( chunkY != chunkX->second.end())
+        {
+             cout<<"Chunk trouvé"<<endl;
+            for(auto& vert : chunkY->second.gigaMesh.indexed_vertices)
+            {
+                
+
+                if(dist(vert,pos)< 2.)
+                {
+                    return true;
+                }
+            }
+        }
+   }
+
+
+
+    return false;
+}
 int init()
 {
     // Initialise GLFW
@@ -131,10 +171,27 @@ int init()
 
 }
 
-int gameLoop(Map map,GameObject* suz, BoundingBox* bb, Camera camera)
+int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 {
     bool displayFPS = false;
+    GameObject* suz = new GameObject();
+    suz->loadMesh("suzanne.off");
+    suz->loadOnGpu(GameObjectShader);
 
+    BoundingBox* bb = new BoundingBox();
+    bb->loadOnGpu(GameObjectShader);
+
+    SceneGraphComposite* graphSuz = new SceneGraphComposite();
+    SceneGraphLeaf* graphBB = new SceneGraphLeaf();
+    graphSuz->gameObject = suz;
+    graphBB->gameObject = bb;
+    graphSuz->add(graphBB);
+
+    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
+    translation->model = translation->getMat4();
+    graphSuz->gameObject->apply(translation);
+    graphBB->gameObject->apply(translation);
+    
     do{
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -153,6 +210,31 @@ int gameLoop(Map map,GameObject* suz, BoundingBox* bb, Camera camera)
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
 
+        
+        if(!collide(&map,graphBB->gameObject))
+        {
+            translation = new Transform(suzie_transform);
+            translation->model = translation->getMat4();
+            graphSuz->gameObject->apply(translation);
+            graphBB->gameObject->apply(translation);
+            suzie_transform = glm::vec3(0.,0.,0.);
+
+        }
+        else
+        {
+            translation = new Transform(-3*suzie_transform);
+            translation->model = translation->getMat4();
+            graphSuz->gameObject->apply(translation);
+            graphBB->gameObject->apply(translation);
+        }
+
+
+
+        //suzie_transform = glm::vec3(0.,0.,0.);
+        //translation = new Transform(suzie_transform);
+        //translation->model = translation->getMat4();
+        //graphBB->gameObject->t->model = translation->getMat4();
+
 
         camera.fov = glm::radians(90.0f);
         viewMatrix = glm::lookAt(camera_position, camera_target+camera_position, camera_up);
@@ -166,10 +248,11 @@ int gameLoop(Map map,GameObject* suz, BoundingBox* bb, Camera camera)
         camera.projectionMatrix = projectionMatrix;
         camera.giveItToMe();
 
-        map.draw(camera);
+       
         
-        suz->draw(camera);
+        graphSuz->gameObject->draw(camera);
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+         map.draw(camera);
         bb->draw(camera);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
@@ -204,31 +287,15 @@ int main( void )
     myTerrain.loadOnRam();
     myTerrain.loadOnGpu();
 
-    GameObject* suz = new GameObject();
-    suz->loadMesh("suzanne.off");
-    suz->loadOnGpu(GameObjectShader);
 
-    BoundingBox* bb = new BoundingBox();
-    bb->loadOnGpu(GameObjectShader);
-
-    SceneGraphComposite* graphSuz = new SceneGraphComposite();
-    SceneGraphLeaf* graphBB = new SceneGraphLeaf();
-    graphSuz->gameObject = suz;
-    graphBB->gameObject = bb;
-    graphSuz->add(graphBB);
-
-    Map map = Map(GameObjectShader,50,10);
+    Map map = Map(GameObjectShader,50,1);
 
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
-    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
-    translation->model = translation->getMat4();
 
 
-    graphSuz->apply(translation);
-
-    gameLoop(map, suz,bb,camera);
+    gameLoop(map,GameObjectShader,camera);
 
     // Cleanup VBO and shader
     //glDeleteBuffers(1, &vertexbuffer);
@@ -284,6 +351,28 @@ void processInput(GLFWwindow *window)
             camera_position += 4.0f*cameraSpeed * dir;
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
             camera_position -= 4.0f*cameraSpeed * dir;
+        
+
+        if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
+        {
+            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,1.,0.);
+            // }        
+            suzie_transform =  glm::vec3(0.,1.,0.);
+                
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
+        {
+            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,-1.,0.);
+            // }        
+             suzie_transform =  glm::vec3(0.,-1.,0.);
+        }
+
     }else{
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
             rotationSpeed += 0.05;

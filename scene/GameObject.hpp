@@ -10,7 +10,7 @@ public:
     GLuint projectionMatrix_uniform ;
 
 	GLuint viewPosUniform;
-
+	
 
 	void draw(Camera camera, Transform* parent = new Transform()){ 
 

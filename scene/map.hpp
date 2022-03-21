@@ -25,7 +25,7 @@ class Map {
     Cube c;
 
     int size = 100;
-    int renderDistance = 15; //chunks
+    int renderDistance; //chunks
 
     const siv::PerlinNoise::seed_type seed = 123456u;
     const siv::PerlinNoise perlin{ seed };
@@ -40,7 +40,7 @@ class Map {
 
         gigaTexture = loadBMP_custom("../textures/minecraft/gigaTexture.bmp",false);
         size=size;
-        renderDistance = renderDistance;
+        this->renderDistance = renderDistance;
 
         programID = GameObjectShader;
         
