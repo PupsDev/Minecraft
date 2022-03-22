@@ -178,8 +178,9 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     suz->loadMesh("suzanne.off");
     suz->loadOnGpu(GameObjectShader);
 
+    GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
     BoundingBox* bb = new BoundingBox();
-    bb->loadOnGpu(GameObjectShader);
+    bb->loadOnGpu(BoxShader);
 
     SceneGraphComposite* graphSuz = new SceneGraphComposite();
     SceneGraphLeaf* graphBB = new SceneGraphLeaf();
@@ -250,11 +251,16 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
        
         
-        graphSuz->gameObject->draw(camera);
+        
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
          map.draw(camera);
-        bb->draw(camera);
+    
+        glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        graphSuz->gameObject->draw(camera);
+        bb->draw(camera);
+        glDisable(GL_BLEND);
 
 
 

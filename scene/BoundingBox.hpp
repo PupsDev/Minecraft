@@ -8,7 +8,7 @@ class BoundingBox : public GameObject
         float radius;
         BoundingBox()
         {
-            createSphere(mesh.indices,mesh.indexed_vertices,mesh.uvs, 8);
+            createSphere(mesh.indices,mesh.indexed_vertices,mesh.uvs, 32);
         }
         bool intersect()
         {
@@ -43,9 +43,10 @@ class BoundingBox : public GameObject
             for(int i = 0 ; i < sommets -1; i++)
                 for(int j = 0 ; j < sommets-1 ; j++)
                 {
-                    indices.push_back(i*sommets +j);
-                    indices.push_back(i*sommets +j+1); 
                     indices.push_back((i+1)*sommets +j); 
+                   
+                    indices.push_back(i*sommets +j+1); 
+                     indices.push_back(i*sommets +j);
 
                     indices.push_back(i*sommets +j+1); 
                     indices.push_back((i+1)*sommets +j); 
@@ -55,5 +56,6 @@ class BoundingBox : public GameObject
 
                 
         }
+
 
 };
