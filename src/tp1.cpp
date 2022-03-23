@@ -79,21 +79,20 @@ bool cameraMode = true;
 bool pvp = false;
 
 bool keyPressed = false;
+bool makeMeGravitate = false;
+
 float dist(glm::vec3 a,glm::vec3 b)
 {
     return sqrt( (a[0]-b[0])*(a[0]-b[0]) +  (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) );
 }
 
-int mapToChokeDaddy(int x, int renderDistance)
+int mapToChunkId(int x, int renderDistance)
 {
-    //cout<<"pos : "<<x<<endl;
-
     return (renderDistance*15 +x)/(renderDistance*15)-1;
 }
 
 Chunk getChunk(Map *map,int ix, int iy)
 {
-
         auto chunkX = map->chunks.find(ix);
         if( chunkX != map->chunks.end())
         {
@@ -103,37 +102,36 @@ Chunk getChunk(Map *map,int ix, int iy)
                     return chunkY->second;   
                 }
         }
-        
 }
 std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
 {
     glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
 
-    int x = mapToChokeDaddy((int)pos[0],1);
-    int y = mapToChokeDaddy((int)pos[2],1);
+    int x = mapToChunkId((int)pos[0],1);
+    int y = mapToChunkId((int)pos[2],1);
     int renderDistance =1;
     std::vector<pair<int,int>> coord;
 
-        ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
+    ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
 
-        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
-            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
-                int ix = (x<0 ? x*-2 +1 : x*2);
-                int iy = (x<0 ? y*-2 +1 : y*2);
-                 //cout<<" le chounk: "<<x<<":"<<y<<endl;     
-                auto chunkX = map->chunks.find(ix);
-                if( chunkX != map->chunks.end())
-                {
-                        auto chunkY = chunkX->second.find(iy);
-                        if( chunkY != chunkX->second.end())
-                        {
+    for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
+        for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
+            int ix = (x<0 ? x*-2 +1 : x*2);
+            int iy = (x<0 ? y*-2 +1 : y*2);
+    
+            auto chunkX = map->chunks.find(ix);
+            if( chunkX != map->chunks.end())
+            {
+                    auto chunkY = chunkX->second.find(iy);
+                    if( chunkY != chunkX->second.end())
+                    {
 
-                            coord.push_back(make_pair(ix,iy));
-                            //chunkY->second.gigaObject.vis = 0;     
-                        }
-                }
+                        coord.push_back(make_pair(ix,iy));
+                        //chunkY->second.gigaObject.vis = 0;     
+                    }
             }
         }
+    }
 
     return coord;
 }
@@ -153,7 +151,7 @@ int findHighest(Chunk chonky,  ivec2 pos)
                             auto cubeZ = cubeY->second.find(z);
                         if( cubeZ != cubeY->second.end())
                         {
-                            cout<<"Z = "<<z<<endl;
+                            //cout<<"Z = "<<z<<endl;
                             ret = z;
                             return ret;
                         }
@@ -166,28 +164,34 @@ int findHighest(Chunk chonky,  ivec2 pos)
 
 bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox)
 {
+    // 4 chunks
     std::vector<pair<int,int>> chunks = findChunks(map, graphbox->gameObject);
-     glm::vec3 newPos ;
-      glm::vec3 pos = graphbox->gameObject->t->apply(glm::vec3(0.,1.,0.));
-     int hauteurMax = - 99999999;
+    glm::vec3 newPos ;
+    glm::vec3 pos = graphbox->gameObject->t->apply(glm::vec3(0.,1.,0.));
+    int hauteurMax = - INT32_MAX;
+
     for(auto pairChunk : chunks)
     {
 
-        Chunk chonkyboy = getChunk(map,pairChunk.first,pairChunk.second);
-        if(chonkyboy.status !=3)
+        Chunk currentChunk = getChunk(map,pairChunk.first,pairChunk.second);
+        // Status of creation is chunk not loaded
+        if(currentChunk.status !=3)
         {
             return false;
         }
        
+       // Coordonnée de la boite de suzanne 
         int x = pos[0];
         int y = pos[2];
 
-        int h = findHighest(chonkyboy,ivec2(x,y));
+        int h = findHighest(currentChunk,ivec2(x,y));
         hauteurMax = std::max(hauteurMax,h);
 
         
     }
-    cout<<"hauteur : "<<hauteurMax<<endl<<endl;
+    //cout<<"hauteur : "<<hauteurMax<<endl<<endl;
+
+    // 1 rayon sphere suzanne + 0.5 cube et 1 offset
     if( (pos[1]-hauteurMax) < 2.5 )
     {
         newPos = glm::vec3(pos[0],hauteurMax+0.5+2,pos[2]);
@@ -199,8 +203,6 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
         suzbox->gameObject->apply(translation);
         return true;
     }
-
-
 
     return false;
 }
@@ -298,6 +300,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     graphSuz->gameObject->apply(translation);
     graphBB->gameObject->apply(translation);
     
+    glm::vec3 vitesse = glm::vec3(0.,0.,0.);
     do{
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -321,27 +324,27 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         graphSuz->gameObject->apply(translation);
         graphBB->gameObject->apply(translation);
         suzie_transform = glm::vec3(0.,0.,0.);
-        
-        if(collide(&map,graphSuz,graphBB))
+        if(makeMeGravitate)
         {
-  
+            glm::vec3 gravity = glm::vec3(0.,-9.82,0.);
+
+            vitesse += deltaTime*gravity;
+
+            translation = new Transform(vitesse);
+            translation->model = translation->getMat4();
+            graphSuz->gameObject->apply(translation);
+            graphBB->gameObject->apply(translation);
+
 
         }
+        if(collide(&map,graphSuz,graphBB))
+        {
+            vitesse[1] = 0.;
+            
+        }
 
-
-
-
-        //suzie_transform = glm::vec3(0.,0.,0.);
-        //translation = new Transform(suzie_transform);
-        //translation->model = translation->getMat4();
-        //graphBB->gameObject->t->model = translation->getMat4();
-
-
-       
-
+      
         camera.set(camera_position,camera_target,camera_up);
-
- 
 
         camera.giveItToMe();
 
@@ -511,6 +514,11 @@ void processInput(GLFWwindow *window)
     }
 
 
+    if (glfwGetKey(window, GLFW_KEY_G) ==  GLFW_PRESS &&
+    glfwGetKey(window, GLFW_KEY_L) ==  GLFW_PRESS ){
+        makeMeGravitate=!makeMeGravitate;
+        //cout<<"seaLevel"<<seaLevel<<endl;
+    }
 
 
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){
