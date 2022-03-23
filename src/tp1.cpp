@@ -131,7 +131,7 @@ std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
                         {
                             //cout<<"Find le chounk: "<<ix<<":"<<iy<<endl;  
                             coord.push_back(make_pair(ix,iy));
-                            chunkY->second.gigaObject.vis = 0;     
+                            //chunkY->second.gigaObject.vis = 0;     
                         }
                 }
             }
@@ -166,7 +166,7 @@ int findHighest(Chunk chonky,  ivec2 pos)
                          auto cubeZ = cubeY->second.find(z);
                         if( cubeZ != cubeY->second.end())
                         {
-                            cout<<"Z = "<<z<<endl;
+                            //cout<<"Z = "<<z<<endl;
                             ret = z;
                             return ret;
                         }
@@ -176,11 +176,11 @@ int findHighest(Chunk chonky,  ivec2 pos)
         return ret;
 }
 
-bool collide(Map *map, GameObject* box)
+bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox)
 {
-    std::vector<pair<int,int>> chunks = findChunks(map, box);
+    std::vector<pair<int,int>> chunks = findChunks(map, graphbox->gameObject);
      glm::vec3 newPos ;
-      glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
+      glm::vec3 pos = graphbox->gameObject->t->apply(glm::vec3(0.,1.,0.));
      int hauteurMax = - 99999999;
     for(auto pairChunk : chunks)
     {
@@ -202,7 +202,7 @@ bool collide(Map *map, GameObject* box)
         //cout<<"x : "<<x<<endl;
         //cout<<"y : "<<y<<endl<<endl;
 
-        hauteurMax = std::max(hauteurMax,findHighest(chonkyboy,ivec2(x,y)));
+        hauteurMax = findHighest(chonkyboy,ivec2(x,y));
         
     }
     cout<<"hauteur : "<<hauteurMax<<endl<<endl;
@@ -211,49 +211,13 @@ bool collide(Map *map, GameObject* box)
     {
         newPos = glm::vec3(pos[0],hauteurMax+2,pos[2]);
         glm::vec3 translate = newPos-pos;
-        
         Transform * translation = new Transform(translate);
-        //Transform * translation = new Transform(vec3(0.0, , 0.0));
+
         translation->model = translation->getMat4();
-        box->apply(translation);
+        graphbox->gameObject->apply(translation);
+        suzbox->gameObject->apply(translation);
         return true;
     }
-
-    //return true;
-     //cout<<"x : "<<pos[0]<<"y : "<<pos[1]<<"z : "<<pos[2]<<endl;
-   
-     //cout<<"x : "<<newPos[0]<<"y : "<<newPos[1]<<"z : "<<newPos[2]<<endl;
-
-    /*
-    glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
-    //cout<<glm::to_string(pos)<<endl;
-    // to do do with renderdistance
-    int x = ((int)pos[0]+15)/15;
-    int y = ((int)pos[2]+15)/15;
-    //cout<<x<<" "<<y<<endl;
-    auto chunkX = map->chunks.find(x-1);
-    
-   if( chunkX != map->chunks.end())
-   {
-           cout<<"Ligne chunk trouvé"<<endl;
-
-        auto chunkY = chunkX->second.find(y-1);
-        if( chunkY != chunkX->second.end())
-        {
-             cout<<"Chunk trouvé"<<endl;
-            for(auto& vert : chunkY->second.gigaMesh.indexed_vertices)
-            {
-                
-
-                if(dist(vert,pos)< 2.)
-                {
-                    return true;
-                }
-            }
-        }
-
-   }
-   */
 
 
 
@@ -358,7 +322,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         glm::mat4 projectionMatrix;
 
         
-        if(!collide(&map,graphBB->gameObject))
+        if(!collide(&map,graphSuz,graphBB))
         {
             translation = new Transform(suzie_transform);
             translation->model = translation->getMat4();
