@@ -79,7 +79,7 @@ class Chunk{
 
         
         int i = 0;
-        int levelDivisor = 10;
+        int levelDivisor = 25;
         
         for(int x = startX ; x < startX+16 ; x++){
             for(int y = startY ; y < startY+16 ; y ++){
@@ -183,7 +183,16 @@ class Chunk{
         
         Transform * tmp = new  Transform();
         gigaObject.apply(tmp);
-        gigaObject.draw(camera);
+         if(gigaObject.vis ==1)
+        {
+            gigaObject.draw(camera);
+
+
+        }
+        else
+        {
+             gigaObject.vis =1;
+        }
 
     }
 };

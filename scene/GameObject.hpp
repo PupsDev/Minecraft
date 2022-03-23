@@ -13,7 +13,7 @@ public:
     GLuint projectionMatrix_uniform ;
 
 	GLuint viewPosUniform;
-
+	int vis;
 	bool doesLOD = false;	
 	double maxDist = 10;
 
@@ -162,10 +162,12 @@ public:
 	GameObject(){
 		t = new  Transform();
 		mesh = Mesh();
+		vis =1.;
 	}
 	GameObject(Mesh m_mesh){
 		t = new Transform();
 		mesh = m_mesh;
+		vis =1.;
 	}
 
 

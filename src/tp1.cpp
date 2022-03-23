@@ -204,9 +204,9 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
         
     }
     cout<<"hauteur : "<<hauteurMax<<endl<<endl;
-    if( (pos[1]-hauteurMax) < 1 )
+    if( (pos[1]-hauteurMax) < 2.5 )
     {
-        newPos = glm::vec3(pos[0],hauteurMax+2,pos[2]);
+        newPos = glm::vec3(pos[0],hauteurMax+0.5+2,pos[2]);
         glm::vec3 translate = newPos-pos;
         Transform * translation = new Transform(translate);
 
@@ -331,21 +331,19 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
-
         
-        if(!collide(&map,graphSuz,graphBB))
+        translation = new Transform(0.5*suzie_transform);
+        translation->model = translation->getMat4();
+        graphSuz->gameObject->apply(translation);
+        graphBB->gameObject->apply(translation);
+        suzie_transform = glm::vec3(0.,0.,0.);
+        
+        if(collide(&map,graphSuz,graphBB))
         {
-            translation = new Transform(suzie_transform);
-            translation->model = translation->getMat4();
-            graphSuz->gameObject->apply(translation);
-            graphBB->gameObject->apply(translation);
-            suzie_transform = glm::vec3(0.,0.,0.);
+  
 
         }
-        else
-        {
-           
-        }
+
 
 
 
@@ -368,10 +366,11 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         suz->draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-         map.draw(camera);
         glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+         map.draw(camera);
+
         glUseProgram(BoxShader);
         bb->draw(camera);
         glDisable(GL_BLEND);

@@ -84,7 +84,7 @@ public:
 			//vec3 P3 = indexed_vertices[indices[i+2]];
 
 			vec3 normal = normalize(cross(P1,P2));
-			cout<<normal<<endl;
+			//cout<<normal<<endl;
 			facesNormals.push_back(normal);
 
 			normals[indices[i]] = normal;
