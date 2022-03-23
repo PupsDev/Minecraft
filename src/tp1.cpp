@@ -474,24 +474,29 @@ void processInput(GLFWwindow *window)
             camera_position -= 4.0f*cameraSpeed * dir;
         
 
+        if (glfwGetKey(window, GLFW_KEY_KP_ADD) == GLFW_PRESS)
+        {
+            suzie_transform =  glm::vec3(0.,1.,0.);          
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS)
+        {
+             suzie_transform =  glm::vec3(0.,-1.,0.);
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
+        {
+            suzie_transform =  glm::vec3(1.,0.,0.);          
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
+        {
+             suzie_transform =  glm::vec3(-1.,0.,0.);
+        }
         if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_PRESS)
         {
-            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,1.,0.);
-            // }        
-            suzie_transform =  glm::vec3(0.,1.,0.);
-                
+            suzie_transform =  glm::vec3(0.,0.,1.);          
         }
         if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_PRESS)
         {
-            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,-1.,0.);
-            // }        
-             suzie_transform =  glm::vec3(0.,-1.,0.);
+             suzie_transform =  glm::vec3(0.,0.,-1.);
         }
 
     }else{
