@@ -48,8 +48,8 @@ using namespace std;
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800*2;
-const unsigned int SCR_HEIGHT = 600*2;
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
@@ -127,7 +127,7 @@ std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
                         auto chunkY = chunkX->second.find(iy);
                         if( chunkY != chunkX->second.end())
                         {
-                            //cout<<"Find le chounk: "<<ix<<":"<<iy<<endl;  
+
                             coord.push_back(make_pair(ix,iy));
                             //chunkY->second.gigaObject.vis = 0;     
                         }
@@ -135,39 +135,29 @@ std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
             }
         }
 
-    for(auto c : coord)
-    {
-        int x = c.first;
-        int y = c.second;
-       // cout<<"Find le chounk: "<<x<<":"<<y<<endl;      
-    
-    }
     return coord;
 }
 int findHighest(Chunk chonky,  ivec2 pos)
 {
     int hauteurMax = 200;
     map<int, map<int, map<int, int>>> bendel;
-  int ret =1;
+    int ret =-1;
     auto cubeX = chonky.bendel.find(pos[0]);
         if( cubeX != chonky.bendel.end())
         {
                 auto cubeY = cubeX->second.find(pos[1]);
                 if( cubeY != cubeX->second.end())
                 {
-                    //cout<<"Find le chounk: "<<ix<<":"<<iy<<endl;  
-                    //coord.push_back(make_pair(ix,iy));
-                    //cubeY->second.gigaObject.vis = 0;     
-
                     for( int z = hauteurMax;z>=0;z-- )
                     {
-                         auto cubeZ = cubeY->second.find(z);
+                            auto cubeZ = cubeY->second.find(z);
                         if( cubeZ != cubeY->second.end())
                         {
-                            //cout<<"Z = "<<z<<endl;
+                            cout<<"Z = "<<z<<endl;
                             ret = z;
                             return ret;
                         }
+
                     }
                 }
         }
@@ -189,18 +179,12 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
             return false;
         }
        
-        int x = pos[0]-chonkyboy.worldPos[0];
-        int y = pos[2]-chonkyboy.worldPos[1];
+        int x = pos[0];
+        int y = pos[2];
 
-        x = x<0?0:x>15?15:x;
-        y = (y<0?0:y>15?15:y);
+        int h = findHighest(chonkyboy,ivec2(x,y));
+        hauteurMax = std::max(hauteurMax,h);
 
-        //cout<<"Chunk : "<<pairChunk.first<<" "<<pairChunk.second<<endl;
-    
-        //cout<<"x : "<<x<<endl;
-        //cout<<"y : "<<y<<endl<<endl;
-
-        hauteurMax = findHighest(chonkyboy,ivec2(x,y));
         
     }
     cout<<"hauteur : "<<hauteurMax<<endl<<endl;
@@ -331,7 +315,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
-        
+
         translation = new Transform(0.5*suzie_transform);
         translation->model = translation->getMat4();
         graphSuz->gameObject->apply(translation);
