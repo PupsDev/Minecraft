@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "*.glsl": "hlsl",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "tuple": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
