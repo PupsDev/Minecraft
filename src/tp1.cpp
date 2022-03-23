@@ -174,19 +174,11 @@ int findHighest(Chunk chonky,  ivec2 pos)
         return ret;
 }
 
-<<<<<<< HEAD
 bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox)
 {
     std::vector<pair<int,int>> chunks = findChunks(map, graphbox->gameObject);
      glm::vec3 newPos ;
       glm::vec3 pos = graphbox->gameObject->t->apply(glm::vec3(0.,1.,0.));
-=======
-bool collide(Map *map, SceneGraphInterface* graphSuz,SceneGraphInterface* graphBB)
-{
-    std::vector<pair<int,int>> chunks = findChunks(map, graphBB->gameObject);
-     glm::vec3 newPos ;
-      glm::vec3 pos = graphBB->gameObject->t->apply(glm::vec3(0.,1.,0.));
->>>>>>> colision
      int hauteurMax = - 99999999;
     for(auto pairChunk : chunks)
     {
@@ -219,22 +211,11 @@ bool collide(Map *map, SceneGraphInterface* graphSuz,SceneGraphInterface* graphB
         Transform * translation = new Transform(translate);
 
         translation->model = translation->getMat4();
-<<<<<<< HEAD
         graphbox->gameObject->apply(translation);
         suzbox->gameObject->apply(translation);
         return true;
     }
 
-=======
-        
-        graphSuz->gameObject->apply(translation);
-        graphBB->gameObject->apply(translation);
-
-        return true;
-    }
-
-
->>>>>>> colision
 
 
     return false;
