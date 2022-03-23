@@ -54,10 +54,17 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/pups/Documents/Minecraft
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/pups/Documents/Minecraft/build
+=======
+CMAKE_SOURCE_DIR = /home/pups/Documents/test/Minecraft-main
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = /home/pups/Documents/test/Minecraft-main/build
+>>>>>>> colision
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -210,14 +217,24 @@ CMakeFiles/src.dir/all: external/CMakeFiles/GLEW_1130.dir/all
 CMakeFiles/src.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=64,65,66,67,68,69,70,71,72 "Built target src"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=64,65,66,67,68,69,70,71,72 "Built target src"
+>>>>>>> colision
 .PHONY : CMakeFiles/src.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/src.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 25
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/src.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 25
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/src.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : CMakeFiles/src.dir/rule
 
 # Convenience name for target.
@@ -236,14 +253,24 @@ CMakeFiles/src.dir/clean:
 external/CMakeFiles/GLEW_1130.dir/all:
 	$(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=1,2 "Built target GLEW_1130"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=1,2 "Built target GLEW_1130"
+>>>>>>> colision
 .PHONY : external/CMakeFiles/GLEW_1130.dir/all
 
 # Build rule for subdir invocation for target.
 external/CMakeFiles/GLEW_1130.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/CMakeFiles/GLEW_1130.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/CMakeFiles/GLEW_1130.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/CMakeFiles/GLEW_1130.dir/rule
 
 # Convenience name for target.
@@ -262,14 +289,24 @@ external/CMakeFiles/GLEW_1130.dir/clean:
 external/glfw-3.1.2/CMakeFiles/uninstall.dir/all:
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/CMakeFiles/uninstall.dir/build.make external/glfw-3.1.2/CMakeFiles/uninstall.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/CMakeFiles/uninstall.dir/build.make external/glfw-3.1.2/CMakeFiles/uninstall.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num= "Built target uninstall"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num= "Built target uninstall"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/CMakeFiles/uninstall.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/CMakeFiles/uninstall.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/CMakeFiles/uninstall.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/rule
 
 # Convenience name for target.
@@ -288,14 +325,24 @@ external/glfw-3.1.2/CMakeFiles/uninstall.dir/clean:
 external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all:
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/src/CMakeFiles/glfw.dir/build.make external/glfw-3.1.2/src/CMakeFiles/glfw.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/src/CMakeFiles/glfw.dir/build.make external/glfw-3.1.2/src/CMakeFiles/glfw.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=21,22,23,24,25,26,27,28,29,30,31,32,33,34 "Built target glfw"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=21,22,23,24,25,26,27,28,29,30,31,32,33,34 "Built target glfw"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/src/CMakeFiles/glfw.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 14
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/src/CMakeFiles/glfw.dir/rule
 
 # Convenience name for target.
@@ -314,14 +361,24 @@ external/glfw-3.1.2/src/CMakeFiles/glfw.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/boing.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/boing.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/boing.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/boing.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/boing.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=3,4 "Built target boing"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=3,4 "Built target boing"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/boing.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/boing.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/boing.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/boing.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/boing.dir/rule
 
 # Convenience name for target.
@@ -340,14 +397,24 @@ external/glfw-3.1.2/examples/CMakeFiles/boing.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/gears.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/gears.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/gears.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/gears.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/gears.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=19,20 "Built target gears"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=19,20 "Built target gears"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/gears.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/gears.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/gears.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/gears.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/gears.dir/rule
 
 # Convenience name for target.
@@ -366,14 +433,24 @@ external/glfw-3.1.2/examples/CMakeFiles/gears.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=38,39,40 "Built target heightmap"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=38,39,40 "Built target heightmap"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/rule
 
 # Convenience name for target.
@@ -392,14 +469,24 @@ external/glfw-3.1.2/examples/CMakeFiles/heightmap.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/particles.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/particles.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/particles.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/particles.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/particles.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=52,53,54,55 "Built target particles"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=52,53,54,55 "Built target particles"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/particles.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/particles.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 18
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/particles.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 18
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/particles.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/particles.dir/rule
 
 # Convenience name for target.
@@ -418,14 +505,24 @@ external/glfw-3.1.2/examples/CMakeFiles/particles.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/simple.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/simple.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/simple.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/simple.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/simple.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=60,61 "Built target simple"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=60,61 "Built target simple"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/simple.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/simple.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/simple.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/simple.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/simple.dir/rule
 
 # Convenience name for target.
@@ -444,14 +541,24 @@ external/glfw-3.1.2/examples/CMakeFiles/simple.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=62,63 "Built target splitview"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=62,63 "Built target splitview"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/rule
 
 # Convenience name for target.
@@ -470,14 +577,24 @@ external/glfw-3.1.2/examples/CMakeFiles/splitview.dir/clean:
 external/glfw-3.1.2/examples/CMakeFiles/wave.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/wave.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/wave.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/examples/CMakeFiles/wave.dir/build.make external/glfw-3.1.2/examples/CMakeFiles/wave.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=81,82 "Built target wave"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=81,82 "Built target wave"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/wave.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/examples/CMakeFiles/wave.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/wave.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/examples/CMakeFiles/wave.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/examples/CMakeFiles/wave.dir/rule
 
 # Convenience name for target.
@@ -496,14 +613,24 @@ external/glfw-3.1.2/examples/CMakeFiles/wave.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=5,6,7 "Built target clipboard"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=5,6,7 "Built target clipboard"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/rule
 
 # Convenience name for target.
@@ -522,14 +649,24 @@ external/glfw-3.1.2/tests/CMakeFiles/clipboard.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/events.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/events.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/events.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/events.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/events.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=13,14,15 "Built target events"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=13,14,15 "Built target events"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/events.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/events.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/events.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/events.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/events.dir/rule
 
 # Convenience name for target.
@@ -548,14 +685,24 @@ external/glfw-3.1.2/tests/CMakeFiles/events.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=49,50,51 "Built target msaa"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=49,50,51 "Built target msaa"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/rule
 
 # Convenience name for target.
@@ -574,14 +721,24 @@ external/glfw-3.1.2/tests/CMakeFiles/msaa.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=16,17,18 "Built target gamma"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=16,17,18 "Built target gamma"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/rule
 
 # Convenience name for target.
@@ -600,14 +757,24 @@ external/glfw-3.1.2/tests/CMakeFiles/gamma.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=35,36,37 "Built target glfwinfo"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=35,36,37 "Built target glfwinfo"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/rule
 
 # Convenience name for target.
@@ -626,14 +793,24 @@ external/glfw-3.1.2/tests/CMakeFiles/glfwinfo.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=41,42,43 "Built target iconify"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=41,42,43 "Built target iconify"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/rule
 
 # Convenience name for target.
@@ -652,14 +829,24 @@ external/glfw-3.1.2/tests/CMakeFiles/iconify.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=44,45 "Built target joysticks"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=44,45 "Built target joysticks"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/rule
 
 # Convenience name for target.
@@ -678,14 +865,24 @@ external/glfw-3.1.2/tests/CMakeFiles/joysticks.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=46,47,48 "Built target monitors"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=46,47,48 "Built target monitors"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/rule
 
 # Convenience name for target.
@@ -704,14 +901,24 @@ external/glfw-3.1.2/tests/CMakeFiles/monitors.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=56,57 "Built target reopen"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=56,57 "Built target reopen"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/rule
 
 # Convenience name for target.
@@ -730,14 +937,24 @@ external/glfw-3.1.2/tests/CMakeFiles/reopen.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=8,9 "Built target cursor"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=8,9 "Built target cursor"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/rule
 
 # Convenience name for target.
@@ -756,14 +973,24 @@ external/glfw-3.1.2/tests/CMakeFiles/cursor.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/empty.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/empty.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/empty.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/empty.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/empty.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=10,11,12 "Built target empty"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=10,11,12 "Built target empty"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/empty.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/empty.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/empty.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/empty.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/empty.dir/rule
 
 # Convenience name for target.
@@ -782,14 +1009,24 @@ external/glfw-3.1.2/tests/CMakeFiles/empty.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=58,59 "Built target sharing"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=58,59 "Built target sharing"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/rule
 
 # Convenience name for target.
@@ -808,14 +1045,24 @@ external/glfw-3.1.2/tests/CMakeFiles/sharing.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=73,74,75 "Built target tearing"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=73,74,75 "Built target tearing"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/rule
 
 # Convenience name for target.
@@ -834,14 +1081,24 @@ external/glfw-3.1.2/tests/CMakeFiles/tearing.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/threads.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/threads.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/threads.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/threads.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/threads.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=76,77,78 "Built target threads"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=76,77,78 "Built target threads"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/threads.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/threads.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/threads.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/threads.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/threads.dir/rule
 
 # Convenience name for target.
@@ -860,14 +1117,24 @@ external/glfw-3.1.2/tests/CMakeFiles/threads.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/title.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/title.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/title.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/title.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/title.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=79,80 "Built target title"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=79,80 "Built target title"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/title.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/title.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/title.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/title.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/title.dir/rule
 
 # Convenience name for target.
@@ -886,14 +1153,24 @@ external/glfw-3.1.2/tests/CMakeFiles/title.dir/clean:
 external/glfw-3.1.2/tests/CMakeFiles/windows.dir/all: external/glfw-3.1.2/src/CMakeFiles/glfw.dir/all
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/windows.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/windows.dir/depend
 	$(MAKE) $(MAKESILENT) -f external/glfw-3.1.2/tests/CMakeFiles/windows.dir/build.make external/glfw-3.1.2/tests/CMakeFiles/windows.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/Minecraft/build/CMakeFiles --progress-num=83,84 "Built target windows"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pups/Documents/test/Minecraft-main/build/CMakeFiles --progress-num=83,84 "Built target windows"
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/windows.dir/all
 
 # Build rule for subdir invocation for target.
 external/glfw-3.1.2/tests/CMakeFiles/windows.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/windows.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 16
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/glfw-3.1.2/tests/CMakeFiles/windows.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/tests/CMakeFiles/windows.dir/rule
 
 # Convenience name for target.

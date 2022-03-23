@@ -1,4 +1,5 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+<<<<<<< HEAD
 Change Dir: /home/pups/Documents/Minecraft/build/CMakeFiles/CMakeTmp
 
 Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_94383/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_94383.dir/build.make CMakeFiles/cmTC_94383.dir/build
@@ -9,14 +10,32 @@ Linking C executable cmTC_94383
 /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_94383.dir/link.txt --verbose=1
 /usr/bin/cc -rdynamic CMakeFiles/cmTC_94383.dir/src.c.o -o cmTC_94383 
 /usr/bin/ld : CMakeFiles/cmTC_94383.dir/src.c.o : dans la fonction « main » :
+=======
+Change Dir: /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_91e82/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_91e82.dir/build.make CMakeFiles/cmTC_91e82.dir/build
+gmake[1] : on entre dans le répertoire « /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_91e82.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_91e82.dir/src.c.o -c /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_91e82
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91e82.dir/link.txt --verbose=1
+/usr/bin/cc -rdynamic CMakeFiles/cmTC_91e82.dir/src.c.o -o cmTC_91e82 
+/usr/bin/ld : CMakeFiles/cmTC_91e82.dir/src.c.o : dans la fonction « main » :
+>>>>>>> colision
 src.c:(.text+0x2f) : référence indéfinie vers « pthread_create »
 /usr/bin/ld : src.c:(.text+0x3b) : référence indéfinie vers « pthread_detach »
 /usr/bin/ld : src.c:(.text+0x47) : référence indéfinie vers « pthread_cancel »
 /usr/bin/ld : src.c:(.text+0x58) : référence indéfinie vers « pthread_join »
 collect2: error: ld returned 1 exit status
+<<<<<<< HEAD
 gmake[1]: *** [CMakeFiles/cmTC_94383.dir/build.make:99 : cmTC_94383] Erreur 1
 gmake[1] : on quitte le répertoire « /home/pups/Documents/Minecraft/build/CMakeFiles/CMakeTmp »
 gmake: *** [Makefile:127 : cmTC_94383/fast] Erreur 2
+=======
+gmake[1]: *** [CMakeFiles/cmTC_91e82.dir/build.make:99 : cmTC_91e82] Erreur 1
+gmake[1] : on quitte le répertoire « /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp »
+gmake: *** [Makefile:127 : cmTC_91e82/fast] Erreur 2
+>>>>>>> colision
 
 
 Source file was:
@@ -41,6 +60,7 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
+<<<<<<< HEAD
 Change Dir: /home/pups/Documents/Minecraft/build/CMakeFiles/CMakeTmp
 
 Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_02cdf/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_02cdf.dir/build.make CMakeFiles/cmTC_02cdf.dir/build
@@ -55,6 +75,22 @@ collect2: error: ld returned 1 exit status
 gmake[1]: *** [CMakeFiles/cmTC_02cdf.dir/build.make:99 : cmTC_02cdf] Erreur 1
 gmake[1] : on quitte le répertoire « /home/pups/Documents/Minecraft/build/CMakeFiles/CMakeTmp »
 gmake: *** [Makefile:127 : cmTC_02cdf/fast] Erreur 2
+=======
+Change Dir: /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_d46bc/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_d46bc.dir/build.make CMakeFiles/cmTC_d46bc.dir/build
+gmake[1] : on entre dans le répertoire « /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_d46bc.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_d46bc.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.22/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d46bc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d46bc.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_d46bc.dir/CheckFunctionExists.c.o -o cmTC_d46bc  -lpthreads 
+/usr/bin/ld : ne peut trouver -lpthreads
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_d46bc.dir/build.make:99 : cmTC_d46bc] Erreur 1
+gmake[1] : on quitte le répertoire « /home/pups/Documents/test/Minecraft-main/build/CMakeFiles/CMakeTmp »
+gmake: *** [Makefile:127 : cmTC_d46bc/fast] Erreur 2
+>>>>>>> colision
 
 
 

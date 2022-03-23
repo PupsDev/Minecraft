@@ -7,6 +7,8 @@ class Mesh
 {
 public:
 	std::vector<unsigned short> indices; //Triangles concaténés dans une liste
+	std::vector<glm::vec3> facesNormals;
+
     std::vector<std::vector<unsigned short>> triangles;
     std::vector<glm::vec3> indexed_vertices;
 	std::vector<glm::vec3> normals;
@@ -71,6 +73,25 @@ public:
 
 
     }
+
+	void computeNormals(){
+
+		normals.resize(indexed_vertices.size());
+
+		for(int i = 0; i < indices.size() ; i += 3){
+			vec3 P1 = indexed_vertices[indices[i]];
+			vec3 P2 = indexed_vertices[indices[i+1]];
+			//vec3 P3 = indexed_vertices[indices[i+2]];
+
+			vec3 normal = normalize(cross(P1,P2));
+			cout<<normal<<endl;
+			facesNormals.push_back(normal);
+
+			normals[indices[i]] = normal;
+			normals[indices[i+1]] = normal;
+			normals[indices[i+2]] = normal;
+		}
+	}
 	
 	void computeAABB(){
 

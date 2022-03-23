@@ -1,9 +1,17 @@
 
+<<<<<<< HEAD
 if (NOT EXISTS "/home/pups/Documents/Minecraft/build/external/glfw-3.1.2/install_manifest.txt")
   message(FATAL_ERROR "Cannot find install manifest: \"/home/pups/Documents/Minecraft/build/external/glfw-3.1.2/install_manifest.txt\"")
 endif()
 
 file(READ "/home/pups/Documents/Minecraft/build/external/glfw-3.1.2/install_manifest.txt" files)
+=======
+if (NOT EXISTS "/home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: \"/home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/install_manifest.txt\"")
+endif()
+
+file(READ "/home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/install_manifest.txt" files)
+>>>>>>> colision
 string(REGEX REPLACE "\n" ";" files "${files}")
 
 foreach (file ${files})

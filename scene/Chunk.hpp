@@ -11,7 +11,8 @@ class Chunk{
 
         int startX = 0;
         int startY = 0;
-        ivec2 worldPos;    
+
+        ivec2 worldPos;
 
         vector<ivec3> cubes;
         vector<int> type;
@@ -182,18 +183,7 @@ class Chunk{
         
         Transform * tmp = new  Transform();
         gigaObject.apply(tmp);
-        if(gigaObject.vis ==1)
-        {
-            gigaObject.draw(camera);
-           
-
-        }
-        else
-        {
-             gigaObject.vis =1;
-        }
-        
-
+        gigaObject.draw(camera);
 
     }
 };

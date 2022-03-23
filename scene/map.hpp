@@ -82,7 +82,7 @@ class Map {
 
                 if(chunks[ix].find(iy) == chunks[ix].end()){
                     chunks[ix][iy] = Chunk();
-                    chunks[ix][iy].worldPos=ivec2(ix,iy);
+                    chunks[ix][iy].worldPos = ivec2(ix,iy);
                 }
                 
                 //camera.giveItToMe(programID);

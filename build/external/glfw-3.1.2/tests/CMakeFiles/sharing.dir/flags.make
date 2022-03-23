@@ -4,7 +4,11 @@
 # compile C with /usr/bin/cc
 C_DEFINES = -DGLEW_STATIC -DTW_NO_DIRECT3D -DTW_NO_LIB_PRAGMA -DTW_STATIC -D_CRT_SECURE_NO_WARNINGS
 
+<<<<<<< HEAD
 C_INCLUDES = -I/home/pups/Documents/Minecraft/external/glfw-3.1.2/include -I/home/pups/Documents/Minecraft/external/glfw-3.1.2/deps
+=======
+C_INCLUDES = -I/home/pups/Documents/test/Minecraft-main/external/glfw-3.1.2/include -I/home/pups/Documents/test/Minecraft-main/external/glfw-3.1.2/deps
+>>>>>>> colision
 
 C_FLAGS =   -Wall
 

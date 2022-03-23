@@ -53,10 +53,17 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/pups/Documents/Minecraft
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/pups/Documents/Minecraft/build
+=======
+CMAKE_SOURCE_DIR = /home/pups/Documents/test/Minecraft-main
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = /home/pups/Documents/test/Minecraft-main/build
+>>>>>>> colision
 
 # Utility rule file for uninstall.
 
@@ -67,7 +74,11 @@ include external/glfw-3.1.2/CMakeFiles/uninstall.dir/compiler_depend.make
 include external/glfw-3.1.2/CMakeFiles/uninstall.dir/progress.make
 
 external/glfw-3.1.2/CMakeFiles/uninstall:
+<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build/external/glfw-3.1.2 && /usr/bin/cmake -P /home/pups/Documents/Minecraft/build/external/glfw-3.1.2/cmake_uninstall.cmake
+=======
+	cd /home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2 && /usr/bin/cmake -P /home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/cmake_uninstall.cmake
+>>>>>>> colision
 
 uninstall: external/glfw-3.1.2/CMakeFiles/uninstall
 uninstall: external/glfw-3.1.2/CMakeFiles/uninstall.dir/build.make
@@ -78,10 +89,18 @@ external/glfw-3.1.2/CMakeFiles/uninstall.dir/build: uninstall
 .PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/build
 
 external/glfw-3.1.2/CMakeFiles/uninstall.dir/clean:
+<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build/external/glfw-3.1.2 && $(CMAKE_COMMAND) -P CMakeFiles/uninstall.dir/cmake_clean.cmake
 .PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/clean
 
 external/glfw-3.1.2/CMakeFiles/uninstall.dir/depend:
 	cd /home/pups/Documents/Minecraft/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pups/Documents/Minecraft /home/pups/Documents/Minecraft/external/glfw-3.1.2 /home/pups/Documents/Minecraft/build /home/pups/Documents/Minecraft/build/external/glfw-3.1.2 /home/pups/Documents/Minecraft/build/external/glfw-3.1.2/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+=======
+	cd /home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2 && $(CMAKE_COMMAND) -P CMakeFiles/uninstall.dir/cmake_clean.cmake
+.PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/clean
+
+external/glfw-3.1.2/CMakeFiles/uninstall.dir/depend:
+	cd /home/pups/Documents/test/Minecraft-main/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/pups/Documents/test/Minecraft-main /home/pups/Documents/test/Minecraft-main/external/glfw-3.1.2 /home/pups/Documents/test/Minecraft-main/build /home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2 /home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+>>>>>>> colision
 .PHONY : external/glfw-3.1.2/CMakeFiles/uninstall.dir/depend
 

@@ -57,10 +57,17 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/pups/Documents/Minecraft
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/pups/Documents/Minecraft/build
+=======
+CMAKE_SOURCE_DIR = /home/pups/Documents/test/Minecraft-main
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = /home/pups/Documents/test/Minecraft-main/build
+>>>>>>> colision
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +139,15 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles /home/pups/Documents/Minecraft/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles /home/pups/Documents/test/Minecraft-main/build//CMakeFiles/progress.marks
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
+>>>>>>> colision
 .PHONY : all
 
 # The main clean target

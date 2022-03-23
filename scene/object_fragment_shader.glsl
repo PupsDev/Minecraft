@@ -41,6 +41,7 @@ void main(){
         
 
         vec3 result = (ambient + diffuse + specular) * objectColor;
+        //vec3 result = (ambient + diffuse + specular) * vec3(0.5,0.5,0.5);
         
         //color = vec3(1.0, 0.0, 1.0);
         color = result;
