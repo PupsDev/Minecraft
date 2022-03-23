@@ -57,17 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-<<<<<<< HEAD
 CMAKE_SOURCE_DIR = /home/pups/Documents/Minecraft
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/pups/Documents/Minecraft/build
-=======
-CMAKE_SOURCE_DIR = /home/pups/Documents/test/Minecraft-main
-
-# The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pups/Documents/test/Minecraft-main/build
->>>>>>> colision
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -139,24 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles /home/pups/Documents/Minecraft/build/external//CMakeFiles/progress.marks
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/Minecraft/build/CMakeFiles 0
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles /home/pups/Documents/test/Minecraft-main/build/external//CMakeFiles/progress.marks
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pups/Documents/test/Minecraft-main/build/CMakeFiles 0
->>>>>>> colision
 .PHONY : all
 
 # The main clean target
 clean:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/clean
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/clean
->>>>>>> colision
 .PHONY : clean
 
 # The main clean target
@@ -165,38 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/preinstall
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/preinstall
->>>>>>> colision
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/preinstall
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/preinstall
->>>>>>> colision
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
->>>>>>> colision
 .PHONY : depend
 
 # Convenience name for target.
 external/CMakeFiles/GLEW_1130.dir/rule:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/CMakeFiles/GLEW_1130.dir/rule
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 external/CMakeFiles/GLEW_1130.dir/rule
->>>>>>> colision
 .PHONY : external/CMakeFiles/GLEW_1130.dir/rule
 
 # Convenience name for target.
@@ -205,11 +172,7 @@ GLEW_1130: external/CMakeFiles/GLEW_1130.dir/rule
 
 # fast build rule for target.
 GLEW_1130/fast:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/build
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/build
->>>>>>> colision
 .PHONY : GLEW_1130/fast
 
 glew-1.13.0/src/glew.o: glew-1.13.0/src/glew.c.o
@@ -217,11 +180,7 @@ glew-1.13.0/src/glew.o: glew-1.13.0/src/glew.c.o
 
 # target to build an object file
 glew-1.13.0/src/glew.c.o:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.o
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.o
->>>>>>> colision
 .PHONY : glew-1.13.0/src/glew.c.o
 
 glew-1.13.0/src/glew.i: glew-1.13.0/src/glew.c.i
@@ -229,11 +188,7 @@ glew-1.13.0/src/glew.i: glew-1.13.0/src/glew.c.i
 
 # target to preprocess a source file
 glew-1.13.0/src/glew.c.i:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.i
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.i
->>>>>>> colision
 .PHONY : glew-1.13.0/src/glew.c.i
 
 glew-1.13.0/src/glew.s: glew-1.13.0/src/glew.c.s
@@ -241,11 +196,7 @@ glew-1.13.0/src/glew.s: glew-1.13.0/src/glew.c.s
 
 # target to generate assembly for a file
 glew-1.13.0/src/glew.c.s:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.s
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(MAKE) $(MAKESILENT) -f external/CMakeFiles/GLEW_1130.dir/build.make external/CMakeFiles/GLEW_1130.dir/glew-1.13.0/src/glew.c.s
->>>>>>> colision
 .PHONY : glew-1.13.0/src/glew.c.s
 
 # Help Target
@@ -275,10 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-<<<<<<< HEAD
 	cd /home/pups/Documents/Minecraft/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
-=======
-	cd /home/pups/Documents/test/Minecraft-main/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
->>>>>>> colision
 .PHONY : cmake_check_build_system
 

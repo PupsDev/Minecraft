@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Install script for directory: /home/pups/Documents/Minecraft/external/glfw-3.1.2/examples
-=======
-# Install script for directory: /home/pups/Documents/test/Minecraft-main/external/glfw-3.1.2/examples
->>>>>>> colision
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

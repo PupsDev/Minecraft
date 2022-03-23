@@ -1,6 +1,2 @@
 # Hashes of file build rules.
-<<<<<<< HEAD
 be5a368a55bc56e6f1dc248e8a635daf external/glfw-3.1.2/CMakeFiles/uninstall
-=======
-233087449da6ee9f8ff63097baf2a44a external/glfw-3.1.2/CMakeFiles/uninstall
->>>>>>> colision

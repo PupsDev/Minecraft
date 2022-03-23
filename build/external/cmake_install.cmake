@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Install script for directory: /home/pups/Documents/Minecraft/external
-=======
-# Install script for directory: /home/pups/Documents/test/Minecraft-main/external
->>>>>>> colision
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -48,11 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-<<<<<<< HEAD
   include("/home/pups/Documents/Minecraft/build/external/glfw-3.1.2/cmake_install.cmake")
-=======
-  include("/home/pups/Documents/test/Minecraft-main/build/external/glfw-3.1.2/cmake_install.cmake")
->>>>>>> colision
 
 endif()
 

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Install script for directory: /home/pups/Documents/Minecraft
-=======
-# Install script for directory: /home/pups/Documents/test/Minecraft-main
->>>>>>> colision
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -48,11 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-<<<<<<< HEAD
   include("/home/pups/Documents/Minecraft/build/external/cmake_install.cmake")
-=======
-  include("/home/pups/Documents/test/Minecraft-main/build/external/cmake_install.cmake")
->>>>>>> colision
 
 endif()
 
@@ -64,9 +56,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-<<<<<<< HEAD
 file(WRITE "/home/pups/Documents/Minecraft/build/${CMAKE_INSTALL_MANIFEST}"
-=======
-file(WRITE "/home/pups/Documents/test/Minecraft-main/build/${CMAKE_INSTALL_MANIFEST}"
->>>>>>> colision
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
