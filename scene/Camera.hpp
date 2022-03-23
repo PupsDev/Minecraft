@@ -47,5 +47,11 @@ public:
 		viewPosUniform = glGetUniformLocation(programID , "viewPos");
 
 	}
+
+	
+	double getDistance(vec3 pos){
+		return length(pos-position);
+	}
+
 	//~Camera();
 };

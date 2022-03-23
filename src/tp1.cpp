@@ -45,13 +45,11 @@ using namespace std;
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
 
-
-
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 800*2;
+const unsigned int SCR_HEIGHT = 600*2;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
@@ -263,7 +261,7 @@ int init()
 
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-    // Hide the mouse and enable unlimited mouvement
+    // Hide the mouse and enable unlimited mouvemezanne0.off cannot be opened
     //  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Set the mouse at the center of the screen
@@ -289,6 +287,19 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     
     bool displayFPS = false;
     GameObject* suz = new GameObject();
+
+
+
+    suz->doesLOD = true;
+
+    suz->setLodMesh("LOD/suzanne0.off",0);
+    suz->setLodMesh("LOD/suzanne1.off",1);
+    suz->setLodMesh("LOD/suzanne2.off",2);
+    suz->setLodMesh("LOD/suzanne3.off",3);
+
+    suz->meshLod[0].computeNormals();
+    
+
     suz->loadMesh("suzanne.off");
     suz->loadOnGpu(GameObjectShader);
 
@@ -301,7 +312,8 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     graphBB->gameObject = bb;
     graphSuz->add(graphBB);
 
-    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
+    Transform * translation = new Transform(glm::vec3(2.,10.,2.));
+    //translation->model = translation->getMat4()*glm::mat4(5.);
     translation->model = translation->getMat4();
     graphSuz->gameObject->apply(translation);
     graphBB->gameObject->apply(translation);
@@ -336,10 +348,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         }
         else
         {
-            //translation = new Transform(-3*suzie_transform);
-            //translation->model = translation->getMat4();
-            //graphSuz->gameObject->apply(translation);
-            //graphBB->gameObject->apply(translation);
+           
         }
 
 
@@ -363,7 +372,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         suz->draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-             map.draw(camera);
+         map.draw(camera);
         glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
@@ -487,44 +496,6 @@ void processInput(GLFWwindow *window)
             //     suzie_transform =  glm::vec3(0.,-1.,0.);
             // }        
              suzie_transform =  glm::vec3(0.,-1.,0.);
-        }
-        if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
-        {
-            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,1.,0.);
-            // }        
-            suzie_transform =  glm::vec3(1.,0.,0.);
-                
-        }
-        if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
-        {
-            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,-1.,0.);
-            // }        
-             suzie_transform =  glm::vec3(-1.,0.,0.);
-        }
-        if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
-        {
-            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,1.,0.);
-            // }        
-            suzie_transform =  glm::vec3(0.,0.,1.);
-                
-        }
-        if (glfwGetKey(window, GLFW_KEY_KP_3) == GLFW_PRESS)
-        {
-            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
-            // {
-            //     keyPressed =!keyPressed;            
-            //     suzie_transform =  glm::vec3(0.,-1.,0.);
-            // }        
-             suzie_transform =  glm::vec3(0.,0.,-1.);
         }
 
     }else{

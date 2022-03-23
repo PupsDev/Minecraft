@@ -1,13 +1,17 @@
 #version 330 core
 
 in vec2 UV;
-in float debug;
+in vec3 normal;
+in vec3 pos;
+//in float debug;
 
 // Ouput data
 out vec3 color;
 
-uniform sampler2D myTextureSampler[5];
-uniform float seaLevel;
+
+uniform sampler2D myTextureSampler[1];
+uniform vec3 viewPos;
+//uniform float seaLevel;
 
 float map(float value, float min1, float max1, float min2, float max2) {
   return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
@@ -17,34 +21,32 @@ float clamp(float value, float min, float max){
 }
 
 void main(){
-        color = vec3(0.2, 0.2,0.9);
+        vec3 lightColor = vec3(0.9,0.9,0.9);
+        vec3 lightDir   = normalize(vec3(0.5,1.0,0.2));
+        vec3 objectColor = texture( myTextureSampler[0], UV).rgb;
+        float specularStrength = 0.2;
 
-        float height = texture( myTextureSampler[0], UV).r;
+        vec3 viewDir = normalize(viewPos - pos);
+        vec3 reflectDir = reflect(-lightDir, normal); 
 
-        vec3 t1 =  texture( myTextureSampler[1], UV).rgb;
-        vec3 t2 =  texture( myTextureSampler[2], UV).rgb;
-        vec3 t3 =  texture( myTextureSampler[3], UV).rgb;
+        float ambientStrength = 0.4;
+        vec3 ambient = ambientStrength * lightColor;
 
-        if(height<seaLevel-0.001){
-                height = height;
-                if(height < 0.33f){
-                        color = mix(t3,t2,clamp(map(height, 0.0, 0.3,-10,1),0,1));
-                }else if(height < 0.66f){
-                        color = mix(t2,t1,clamp(map(height, 0.3, 0.66,-10,1),0,1));;
-                }else{
-                        color = t1;       
-                }
-        }else{
-                color = texture( myTextureSampler[4], UV).rgb; 
-        }
+        float diff = max(dot(normal, lightDir), 0.0);
+        vec3 diffuse = diff * lightColor;
 
-        //color = vec3(seaLevel);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+        vec3 specular = specularStrength * spec * lightColor;
 
-        //color =vec3(0.2, 0.2,0.4);
-        //color = vec3(debug);
+        
 
-        //color = texture( myTextureSampler[1], UV).rgb;
-        //color = vec3(UV,0.0);
-        //color = vec3(1.0, 0.0, 0.0);
+        //vec3 result = (ambient + diffuse + specular) * objectColor;
+        vec3 result = (ambient + diffuse + specular) * vec3(0.5,0.5,0.5);
+        
+        //color = vec3(1.0, 0.0, 1.0);
+        color = result;
+        //color = normalize(viewPos);
+        //color = normal;
 
+        //color = vec3(1,0,0);
 }
