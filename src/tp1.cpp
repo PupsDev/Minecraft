@@ -45,6 +45,8 @@ using namespace std;
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
 
+
+
 void processInput(GLFWwindow *window);
 
 // settings
@@ -84,48 +86,144 @@ float dist(glm::vec3 a,glm::vec3 b)
     return sqrt( (a[0]-b[0])*(a[0]-b[0]) +  (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) );
 }
 
-int mapToChunkInd(int x, int renderDistance)
+int mapToChokeDaddy(int x, int renderDistance)
 {
+    //cout<<"pos : "<<x<<endl;
+
     return (renderDistance*15 +x)/(renderDistance*15)-1;
 }
 
+Chunk getChunk(Map *map,int ix, int iy)
+{
+
+        auto chunkX = map->chunks.find(ix);
+        if( chunkX != map->chunks.end())
+        {
+                auto chunkY = chunkX->second.find(iy);
+                if( chunkY != chunkX->second.end())
+                {
+                    return chunkY->second;   
+                }
+        }
+        
+}
 std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
 {
     glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
 
-    int x = mapToChunkInd((int)pos[0],1);
-    int y = mapToChunkInd((int)pos[2],1);
+    int x = mapToChokeDaddy((int)pos[0],1);
+    int y = mapToChokeDaddy((int)pos[2],1);
     int renderDistance =1;
     std::vector<pair<int,int>> coord;
-    coord.push_back(make_pair( mapToChunkInd((int)pos[0],renderDistance),mapToChunkInd((int)pos[2],renderDistance)));
-    coord.push_back(make_pair( mapToChunkInd((int)pos[0]+16,renderDistance),mapToChunkInd((int)pos[2],renderDistance)));
-    coord.push_back(make_pair( mapToChunkInd((int)pos[0],renderDistance),mapToChunkInd((int)pos[2]+16,renderDistance)));
-    coord.push_back(make_pair( mapToChunkInd((int)pos[0]+16,renderDistance),mapToChunkInd((int)pos[2]+16,renderDistance)));
-     cout<<"FINDCHUNKS: "<<endl;   
+
+        ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
+
+        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
+            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
+                int ix = (x<0 ? x*-2 +1 : x*2);
+                int iy = (x<0 ? y*-2 +1 : y*2);
+                 //cout<<" le chounk: "<<x<<":"<<y<<endl;     
+                auto chunkX = map->chunks.find(ix);
+                if( chunkX != map->chunks.end())
+                {
+                        auto chunkY = chunkX->second.find(iy);
+                        if( chunkY != chunkX->second.end())
+                        {
+                            //cout<<"Find le chounk: "<<ix<<":"<<iy<<endl;  
+                            coord.push_back(make_pair(ix,iy));
+                            chunkY->second.gigaObject.vis = 0;     
+                        }
+                }
+            }
+        }
+
     for(auto c : coord)
     {
         int x = c.first;
         int y = c.second;
-        //cout<<"Find le chounk: "<<x<<":"<<y<<endl;      
-        auto chunkX = map->chunks.find(x);
-        if( chunkX != map->chunks.end())
+       // cout<<"Find le chounk: "<<x<<":"<<y<<endl;      
+    
+    }
+    return coord;
+}
+int findHighest(Chunk chonky,  ivec2 pos)
+{
+    int hauteurMax = 200;
+    map<int, map<int, map<int, int>>> bendel;
+  int ret =1;
+    auto cubeX = chonky.bendel.find(pos[0]);
+        if( cubeX != chonky.bendel.end())
         {
-                auto chunkY = chunkX->second.find(y);
-                if( chunkY != chunkX->second.end())
+                auto cubeY = cubeX->second.find(pos[1]);
+                if( cubeY != cubeX->second.end())
                 {
-                   cout<<"Find le chounk: "<<x<<":"<<y<<endl;       
+                    //cout<<"Find le chounk: "<<ix<<":"<<iy<<endl;  
+                    //coord.push_back(make_pair(ix,iy));
+                    //cubeY->second.gigaObject.vis = 0;     
+
+                    for( int z = hauteurMax;z>=0;z-- )
+                    {
+                         auto cubeZ = cubeY->second.find(z);
+                        if( cubeZ != cubeY->second.end())
+                        {
+                            cout<<"Z = "<<z<<endl;
+                            ret = z;
+                            return ret;
+                        }
+                    }
                 }
         }
-
-    }
-
-
-
-
+        return ret;
 }
+
 bool collide(Map *map, GameObject* box)
 {
     std::vector<pair<int,int>> chunks = findChunks(map, box);
+     glm::vec3 newPos ;
+      glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
+     int hauteurMax = - 99999999;
+    for(auto pairChunk : chunks)
+    {
+
+        Chunk chonkyboy = getChunk(map,pairChunk.first,pairChunk.second);
+        if(chonkyboy.status !=3)
+        {
+            return false;
+        }
+       
+        int x = pos[0]-chonkyboy.worldPos[0];
+        int y = pos[2]-chonkyboy.worldPos[1];
+
+        x = x<0?0:x>15?15:x;
+        y = (y<0?0:y>15?15:y);
+
+        //cout<<"Chunk : "<<pairChunk.first<<" "<<pairChunk.second<<endl;
+    
+        //cout<<"x : "<<x<<endl;
+        //cout<<"y : "<<y<<endl<<endl;
+
+        hauteurMax = std::max(hauteurMax,findHighest(chonkyboy,ivec2(x,y)));
+        
+    }
+    cout<<"hauteur : "<<hauteurMax<<endl<<endl;
+    if( (pos[1]-hauteurMax) < 1 )
+
+    {
+        newPos = glm::vec3(pos[0],hauteurMax+2,pos[2]);
+        glm::vec3 translate = newPos-pos;
+        
+        Transform * translation = new Transform(translate);
+        //Transform * translation = new Transform(vec3(0.0, , 0.0));
+        translation->model = translation->getMat4();
+        box->apply(translation);
+        return true;
+    }
+
+    //return true;
+     //cout<<"x : "<<pos[0]<<"y : "<<pos[1]<<"z : "<<pos[2]<<endl;
+   
+     //cout<<"x : "<<newPos[0]<<"y : "<<newPos[1]<<"z : "<<newPos[2]<<endl;
+
     /*
     glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
     //cout<<glm::to_string(pos)<<endl;
@@ -236,7 +334,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     graphBB->gameObject = bb;
     graphSuz->add(graphBB);
 
-    Transform * translation = new Transform(glm::vec3(2.,10.,2.));
+    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
     translation->model = translation->getMat4();
     graphSuz->gameObject->apply(translation);
     graphBB->gameObject->apply(translation);
@@ -271,10 +369,10 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         }
         else
         {
-            translation = new Transform(-3*suzie_transform);
-            translation->model = translation->getMat4();
-            graphSuz->gameObject->apply(translation);
-            graphBB->gameObject->apply(translation);
+            //translation = new Transform(-3*suzie_transform);
+            //translation->model = translation->getMat4();
+            //graphSuz->gameObject->apply(translation);
+            //graphBB->gameObject->apply(translation);
         }
 
 
@@ -339,7 +437,7 @@ int main( void )
     myTerrain.loadOnGpu();
 
 
-    Map map = Map(GameObjectShader,100,2);
+    Map map = Map(GameObjectShader,100,15);
 
     // For speed computation
     double lastTime = glfwGetTime();
@@ -422,6 +520,44 @@ void processInput(GLFWwindow *window)
             //     suzie_transform =  glm::vec3(0.,-1.,0.);
             // }        
              suzie_transform =  glm::vec3(0.,-1.,0.);
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_6) == GLFW_PRESS)
+        {
+            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,1.,0.);
+            // }        
+            suzie_transform =  glm::vec3(1.,0.,0.);
+                
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_4) == GLFW_PRESS)
+        {
+            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,-1.,0.);
+            // }        
+             suzie_transform =  glm::vec3(-1.,0.,0.);
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_9) == GLFW_PRESS)
+        {
+            // if (glfwGetKey(window, GLFW_KEY_KP_8) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,1.,0.);
+            // }        
+            suzie_transform =  glm::vec3(0.,0.,1.);
+                
+        }
+        if (glfwGetKey(window, GLFW_KEY_KP_3) == GLFW_PRESS)
+        {
+            //if (glfwGetKey(window, GLFW_KEY_KP_2) == GLFW_RELEASE)
+            // {
+            //     keyPressed =!keyPressed;            
+            //     suzie_transform =  glm::vec3(0.,-1.,0.);
+            // }        
+             suzie_transform =  glm::vec3(0.,0.,-1.);
         }
 
     }else{

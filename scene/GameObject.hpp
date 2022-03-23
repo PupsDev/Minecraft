@@ -5,7 +5,7 @@ public:
 	Transform* t;
 	Mesh mesh;
 	GLuint programID;
-
+	int vis;
 	GLuint viewMatrix_uniform ;
     GLuint projectionMatrix_uniform ;
 
@@ -121,10 +121,12 @@ public:
 
 
 	GameObject(){
+		vis=1;
 		t = new  Transform();
 		mesh = Mesh();
 	}
 	GameObject(Mesh m_mesh){
+		vis=1;
 		t = new Transform();
 		mesh = m_mesh;
 	}
