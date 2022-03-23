@@ -94,7 +94,7 @@ class Chunk{
                     3;
 
                 //cout<<z<<endl;
-                z= z /levelDivisor ;
+                //z= z /levelDivisor ;
                 for(int k = 0 ; k <= z ; k ++){
                     int realType =
                         k == z ? baseType :

@@ -173,25 +173,27 @@ int init()
 
 int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 {
+    
+    GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
+    
     bool displayFPS = false;
     GameObject* suz = new GameObject();
     suz->loadMesh("suzanne.off");
     suz->loadOnGpu(GameObjectShader);
 
-    GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
-    BoundingBox* bb = new BoundingBox();
-    bb->loadOnGpu(BoxShader);
+    //BoundingBox* bb = new BoundingBox();
+    //bb->loadOnGpu(BoxShader);
 
     SceneGraphComposite* graphSuz = new SceneGraphComposite();
     SceneGraphLeaf* graphBB = new SceneGraphLeaf();
     graphSuz->gameObject = suz;
-    graphBB->gameObject = bb;
-    graphSuz->add(graphBB);
+    //graphBB->gameObject = bb;
+    //graphSuz->add(graphBB);
 
     Transform * translation = new Transform(glm::vec3(0.,10.,0.));
     translation->model = translation->getMat4();
     graphSuz->gameObject->apply(translation);
-    graphBB->gameObject->apply(translation);
+    //graphBB->gameObject->apply(translation);
     
     do{
         float currentFrame = glfwGetTime();
@@ -212,12 +214,12 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         glm::mat4 projectionMatrix;
 
         
-        if(!collide(&map,graphBB->gameObject))
+        /*if(!collide(&map,graphBB->gameObject))
         {
             translation = new Transform(suzie_transform);
             translation->model = translation->getMat4();
             graphSuz->gameObject->apply(translation);
-            graphBB->gameObject->apply(translation);
+           // graphBB->gameObject->apply(translation);
             suzie_transform = glm::vec3(0.,0.,0.);
 
         }
@@ -226,8 +228,8 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
             translation = new Transform(-3*suzie_transform);
             translation->model = translation->getMat4();
             graphSuz->gameObject->apply(translation);
-            graphBB->gameObject->apply(translation);
-        }
+            //graphBB->gameObject->apply(translation);
+        }*/
 
 
 
@@ -250,16 +252,16 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         camera.giveItToMe();
 
        
-        
+        map.draw(camera);
+        //suz->draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-         map.draw(camera);
-    
+
         glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        graphSuz->gameObject->draw(camera);
-        bb->draw(camera);
+        
+        //bb->draw(camera);
         glDisable(GL_BLEND);
 
 
@@ -294,7 +296,7 @@ int main( void )
     myTerrain.loadOnGpu();
 
 
-    Map map = Map(GameObjectShader,50,1);
+    Map map = Map(GameObjectShader,100,15);
 
     // For speed computation
     double lastTime = glfwGetTime();
