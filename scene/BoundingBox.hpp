@@ -8,6 +8,7 @@ class BoundingBox : public GameObject
         float radius;
         BoundingBox()
         {
+            radius=1.;
             createSphere(mesh.indices,mesh.indexed_vertices,mesh.uvs, 32);
         }
         bool intersect()
@@ -20,11 +21,11 @@ class BoundingBox : public GameObject
             indexed_vertices.clear();
             indexed_uvs.clear();
             indices.clear();
-            float size = 0.2;
+            //float size = 0.2;
 
             float const R = 1./(float)(sommets-1);
             float const S = 1./(float)(sommets-1);
-            float radius =1.;
+            //float radius =1.;
 
             for(int i = 0 ; i < sommets ; i++)
                 for(int j = 0 ; j < sommets ; j++)

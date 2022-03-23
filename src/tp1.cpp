@@ -18,6 +18,7 @@ GLFWwindow* window;
 #include <glm/gtx/rotate_vector.hpp>
 
 #include <iostream>
+#include <utility>
 
 using namespace glm;
 using namespace std;
@@ -82,8 +83,50 @@ float dist(glm::vec3 a,glm::vec3 b)
 {
     return sqrt( (a[0]-b[0])*(a[0]-b[0]) +  (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) );
 }
+
+int mapToChunkInd(int x, int renderDistance)
+{
+    return (renderDistance*15 +x)/(renderDistance*15)-1;
+}
+
+std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
+{
+    glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
+
+    int x = mapToChunkInd((int)pos[0],1);
+    int y = mapToChunkInd((int)pos[2],1);
+    int renderDistance =1;
+    std::vector<pair<int,int>> coord;
+    coord.push_back(make_pair( mapToChunkInd((int)pos[0],renderDistance),mapToChunkInd((int)pos[2],renderDistance)));
+    coord.push_back(make_pair( mapToChunkInd((int)pos[0]+16,renderDistance),mapToChunkInd((int)pos[2],renderDistance)));
+    coord.push_back(make_pair( mapToChunkInd((int)pos[0],renderDistance),mapToChunkInd((int)pos[2]+16,renderDistance)));
+    coord.push_back(make_pair( mapToChunkInd((int)pos[0]+16,renderDistance),mapToChunkInd((int)pos[2]+16,renderDistance)));
+     cout<<"FINDCHUNKS: "<<endl;   
+    for(auto c : coord)
+    {
+        int x = c.first;
+        int y = c.second;
+        //cout<<"Find le chounk: "<<x<<":"<<y<<endl;      
+        auto chunkX = map->chunks.find(x);
+        if( chunkX != map->chunks.end())
+        {
+                auto chunkY = chunkX->second.find(y);
+                if( chunkY != chunkX->second.end())
+                {
+                   cout<<"Find le chounk: "<<x<<":"<<y<<endl;       
+                }
+        }
+
+    }
+
+
+
+
+}
 bool collide(Map *map, GameObject* box)
 {
+    std::vector<pair<int,int>> chunks = findChunks(map, box);
+    /*
     glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
     //cout<<glm::to_string(pos)<<endl;
     // to do do with renderdistance
@@ -91,6 +134,7 @@ bool collide(Map *map, GameObject* box)
     int y = ((int)pos[2]+15)/15;
     //cout<<x<<" "<<y<<endl;
     auto chunkX = map->chunks.find(x-1);
+    
    if( chunkX != map->chunks.end())
    {
            cout<<"Ligne chunk trouvé"<<endl;
@@ -109,7 +153,9 @@ bool collide(Map *map, GameObject* box)
                 }
             }
         }
+
    }
+   */
 
 
 
@@ -181,19 +227,19 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     suz->loadMesh("suzanne.off");
     suz->loadOnGpu(GameObjectShader);
 
-    //BoundingBox* bb = new BoundingBox();
-    //bb->loadOnGpu(BoxShader);
+    BoundingBox* bb = new BoundingBox();
+    bb->loadOnGpu(BoxShader);
 
     SceneGraphComposite* graphSuz = new SceneGraphComposite();
     SceneGraphLeaf* graphBB = new SceneGraphLeaf();
     graphSuz->gameObject = suz;
-    //graphBB->gameObject = bb;
-    //graphSuz->add(graphBB);
+    graphBB->gameObject = bb;
+    graphSuz->add(graphBB);
 
-    Transform * translation = new Transform(glm::vec3(0.,10.,0.));
+    Transform * translation = new Transform(glm::vec3(2.,10.,2.));
     translation->model = translation->getMat4();
     graphSuz->gameObject->apply(translation);
-    //graphBB->gameObject->apply(translation);
+    graphBB->gameObject->apply(translation);
     
     do{
         float currentFrame = glfwGetTime();
@@ -214,12 +260,12 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         glm::mat4 projectionMatrix;
 
         
-        /*if(!collide(&map,graphBB->gameObject))
+        if(!collide(&map,graphBB->gameObject))
         {
             translation = new Transform(suzie_transform);
             translation->model = translation->getMat4();
             graphSuz->gameObject->apply(translation);
-           // graphBB->gameObject->apply(translation);
+            graphBB->gameObject->apply(translation);
             suzie_transform = glm::vec3(0.,0.,0.);
 
         }
@@ -228,8 +274,8 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
             translation = new Transform(-3*suzie_transform);
             translation->model = translation->getMat4();
             graphSuz->gameObject->apply(translation);
-            //graphBB->gameObject->apply(translation);
-        }*/
+            graphBB->gameObject->apply(translation);
+        }
 
 
 
@@ -239,29 +285,25 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         //graphBB->gameObject->t->model = translation->getMat4();
 
 
-        camera.fov = glm::radians(90.0f);
-        viewMatrix = glm::lookAt(camera_position, camera_target+camera_position, camera_up);
-        projectionMatrix = glm::perspective(camera.fov, 4.0f/3.0f, 0.1f, 1000.0f);
+       
 
-        //camera.fov = glm::radians(45.0f);
-        camera.position = camera_position; // TODO faudra faire ça bien un jour et faire les calculs dans la classe camera
-        camera.direction = camera_target;
+        camera.set(camera_position,camera_target,camera_up);
 
-        camera.viewMatrix = viewMatrix;
-        camera.projectionMatrix = projectionMatrix;
+ 
+
         camera.giveItToMe();
 
        
-        map.draw(camera);
-        //suz->draw(camera);
+       glUseProgram(GameObjectShader);
+        suz->draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
+             map.draw(camera);
         glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        
-        //bb->draw(camera);
+        glUseProgram(BoxShader);
+        bb->draw(camera);
         glDisable(GL_BLEND);
 
 
@@ -289,6 +331,7 @@ int main( void )
 
     Camera camera(programID);
 
+
     Terrain myTerrain = Terrain(programID);
 
     myTerrain.setResolution(resolution);
@@ -296,14 +339,14 @@ int main( void )
     myTerrain.loadOnGpu();
 
 
-    Map map = Map(GameObjectShader,100,15);
+    Map map = Map(GameObjectShader,100,2);
 
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
 
-    gameLoop(map,GameObjectShader,camera);
+    gameLoop(map,programID,camera);
 
     // Cleanup VBO and shader
     //glDeleteBuffers(1, &vertexbuffer);

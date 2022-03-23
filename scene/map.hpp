@@ -33,7 +33,7 @@ class Map {
     GLuint programID;
     GLuint gigaTexture;
 
-    int maxThread = 10;
+    int maxThread = 1;
     int nbThread = 0;
 
     Map(GLuint GameObjectShader, int size=100, int renderDistance =15){
