@@ -351,12 +351,12 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
        
        glUseProgram(GameObjectShader);
         suz->draw(camera);
+         map.draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         glEnable(GL_BLEND);
          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-         map.draw(camera);
 
         glUseProgram(BoxShader);
         bb->draw(camera);
