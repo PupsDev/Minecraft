@@ -40,7 +40,7 @@ public:
 	Camera(GLuint programID){
 
 		fov = glm::radians(90.0f);
-        projectionMatrix = glm::perspective(fov, 4.0f/3.0f, 0.1f, 1000.0f);
+        projectionMatrix = glm::perspective(fov, 16.0f/9.0f, 0.1f, 1000.0f);
 
 		viewMatrix_uniform = glGetUniformLocation(programID,"view");
 		projectionMatrix_uniform = glGetUniformLocation(programID,"projection");

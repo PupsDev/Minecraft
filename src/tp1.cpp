@@ -48,8 +48,8 @@ using namespace std;
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
@@ -187,6 +187,9 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
         int h = findHighest(currentChunk,ivec2(x,y));
         hauteurMax = std::max(hauteurMax,h);
 
+        if(h != -1 && pos[1]-hauteurMax < 2.5)
+        currentChunk.hideCube(ivec3(x,y,h));
+
         
     }
     //cout<<"hauteur : "<<hauteurMax<<endl<<endl;
@@ -197,6 +200,8 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
         newPos = glm::vec3(pos[0],hauteurMax+0.5+2,pos[2]);
         glm::vec3 translate = newPos-pos;
         Transform * translation = new Transform(translate);
+
+        
 
         translation->model = translation->getMat4();
         graphbox->gameObject->apply(translation);

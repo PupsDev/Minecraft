@@ -42,6 +42,23 @@ public:
     	glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
+	void reloadOnGpu(){
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
+	    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferPlane);
+	    glBufferData(GL_ELEMENT_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0] , GL_STATIC_DRAW);
+
+
+	}
+
     void loadOnGpu(GLuint id){
     	// Load it into a VBO
     	programID = id;

@@ -20,11 +20,11 @@ class Chunk{
 
         map<int, map<int, map<int, int>>> bendel;
 
+
         Cube * cubeSample;
         GameObject gigaObject;
-        Mesh gigaMesh;
-        
 
+        GLuint myProgId;
         GLuint viewMatrix_uniform;
         GLuint projectionMatrix_uniform;
         GLuint viewPosUniform;
@@ -32,14 +32,19 @@ class Chunk{
 
     Chunk(){
         status = 0;
-        gigaMesh =  Mesh();
         gigaObject =  GameObject();
+        gigaObject.mesh = Mesh();
     }
 
 
     void makeGigaMesh(){
         
-        
+        gigaObject.mesh.indices.clear();
+        gigaObject.mesh.indexed_vertices.clear();
+        gigaObject.mesh.normals.clear();
+        gigaObject.mesh.uvs.clear();
+
+
         int ind = 0;
         for(int i = 0 ; i < cubes.size() ; i++){
             int p2 = 1;
@@ -48,7 +53,7 @@ class Chunk{
                     cubeSample->faces[j];
 
                     for(int k = 0 ; k < cubeSample->faces[j].indices.size() ; k ++){
-                        gigaMesh.indices.push_back(cubeSample->faces[j].indices[k] + ind);
+                        gigaObject.mesh.indices.push_back(cubeSample->faces[j].indices[k] + ind);
                     }
 
                     for(int k = 0 ; k < cubeSample->faces[j].indexed_vertices.size() ; k ++){
@@ -58,15 +63,14 @@ class Chunk{
                         vec2 uv = cubeSample->faces[j].uvs[k];
                         uv.x = uv.x*0.2 + type[i]*0.2;
 
-                        gigaMesh.indexed_vertices.push_back(cubeSample->faces[j].indexed_vertices[k]+pos);
-                        gigaMesh.normals.push_back(cubeSample->faces[j].normals[k]);
-                        gigaMesh.uvs.push_back(uv);
+                        gigaObject.mesh.indexed_vertices.push_back(cubeSample->faces[j].indexed_vertices[k]+pos);
+                        gigaObject.mesh.normals.push_back(cubeSample->faces[j].normals[k]);
+                        gigaObject.mesh.uvs.push_back(uv);
                     }
                 }
                 p2*=2;
             }
         }
-        gigaObject.mesh = gigaMesh;
     }
 
     //Chunk(const siv::PerlinNoise &perlin, int sx, int sy, Cube * c, GLuint programID, GLuint texture){
@@ -112,7 +116,25 @@ class Chunk{
             }
         }
 
-        for(int j = 0 ; j < cubes.size();j++){
+        computeVisibility();
+        makeGigaMesh();
+
+        status = 2;
+    }
+
+
+    int getCube(ivec3 cubePos){
+        if(
+            bendel.find(cubePos[0]) != bendel.end() &&
+            bendel[cubePos[0]].find(cubePos[1]) != bendel[cubePos[0]].end() &&
+            bendel[cubePos[0]][cubePos[1]].find(cubePos[2])!=bendel[cubePos[0]][cubePos[1]].end()){
+                return bendel[cubePos[0]][cubePos[1]][cubePos[2]];
+        }
+    }
+
+
+    void computeVisibility(){
+         for(int j = 0 ; j < cubes.size();j++){
             int tmpVis = 63;
             if(
                 bendel.find(cubes[j][0]-1) != bendel.end() &&
@@ -154,12 +176,34 @@ class Chunk{
             visibility.push_back(tmpVis);
         }
 
-        makeGigaMesh();
+    }
 
-        status = 2;
+    void hideCube(ivec3 cubePos){
+        if(status >= 2){
+            cout<<"hide cube : "<<cubePos<<endl;
+            int cubeTohide = bendel[cubePos[0]][cubePos[1]][cubePos[2]];
+            ///////////////
+            cubes.erase(cubes.begin()+cubeTohide);
+            type.erase(type.begin()+cubeTohide);
+            visibility.erase(visibility.begin()+cubeTohide);
+
+            bendel[cubePos[0]][cubePos[1]][cubePos[2]] = -1;
+
+            ///////////////
+            computeVisibility();
+            makeGigaMesh();
+            reloadOnGpu();
+        }
+    }
+
+    void reloadOnGpu(){
+        glUseProgram(myProgId);
+        gigaObject.mesh.reloadOnGpu();
     }
 
     void loadOnGpu(GLuint programID, GLuint texture){
+        myProgId    = programID;
+
         glUseProgram(programID);
 
         gigaObject.mesh.texture = texture;
