@@ -129,6 +129,8 @@ class Chunk{
             bendel[cubePos[0]].find(cubePos[1]) != bendel[cubePos[0]].end() &&
             bendel[cubePos[0]][cubePos[1]].find(cubePos[2])!=bendel[cubePos[0]][cubePos[1]].end()){
                 return bendel[cubePos[0]][cubePos[1]][cubePos[2]];
+        }else{
+            return -1;
         }
     }
 
@@ -136,50 +138,30 @@ class Chunk{
     void computeVisibility(){
          for(int j = 0 ; j < cubes.size();j++){
             int tmpVis = 63;
-            if(
-                bendel.find(cubes[j][0]-1) != bendel.end() &&
-                bendel[cubes[j][0]-1].find(cubes[j][1]) != bendel[cubes[j][0]-1].end() &&
-                bendel[cubes[j][0]-1][cubes[j][1]].find(cubes[j][2])!=bendel[cubes[j][0]-1][cubes[j][1]].end()){
+            if(getCube(cubes[j]+ivec3(-1,0,0)) != -1){
                 tmpVis = tmpVis & (~1);
             }
-            if(
-                bendel.find(cubes[j][0]+1) != bendel.end() &&
-                bendel[cubes[j][0]+1].find(cubes[j][1]) != bendel[cubes[j][0]+1].end() &&
-                bendel[cubes[j][0]+1][cubes[j][1]].find(cubes[j][2])!=bendel[cubes[j][0]+1][cubes[j][1]].end()){
+            if(getCube(cubes[j]+ivec3(1,0,0)) != -1){
                 tmpVis = tmpVis & (~16);
             }
-            if(
-                bendel.find(cubes[j][0]) != bendel.end() &&
-                bendel[cubes[j][0]].find(cubes[j][1]+1) != bendel[cubes[j][0]].end() &&
-                bendel[cubes[j][0]][cubes[j][1]+1].find(cubes[j][2])!=bendel[cubes[j][0]][cubes[j][1]+1].end()){
+            if(getCube(cubes[j]+ivec3(0,1,0)) != -1){
                 tmpVis = tmpVis & (~8);
             }
-            if(
-                bendel.find(cubes[j][0]) != bendel.end() &&
-                bendel[cubes[j][0]].find(cubes[j][1]-1) != bendel[cubes[j][0]].end() &&
-                bendel[cubes[j][0]][cubes[j][1]-1].find(cubes[j][2])!=bendel[cubes[j][0]][cubes[j][1]-1].end()){
+            if(getCube(cubes[j]+ivec3(0,-1,0)) != -1){
                 tmpVis = tmpVis & (~4);
             }
-            if(
-                bendel.find(cubes[j][0]) != bendel.end() &&
-                bendel[cubes[j][0]].find(cubes[j][1]) != bendel[cubes[j][0]].end() &&
-                bendel[cubes[j][0]][cubes[j][1]].find(cubes[j][2]+1)!=bendel[cubes[j][0]][cubes[j][1]].end()){
+            if(getCube(cubes[j]+ivec3(0,0,1)) != -1){
                 tmpVis = tmpVis & (~32);
             }
-            if(
-                bendel.find(cubes[j][0]) != bendel.end() &&
-                bendel[cubes[j][0]].find(cubes[j][1]) != bendel[cubes[j][0]].end() &&
-                bendel[cubes[j][0]][cubes[j][1]].find(cubes[j][2]-1)!=bendel[cubes[j][0]][cubes[j][1]].end()){
+            if(getCube(cubes[j]+ivec3(0,0,-1)) != -1){
                 tmpVis = tmpVis & (~2);
             }
-
             visibility.push_back(tmpVis);
         }
-
     }
 
     void hideCube(ivec3 cubePos){
-        if(status >= 2){
+        if(status > 2){
             cout<<"hide cube : "<<cubePos<<endl;
             int cubeTohide = bendel[cubePos[0]][cubePos[1]][cubePos[2]];
             ///////////////
@@ -187,7 +169,7 @@ class Chunk{
             type.erase(type.begin()+cubeTohide);
             visibility.erase(visibility.begin()+cubeTohide);
 
-            bendel[cubePos[0]][cubePos[1]][cubePos[2]] = -1;
+            bendel[cubePos[0]][cubePos[1]].erase(cubePos[2]);
 
             ///////////////
             computeVisibility();

@@ -91,7 +91,7 @@ int mapToChunkId(int x, int renderDistance)
     return (renderDistance*15 +x)/(renderDistance*15)-1;
 }
 
-Chunk getChunk(Map *map,int ix, int iy)
+Chunk* getChunk(Map *map,int ix, int iy)
 {
         auto chunkX = map->chunks.find(ix);
         if( chunkX != map->chunks.end())
@@ -99,9 +99,10 @@ Chunk getChunk(Map *map,int ix, int iy)
                 auto chunkY = chunkX->second.find(iy);
                 if( chunkY != chunkX->second.end())
                 {
-                    return chunkY->second;   
+                    return &chunkY->second;   
                 }
         }
+        return NULL;
 }
 std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
 {
@@ -135,13 +136,13 @@ std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
 
     return coord;
 }
-int findHighest(Chunk chonky,  ivec2 pos)
+int findHighest(Chunk *chonky,  ivec2 pos)
 {
     int hauteurMax = 200;
     map<int, map<int, map<int, int>>> bendel;
     int ret =-1;
-    auto cubeX = chonky.bendel.find(pos[0]);
-        if( cubeX != chonky.bendel.end())
+    auto cubeX = chonky->bendel.find(pos[0]);
+        if( cubeX != chonky->bendel.end())
         {
                 auto cubeY = cubeX->second.find(pos[1]);
                 if( cubeY != cubeX->second.end())
@@ -173,9 +174,9 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
     for(auto pairChunk : chunks)
     {
 
-        Chunk currentChunk = getChunk(map,pairChunk.first,pairChunk.second);
+        Chunk *currentChunk = getChunk(map,pairChunk.first,pairChunk.second);
         // Status of creation is chunk not loaded
-        if(currentChunk.status !=3)
+        if( currentChunk!=NULL && currentChunk->status !=3)
         {
             return false;
         }
@@ -188,7 +189,7 @@ bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox
         hauteurMax = std::max(hauteurMax,h);
 
         if(h != -1 && pos[1]-hauteurMax < 2.5)
-        currentChunk.hideCube(ivec3(x,y,h));
+        currentChunk->hideCube(ivec3(x,y,h));
 
         
     }
