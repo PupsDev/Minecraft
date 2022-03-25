@@ -13,6 +13,8 @@ class Chunk{
         int startY = 0;
 
         ivec2 worldPos;
+        
+        vector<bool> deletedCUbe;
 
         vector<ivec3> cubes;
         vector<int> type;
@@ -46,7 +48,7 @@ class Chunk{
 
 
         int ind = 0;
-        for(int i = 0 ; i < cubes.size() ; i++){
+        for(int i = 0 ; i < cubes.size() ; i++)if(!deletedCUbe[i]){
             int p2 = 1;
             for(int j = 0 ; j< 6 ; j ++){
                 if(visibility[i] & p2){
@@ -109,6 +111,7 @@ class Chunk{
                         baseType == 4 ? 4:
                         3;
                     ivec3 pos = vec3(x,y,k);
+                    deletedCUbe.push_back(false);
                     cubes.push_back(pos);
                     type.push_back(realType);
                     bendel[pos[0]][pos[1]][pos[2]] = i++;
@@ -136,6 +139,7 @@ class Chunk{
 
 
     void computeVisibility(){
+        visibility.clear();
          for(int j = 0 ; j < cubes.size();j++){
             int tmpVis = 63;
             if(getCube(cubes[j]+ivec3(-1,0,0)) != -1){
@@ -165,11 +169,15 @@ class Chunk{
             cout<<"hide cube : "<<cubePos<<endl;
             int cubeTohide = bendel[cubePos[0]][cubePos[1]][cubePos[2]];
             ///////////////
-            cubes.erase(cubes.begin()+cubeTohide);
-            type.erase(type.begin()+cubeTohide);
-            visibility.erase(visibility.begin()+cubeTohide);
+            
+            // cubes.erase(cubes.begin()+cubeTohide);
+            // type.erase(type.begin()+cubeTohide);
+            // visibility.erase(visibility.begin()+cubeTohide);
+
+            deletedCUbe[cubeTohide] = true;
 
             bendel[cubePos[0]][cubePos[1]].erase(cubePos[2]);
+            
 
             ///////////////
             computeVisibility();
