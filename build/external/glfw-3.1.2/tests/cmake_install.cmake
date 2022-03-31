@@ -1,4 +1,4 @@
-# Install script for directory: /home/pups/Documents/Minecraft/external/glfw-3.1.2/tests
+# Install script for directory: /home/sylvain/Documents/MoteurDeJeu/Minecraft/external/glfw-3.1.2/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,10 +35,5 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
-endif()
-
-# Set default install directory permissions.
-if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 

@@ -38,12 +38,13 @@ using namespace std;
 #include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
 
-
-
-
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
+
+#include "scene/Plane.hpp"
+
+
 
 void processInput(GLFWwindow *window);
 
@@ -163,6 +164,7 @@ int findHighest(Chunk *chonky,  ivec2 pos)
         return ret;
 }
 
+
 bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox)
 {
     // 4 chunks
@@ -277,6 +279,33 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     GameObject* suz = new GameObject();
 
 
+    //////////////avion
+
+    Plane *avion = new Plane();
+    avion->loadMesh("avions/m2000V2.off");
+    avion->mesh.computeNormals();
+    avion->loadOnGpu(GameObjectShader);
+    BoundingBox* planeBB = new BoundingBox();
+    planeBB->loadOnGpu(BoxShader);
+
+    SceneGraphComposite* graphPlane = new SceneGraphComposite();
+    SceneGraphLeaf* graphPlaneBB = new SceneGraphLeaf();
+
+    graphPlane->gameObject = avion;
+    graphPlaneBB->gameObject = planeBB;
+
+    graphPlane->add(graphPlaneBB);
+
+    Transform * translation = new Transform(glm::vec3(0.,-10.,0.));
+    //translation->model = translation->getMat4()*glm::mat4(5.);
+    translation->model = translation->getMat4();
+    graphPlane->gameObject->apply(translation);
+    graphPlaneBB->gameObject->apply(translation);
+
+    //////////////avion
+
+
+
 
     suz->doesLOD = true;
 
@@ -287,9 +316,12 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
     suz->meshLod[0].computeNormals();
     
+    
 
     suz->loadMesh("suzanne.off");
     suz->loadOnGpu(GameObjectShader);
+
+    
 
     BoundingBox* bb = new BoundingBox();
     bb->loadOnGpu(BoxShader);
@@ -300,11 +332,14 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     graphBB->gameObject = bb;
     graphSuz->add(graphBB);
 
-    Transform * translation = new Transform(glm::vec3(2.,10.,2.));
+    translation = new Transform(glm::vec3(2.,10.,2.));
     //translation->model = translation->getMat4()*glm::mat4(5.);
     translation->model = translation->getMat4();
     graphSuz->gameObject->apply(translation);
     graphBB->gameObject->apply(translation);
+
+
+    
     
     glm::vec3 vitesse = glm::vec3(0.,0.,0.);
     do{
@@ -325,7 +360,7 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
 
-        translation = new Transform(0.5*suzie_transform);
+        translation = new Transform(0.5f*suzie_transform);
         translation->model = translation->getMat4();
         graphSuz->gameObject->apply(translation);
         graphBB->gameObject->apply(translation);
@@ -348,7 +383,20 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
             vitesse[1] = 0.;
             
         }
+        
+        avion->controlesUpdate(window, deltaTime);
+        auto tmpTransform = avion->update(deltaTime);
 
+        //camera_position = tmpTransform->applyToPoint(vec3(0,0,0)) + vec3(0,5,-5);
+        //camera_position = tmpTransform->getTranslation();// + vec3(0,5,-5);
+
+        camera_position = tmpTransform->applyToPoint(vec3(0, 0, 0))+vec3(-5,5,0);
+        
+        //cout<<"camera_position : "<<camera_position<<endl;
+        //tmpTransform->printmat4(tmpTransform->getMat4());
+
+        graphPlane->gameObject->t = tmpTransform;
+        graphPlaneBB->gameObject->t = tmpTransform;
       
         camera.set(camera_position,camera_target,camera_up);
 
@@ -356,12 +404,18 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
        
        glUseProgram(GameObjectShader);
+
         suz->draw(camera);
-         map.draw(camera);
+        map.draw(camera);
+
+        
+
+        avion->draw(camera);
+        //planeBB->draw(camera);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         glEnable(GL_BLEND);
-         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
         glUseProgram(BoxShader);
@@ -389,19 +443,12 @@ int main( void )
     //GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
-    
 
+    //cout<<"GameObjectShader : "<<GameObjectShader<<endl;
+    
     Camera camera(programID);
 
-
-    Terrain myTerrain = Terrain(programID);
-
-    myTerrain.setResolution(resolution);
-    myTerrain.loadOnRam();
-    myTerrain.loadOnGpu();
-
-
-    Map map = Map(GameObjectShader,100,15);
+    Map map = Map(GameObjectShader,100,10);
 
     // For speed computation
     double lastTime = glfwGetTime();

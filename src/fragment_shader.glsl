@@ -23,7 +23,8 @@ float clamp(float value, float min, float max){
 void main(){
         vec3 lightColor = vec3(0.9,0.9,0.9);
         vec3 lightDir   = normalize(vec3(0.5,1.0,0.2));
-        vec3 objectColor = texture( myTextureSampler[0], UV).rgb;
+        //vec3 objectColor = texture( myTextureSampler[0], UV).rgb;
+        vec3 objectColor = vec3(0.5,0.5,0.5);
         float specularStrength = 0.2;
 
         vec3 viewDir = normalize(viewPos - pos);

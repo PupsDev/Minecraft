@@ -43,6 +43,8 @@ public:
 	}
 
 	void reloadOnGpu(){
+		if(normals.size()!=indexed_vertices.size())
+		computeNormals();
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
@@ -60,6 +62,11 @@ public:
 	}
 
     void loadOnGpu(GLuint id){
+
+		if(normals.size()!=indexed_vertices.size())
+		computeNormals();
+
+
     	// Load it into a VBO
     	programID = id;
     	modelMatrix_uniform = glGetUniformLocation(programID,"model");
@@ -93,21 +100,35 @@ public:
 
 	void computeNormals(){
 
-		normals.resize(indexed_vertices.size());
+		vector<double> valence = vector<double>() ;// = vector<double>(indexed_vertices.size(), 0.0);
+		valence.resize(indexed_vertices.size(), 0.0);
+
+		normals.resize(indexed_vertices.size(),vec3(0,0,0));
 
 		for(int i = 0; i < indices.size() ; i += 3){
 			vec3 P1 = indexed_vertices[indices[i]];
 			vec3 P2 = indexed_vertices[indices[i+1]];
-			//vec3 P3 = indexed_vertices[indices[i+2]];
+			vec3 P3 = indexed_vertices[indices[i+2]];
 
-			vec3 normal = normalize(cross(P1,P2));
+			vec3 normal = normalize(cross(P2-P1,P3-P1));
 			//cout<<normal<<endl;
 			facesNormals.push_back(normal);
 
-			normals[indices[i]] = normal;
-			normals[indices[i+1]] = normal;
-			normals[indices[i+2]] = normal;
+			normals[indices[i]] += normal;
+			normals[indices[i+1]] += normal;
+			normals[indices[i+2]] += normal;
+
+			valence[indices[i]] ++;
+			valence[indices[i+1]] ++;
+			valence[indices[i+2]] ++;
 		}
+
+		for(int i = 0 ; i < indexed_vertices.size() ; i ++){
+			normals[i] = normalize(normals[i]);
+			//normals[i] = normals[i] / (valence[i] > 0 ? valence[i] : 1.0);
+		}
+
+		valence.clear();
 	}
 	
 	void computeAABB(){

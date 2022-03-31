@@ -27,8 +27,8 @@ public:
 		Mesh * tmpMesh;
 
 		if(doesLOD){
-			cout<<"cameraDistance :"<<cameraDistance<<endl;
-			cout<<"affiched "<<fmin(cameraDistance/maxDist,1.0) * (meshLod.size() - 1)<<endl;
+			//cout<<"cameraDistance :"<<cameraDistance<<endl;
+			//cout<<"affiched "<<fmin(cameraDistance/maxDist,1.0) * (meshLod.size() - 1)<<endl;
 			tmpMesh = &meshLod[fmin(cameraDistance/maxDist,1.0) * (meshLod.size() - 1)];
 		}else{
 			tmpMesh = &mesh;
@@ -44,6 +44,7 @@ public:
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
+			glEnableVertexAttribArray(3);
 
 		
 
@@ -62,7 +63,7 @@ public:
 			// Index buffer
 			//t->printmat4();
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmpMesh->elementbuffer);
-			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(t->model));
+			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(t->getMat4()));
 
 			glBindBuffer(GL_ARRAY_BUFFER, tmpMesh->uvBufferPlane);
 			glVertexAttribPointer(

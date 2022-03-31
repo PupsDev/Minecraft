@@ -29,18 +29,24 @@ class Transform
             this->s =1.;
             this->m = glm::mat3(1.);
             this->translation = translation;
+
+            model = getMat4();
         }
         Transform(glm::mat3 m)
         {
             this->s =1.;
             this->m = m;
-            this->translation = glm::vec3(0.);                    
+            this->translation = glm::vec3(0.);    
+
+            model = getMat4();                
         }
         Transform(glm::mat3 m,glm::vec3 translation)
         {
             this->s =1.;
             this->m = m;
-            this->translation = translation;    
+            this->translation = translation;  
+
+            model = getMat4();  
             
             
         }
@@ -49,14 +55,18 @@ class Transform
             this->s =s;
             this->m = m;
             this->translation = translation;
+
+            model = getMat4();
             
              
          }
         Transform(glm::mat4 mat)
          {
+            this->s =1.;
+            this->m = glm::mat3(1.);
+            this->translation = glm::vec3(0.);
+
             this->model = mat;
-            
-             
          }
          
          void print()
@@ -86,7 +96,7 @@ class Transform
             {
                 for(int j=0;j<4;j++)
                 {
-                    std::cout<<glm::value_ptr(m)[i*4+j]<<" ";
+                    std::cout<<glm::value_ptr(m)[j*4+i]<<"\t";
                 }
                 std::cout<<"\n";
 
@@ -101,7 +111,7 @@ class Transform
             {
                 for(int j=0;j<4;j++)
                 {
-                    std::cout<<glm::value_ptr(model)[i*4+j]<<" ";
+                    std::cout<<glm::value_ptr(model)[j*4+i]<<"\t";
                 }
                 std::cout<<"\n";
 
@@ -125,8 +135,8 @@ class Transform
         }
         glm::mat4 getMat4()
         {
-
-            return  glm::translate(glm::mat4(), translation )*glm::mat4(m)*glm::mat4(s);
+            return  glm::translate(model, translation )*glm::mat4(m)*glm::mat4(s);
+            //return  glm::translate(glm::mat4(), translation )*glm::mat4(m)*glm::mat4(s);
         }
         glm::vec3 apply(glm::vec3 p)
         {
@@ -136,7 +146,10 @@ class Transform
             return res;
         }
         glm::vec3 applyToPoint(glm::vec3 p)
-        {
+        {   
+            vec4 tmpVec4 = getMat4() * vec4(p,1);
+            return vec3(tmpVec4);
+
             return m * (s*p) +translation;
         }
 
@@ -156,7 +169,7 @@ class Transform
         }*/
         void multiply(Transform* t)
         {
-
+            model = getMat4();
             this->model = t->model*model;
             
         }
@@ -169,6 +182,11 @@ class Transform
             return result;
 
         }
+
+        // vec3 getTranslation(){
+            
+        //     return vec3(value_ptr(model)[12],value_ptr(model)[13],value_ptr(model)[14]);
+        // }
         
 };
 
