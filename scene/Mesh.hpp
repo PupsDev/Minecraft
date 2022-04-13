@@ -149,6 +149,9 @@ public:
         cout<<AABBMax<<endl;
 		
 	}   
+		Mesh(){
+
+	}
 
 /*
 	Mesh(){

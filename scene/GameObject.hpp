@@ -4,7 +4,11 @@ class GameObject
 {
 public:
 
+	// parent Transform 
+	Transform* parentT;
+	// local transform
 	Transform* t;
+
 	Mesh mesh;
 	vector<Mesh> meshLod;
 	GLuint programID;
@@ -13,18 +17,25 @@ public:
     GLuint projectionMatrix_uniform ;
 
 	GLuint viewPosUniform;
+
 	int vis;
 	bool doesLOD = false;	
 	double maxDist = 10;
+
+	bool wireframe = false;
+	
+	PhysicComponent* physic;
 
 	void draw(Camera camera, Transform* parent = new Transform()){ 
 
 		double cameraDistance = camera.getDistance(t->apply(vec3(0,0,0)));
 		//cameraDistance-=40;
-		//t->printmat4();
+	
 		//cout<<"cameraDstance : "<<cameraDistance<<endl;
 
-		Mesh * tmpMesh;
+		Mesh * tmpMesh;	
+			//t->printmat4();
+
 
 		if(doesLOD){
 			//cout<<"cameraDistance :"<<cameraDistance<<endl;
@@ -34,7 +45,7 @@ public:
 			tmpMesh = &mesh;
 		}
 		if(!doesLOD || cameraDistance<maxDist*5){	
-
+		
 			glUseProgram(programID);
 
 			glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
@@ -62,8 +73,10 @@ public:
 
 			// Index buffer
 			//t->printmat4();
+			//t->printmat4();
+			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmpMesh->elementbuffer);
-			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(t->getMat4()));
+			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(parentT->model * t->model));
 
 			glBindBuffer(GL_ARRAY_BUFFER, tmpMesh->uvBufferPlane);
 			glVertexAttribPointer(
@@ -118,13 +131,16 @@ public:
 
 
 		//tmp.applyTransformation(parent);
-
+		
 		t->multiply(parent);
 		
 
 	}
-	void compute(Transform * t)
+	glm::vec3 computePosition()
 	{
+		Transform *model = new Transform(parentT->model * t->model); 
+		return model->apply(glm::vec3(0.));
+		
 
 	}
 	void setLodMesh(std::string name, int index){
@@ -162,11 +178,13 @@ public:
 
 	GameObject(){
 		t = new  Transform();
+		parentT = new  Transform();
 		mesh = Mesh();
 		vis =1.;
 	}
 	GameObject(Mesh m_mesh){
 		t = new Transform();
+		parentT = new Transform();
 		mesh = m_mesh;
 		vis =1.;
 	}

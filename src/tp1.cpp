@@ -34,9 +34,11 @@ using namespace std;
 
 #include "scene/Camera.hpp"
 #include "scene/Mesh.hpp"
+#include "scene/Physic.hpp"
 #include "scene/GameObject.hpp"
 #include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
+#include "scene/Scene.hpp"
 
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
@@ -48,14 +50,15 @@ using namespace std;
 
 void processInput(GLFWwindow *window);
 
+
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
 // camera
-glm::vec3 camera_position   = glm::vec3(-10.0, 2.0, -10.0);
+glm::vec3 camera_position   = glm::vec3(5.0, 20.0, 2.0);
 //vec3(8.16655, 0.26985, -9.64445), vec3(7.8268, -0.136002, -8.79601)
-glm::vec3 camera_target = glm::vec3(1.0, 1.0, 1.0)-camera_position;
+glm::vec3 camera_target = glm::vec3(0.0, 0.0, 1.0);//-camera_position;
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
 
 //Suzie
@@ -64,6 +67,13 @@ glm::vec3 suzie_transform = glm::vec3(0.0, 0.0, 0.0);
 float deltaTime = 0.0f;	// time between current frame and last frame 
 float lastFrame = 0.0f;
 
+//input 
+glm::vec3 mouse_ray    = glm::vec3(0.0f, 0.f,0.f);
+bool selectClick = false;
+
+Camera camera;
+double  mouse_x;
+double  mouse_y;
 //rotation
 float chairAngle = 0.0f;
 float seaLevel = 1.0f;
@@ -82,138 +92,6 @@ bool pvp = false;
 bool keyPressed = false;
 bool makeMeGravitate = false;
 
-float dist(glm::vec3 a,glm::vec3 b)
-{
-    return sqrt( (a[0]-b[0])*(a[0]-b[0]) +  (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) );
-}
-
-int mapToChunkId(int x, int renderDistance)
-{
-    return (renderDistance*15 +x)/(renderDistance*15)-1;
-}
-
-Chunk* getChunk(Map *map,int ix, int iy)
-{
-        auto chunkX = map->chunks.find(ix);
-        if( chunkX != map->chunks.end())
-        {
-                auto chunkY = chunkX->second.find(iy);
-                if( chunkY != chunkX->second.end())
-                {
-                    return &chunkY->second;   
-                }
-        }
-        return NULL;
-}
-std::vector<pair<int,int>> findChunks(Map *map, GameObject* box)
-{
-    glm::vec3 pos = box->t->apply(glm::vec3(0.,1.,0.));
-
-    int x = mapToChunkId((int)pos[0],1);
-    int y = mapToChunkId((int)pos[2],1);
-    int renderDistance =1;
-    std::vector<pair<int,int>> coord;
-
-    ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
-
-    for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
-        for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
-            int ix = (x<0 ? x*-2 +1 : x*2);
-            int iy = (x<0 ? y*-2 +1 : y*2);
-    
-            auto chunkX = map->chunks.find(ix);
-            if( chunkX != map->chunks.end())
-            {
-                    auto chunkY = chunkX->second.find(iy);
-                    if( chunkY != chunkX->second.end())
-                    {
-
-                        coord.push_back(make_pair(ix,iy));
-                        //chunkY->second.gigaObject.vis = 0;     
-                    }
-            }
-        }
-    }
-
-    return coord;
-}
-int findHighest(Chunk *chonky,  ivec2 pos)
-{
-    int hauteurMax = 200;
-    map<int, map<int, map<int, int>>> bendel;
-    int ret =-1;
-    auto cubeX = chonky->bendel.find(pos[0]);
-        if( cubeX != chonky->bendel.end())
-        {
-                auto cubeY = cubeX->second.find(pos[1]);
-                if( cubeY != cubeX->second.end())
-                {
-                    for( int z = hauteurMax;z>=0;z-- )
-                    {
-                            auto cubeZ = cubeY->second.find(z);
-                        if( cubeZ != cubeY->second.end())
-                        {
-                            //cout<<"Z = "<<z<<endl;
-                            ret = z;
-                            return ret;
-                        }
-
-                    }
-                }
-        }
-        return ret;
-}
-
-
-bool collide(Map *map, SceneGraphInterface* suzbox,SceneGraphInterface* graphbox)
-{
-    // 4 chunks
-    std::vector<pair<int,int>> chunks = findChunks(map, graphbox->gameObject);
-    glm::vec3 newPos ;
-    glm::vec3 pos = graphbox->gameObject->t->apply(glm::vec3(0.,1.,0.));
-    int hauteurMax = - INT32_MAX;
-
-    for(auto pairChunk : chunks)
-    {
-
-        Chunk *currentChunk = getChunk(map,pairChunk.first,pairChunk.second);
-        // Status of creation is chunk not loaded
-        if( currentChunk!=NULL && currentChunk->status !=3)
-        {
-            return false;
-        }
-       
-       // Coordonnée de la boite de suzanne 
-        int x = pos[0];
-        int y = pos[2];
-
-        int h = findHighest(currentChunk,ivec2(x,y));
-        hauteurMax = std::max(hauteurMax,h);
-
-        if(h != -1 && pos[1]-hauteurMax < 2.5)
-        currentChunk->hideCube(ivec3(x,y,h));
-
-        
-    }
-    //cout<<"hauteur : "<<hauteurMax<<endl<<endl;
-
-    // 1 rayon sphere suzanne + 0.5 cube et 1 offset
-    if( (pos[1]-hauteurMax) < 2.5 )
-    {
-        newPos = glm::vec3(pos[0],hauteurMax+0.5+2,pos[2]);
-        glm::vec3 translate = newPos-pos;
-        Transform * translation = new Transform(translate);
-
-        
-
-        translation->model = translation->getMat4();
-        graphbox->gameObject->apply(translation);
-        suzbox->gameObject->apply(translation);
-        return true;
-    }
-
-    return false;
-}
 int init()
 {
     // Initialise GLFW
@@ -267,80 +145,16 @@ int init()
 
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
-
+    return 1;
 }
 
-int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
+
+int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 {
-    
-    GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
+
     
     bool displayFPS = false;
-    GameObject* suz = new GameObject();
 
-
-    //////////////avion
-
-    Plane *avion = new Plane();
-    avion->loadMesh("avions/m2000V2.off");
-    avion->mesh.computeNormals();
-    avion->loadOnGpu(GameObjectShader);
-    BoundingBox* planeBB = new BoundingBox();
-    planeBB->loadOnGpu(BoxShader);
-
-    SceneGraphComposite* graphPlane = new SceneGraphComposite();
-    SceneGraphLeaf* graphPlaneBB = new SceneGraphLeaf();
-
-    graphPlane->gameObject = avion;
-    graphPlaneBB->gameObject = planeBB;
-
-    graphPlane->add(graphPlaneBB);
-
-    Transform * translation = new Transform(glm::vec3(0.,-10.,0.));
-    //translation->model = translation->getMat4()*glm::mat4(5.);
-    translation->model = translation->getMat4();
-    graphPlane->gameObject->apply(translation);
-    graphPlaneBB->gameObject->apply(translation);
-
-    //////////////avion
-
-
-
-
-    suz->doesLOD = true;
-
-    suz->setLodMesh("LOD/suzanne0.off",0);
-    suz->setLodMesh("LOD/suzanne1.off",1);
-    suz->setLodMesh("LOD/suzanne2.off",2);
-    suz->setLodMesh("LOD/suzanne3.off",3);
-
-    suz->meshLod[0].computeNormals();
-    
-    
-
-    suz->loadMesh("suzanne.off");
-    suz->loadOnGpu(GameObjectShader);
-
-    
-
-    BoundingBox* bb = new BoundingBox();
-    bb->loadOnGpu(BoxShader);
-
-    SceneGraphComposite* graphSuz = new SceneGraphComposite();
-    SceneGraphLeaf* graphBB = new SceneGraphLeaf();
-    graphSuz->gameObject = suz;
-    graphBB->gameObject = bb;
-    graphSuz->add(graphBB);
-
-    translation = new Transform(glm::vec3(2.,10.,2.));
-    //translation->model = translation->getMat4()*glm::mat4(5.);
-    translation->model = translation->getMat4();
-    graphSuz->gameObject->apply(translation);
-    graphBB->gameObject->apply(translation);
-
-
-    
-    
     glm::vec3 vitesse = glm::vec3(0.,0.,0.);
     do{
         float currentFrame = glfwGetTime();
@@ -349,80 +163,17 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
 
         if(1/deltaTime<60 && displayFPS)
             cout<<"fps : "<<1/deltaTime<<endl;
-
-        // input
-        // -----
         processInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        glm::mat4 viewMatrix;
-        glm::mat4 projectionMatrix;
-
-        translation = new Transform(0.5f*suzie_transform);
-        translation->model = translation->getMat4();
-        graphSuz->gameObject->apply(translation);
-        graphBB->gameObject->apply(translation);
-        suzie_transform = glm::vec3(0.,0.,0.);
-        if(makeMeGravitate)
-        {
-            glm::vec3 gravity = glm::vec3(0.,-9.82,0.);
-
-            vitesse += deltaTime*gravity;
-
-            translation = new Transform(vitesse);
-            translation->model = translation->getMat4();
-            graphSuz->gameObject->apply(translation);
-            graphBB->gameObject->apply(translation);
-
-
-        }
-        if(collide(&map,graphSuz,graphBB))
-        {
-            vitesse[1] = 0.;
-            
-        }
-        
-        avion->controlesUpdate(window, deltaTime);
-        auto tmpTransform = avion->update(deltaTime);
-
-        //camera_position = tmpTransform->applyToPoint(vec3(0,0,0)) + vec3(0,5,-5);
-        //camera_position = tmpTransform->getTranslation();// + vec3(0,5,-5);
-
-        camera_position = tmpTransform->applyToPoint(vec3(0, 0, 0))+vec3(-5,5,0);
-        
-        //cout<<"camera_position : "<<camera_position<<endl;
-        //tmpTransform->printmat4(tmpTransform->getMat4());
-
-        graphPlane->gameObject->t = tmpTransform;
-        graphPlaneBB->gameObject->t = tmpTransform;
-      
         camera.set(camera_position,camera_target,camera_up);
-
         camera.giveItToMe();
+        scene.setCamera(camera);
 
-       
-       glUseProgram(GameObjectShader);
-
-        suz->draw(camera);
         map.draw(camera);
-
-        
-
-        avion->draw(camera);
-        //planeBB->draw(camera);
-        
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-
-        glUseProgram(BoxShader);
-        bb->draw(camera);
-        glDisable(GL_BLEND);
-
-
+        scene.update();
+        scene.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -430,7 +181,10 @@ int gameLoop(Map map,GLuint GameObjectShader ,Camera camera)
     } // Check if the ESC key was pressed or the window was closed
     while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
            glfwWindowShouldClose(window) == 0 );
+    return 1;
 }
+
+
 int main( void )
 {
     init();
@@ -438,28 +192,24 @@ int main( void )
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
+  
 
-    // Create and compile our GLSL program from the shaders
-    //GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
 
-    //cout<<"GameObjectShader : "<<GameObjectShader<<endl;
-    
-    Camera camera(programID);
+    camera.setProgramId(programID);
 
     Map map = Map(GameObjectShader,100,10);
+    Scene scene = Scene();
+    scene.setCamera(camera);
+
 
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
+    gameLoop(map,scene,programID);
 
-    gameLoop(map,programID,camera);
-
-    // Cleanup VBO and shader
-    //glDeleteBuffers(1, &vertexbuffer);
-    //glDeleteBuffers(1, &elementbuffer);
 
     glDeleteProgram(programID);
     glDeleteProgram(GameObjectShader);
@@ -468,7 +218,6 @@ int main( void )
 
     return 0;
 }
-
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -479,6 +228,9 @@ void processInput(GLFWwindow *window)
     vec3 dir = normalize(vec3(camera_target[0],0.0,camera_target[2]));
 
     if(cameraMode){
+
+
+
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
             glm::vec3 rotateAxis = glm::cross(camera_target,camera_up); //rotateAxis
             camera_target = glm::rotate (camera_target,0.4f*cameraSpeed * 1.0f, rotateAxis);

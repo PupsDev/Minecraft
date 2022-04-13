@@ -229,6 +229,53 @@ class Chunk{
         }
 
     }
+    bool intersect(float &t,glm::vec3 o, glm::vec3 d,ivec3 &cube)
+    {
+        std::vector<glm::vec3> normals;
+
+        normals.push_back(glm::vec3(1.,0.,0.));
+        normals.push_back(glm::vec3(-1.,0.,0.));
+
+        normals.push_back(glm::vec3(0.,1.,0.));
+        normals.push_back(glm::vec3(0.,-1.,0.));
+
+        normals.push_back(glm::vec3(0.,0.,1.));
+        normals.push_back(glm::vec3(0.,0.,-1.));
+
+        float t_max = 1000.;
+        bool ret = false;
+        
+        for(auto & pos : cubes)
+        {
+            for(auto &norm : normals)
+            {
+                float div =glm::dot(d,norm); 
+                //cout<<div<<endl;
+                if( div !=0)
+                {
+                   // cout<<"OUI"<<endl;
+                    ret = true;
+                    glm::vec3 point = glm::vec3(pos[0]+norm[0]/2,pos[1]+norm[1]/2,pos[2]+norm[2]/2);
+                    glm::vec3 direc = glm::vec3(point-o);
+                    float t2 = glm::dot( direc,norm) / div;
+
+                    glm::vec3 intersection  = o + t2 * d;
+                    float distance = length(intersection-point);
+
+                    if(t2<t_max && distance < 0.5)
+                    {
+                        t_max = t2;
+                        cube = pos;
+
+                    }
+                }
+            }
+        }
+        t = t_max;
+        hideCube(cube);
+        return ret;
+
+    }
 };
 
 void constructChunk(Chunk * self, const siv::PerlinNoise &perlin, int sx, int sy, Cube * c, int * nbThread){

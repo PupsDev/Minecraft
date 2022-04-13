@@ -37,16 +37,13 @@ public:
         direction = camera_target;
         viewMatrix = glm::lookAt(position, direction+position, camera_up);
 	}
-	Camera(GLuint programID){
-
+	Camera()
+	{
 		fov = glm::radians(90.0f);
         projectionMatrix = glm::perspective(fov, 16.0f/9.0f, 0.1f, 1000.0f);
-
-		viewMatrix_uniform = glGetUniformLocation(programID,"view");
-		projectionMatrix_uniform = glGetUniformLocation(programID,"projection");
-		viewPosUniform = glGetUniformLocation(programID , "viewPos");
-
+		
 	}
+
 
 	
 	double getDistance(vec3 pos){

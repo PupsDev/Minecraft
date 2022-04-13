@@ -45,7 +45,9 @@ class SceneGraphLeaf : public SceneGraphInterface
 };
 class SceneGraphComposite : public SceneGraphInterface
 {
+    
     public:
+        glm::vec3 BBsize;
         SceneGraphComposite()
         {
 
@@ -55,19 +57,33 @@ class SceneGraphComposite : public SceneGraphInterface
         {
 
             gameObject->apply(t);
-            Transform *tlocal= gameObject->t;
             
-            for( auto& child : children ) {
-                
-                child->apply(tlocal);
-               
 
-            }
         }
+        void setBoundingBox(GLuint BoxShader)
+        {
+            AABB* monkeyBB = new AABB(*gameObject);
+            monkeyBB->loadOnGpu(BoxShader);
+            BBsize = monkeyBB->size;
+            SceneGraphLeaf* graphMonkeyBB = new SceneGraphLeaf();
+            graphMonkeyBB->gameObject = monkeyBB;
+            add(graphMonkeyBB);
+            
+        }
+        void applyPhysics()
+        {
+            float deltaTime = 0.001f;
+            Transform * translation = new Transform(gameObject->physic->vitesse + deltaTime * gameObject->physic->gravity );
+            translation->model = translation->getMat4();
+            apply(translation);
+        }
+
 
         void add(SceneGraphInterface* child)
         {
+            child->gameObject->parentT = gameObject->t;
             children.push_back(child);
+            
         }
 
 };
