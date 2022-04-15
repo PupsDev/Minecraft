@@ -5,21 +5,26 @@ class Scene
         Camera camera;
 
         SceneGraphComposite* graphMonkey;
+        SceneGraphComposite* graphMonkey2;
+
         glm::vec3 vitesse;
 
         Scene()
         {
             GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
             Transform * translation = new Transform(glm::vec3(2.,20.,2.));
+            Transform * translation2 = new Transform(glm::vec3(8.,20.,2.));
             translation->model = translation->getMat4();
+            translation2->model = translation2->getMat4();
+
             vitesse = glm::vec3(0.,0.,0.);
 
 
             
 
             GameObject * simpleMonkey = new GameObject();
-            simpleMonkey->physic = new PhysicComponent(glm::vec3(0.,-9.82,0.));
-            simpleMonkey->physic->vitesse = 0.01f*glm::vec3(0.,0.,10.);
+            simpleMonkey->physic = new PhysicComponent(glm::vec3(0.,0.,0.));
+            simpleMonkey->physic->vitesse = 0.01f*glm::vec3(1.,0.,0.);
             
             simpleMonkey->loadMesh("suzanne.off");
             simpleMonkey->loadOnGpu(BoxShader);
@@ -28,17 +33,35 @@ class Scene
             graphMonkey->gameObject = simpleMonkey;
             graphMonkey->setBoundingBox(BoxShader);
 
-            simpleMonkey->physic->position = simpleMonkey->computePosition();
+
             simpleMonkey->physic->size = graphMonkey->BBsize;
 
       
             graphMonkey->apply(translation);
 
             add(graphMonkey);
+
+
+            GameObject * simpleMonkey2 = new GameObject();
+            simpleMonkey2->physic = new PhysicComponent(glm::vec3(0.,0.,0.));
+            simpleMonkey2->physic->vitesse = 0.01f*glm::vec3(-1.,0.,0.);
+            
+            simpleMonkey2->loadMesh("suzanne.off");
+            simpleMonkey2->loadOnGpu(BoxShader);
+
+            graphMonkey2 = new SceneGraphComposite();
+            graphMonkey2->gameObject = simpleMonkey2;
+            graphMonkey2->setBoundingBox(BoxShader);
+
+
+            simpleMonkey2->physic->size = graphMonkey2->BBsize;
+
+      
+            graphMonkey2->apply(translation2);
+
+            add(graphMonkey2);
            
             
-
-
         }
         void setCamera(Camera m_camera)
         {
@@ -61,9 +84,32 @@ class Scene
         // Updated each frame
         void update()
         {   
-            graphMonkey->gameObject->physic->position = graphMonkey->gameObject->computePosition();
-            graphMonkey->gameObject->physic->display();
+
+            //graphMonkey->gameObject->physic->display();
+            glm::vec3 collisionNormal;
+            float collisiontime = graphMonkey->gameObject->physic->SweptAABB(graphMonkey2->gameObject->physic, collisionNormal); 
+            graphMonkey->gameObject->physic->position += graphMonkey->gameObject->physic->vitesse * collisiontime; 
+            
+  
+            float remainingtime = 1.0f - collisiontime;
+            cout<<collisiontime<<endl;
+            //cout<<graphMonkey->gameObject->physic->position<<endl;
+            if(collisiontime < 0.01f)
+            {
+                graphMonkey->gameObject->physic->vitesse *= remainingtime;
+                 graphMonkey2->gameObject->physic->vitesse *= remainingtime;
+                for(int i = 0 ; i < 3 ; i++)
+                {
+                    if(abs(collisionNormal[i])>0.0001f)
+                    {
+                        graphMonkey->gameObject->physic->vitesse[i] *= -1.f;
+                        graphMonkey2->gameObject->physic->vitesse[i] *= -1.f;
+                    }
+                }
+            }
+
             graphMonkey->applyPhysics();
+            graphMonkey2->applyPhysics();
 
 
         }

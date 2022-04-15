@@ -56,7 +56,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-glm::vec3 camera_position   = glm::vec3(5.0, 20.0, 2.0);
+glm::vec3 camera_position   = glm::vec3(5.0, 20.0, -5.0);
 //vec3(8.16655, 0.26985, -9.64445), vec3(7.8268, -0.136002, -8.79601)
 glm::vec3 camera_target = glm::vec3(0.0, 0.0, 1.0);//-camera_position;
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);

@@ -74,9 +74,12 @@ public:
 			// Index buffer
 			//t->printmat4();
 			//t->printmat4();
+			glm::mat4 newmodel = parentT->model * t->model;
+			Transform *model = new Transform(newmodel); 
+			physic->position = model->apply(glm::vec3(0.));
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, tmpMesh->elementbuffer);
-			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(parentT->model * t->model));
+			glUniformMatrix4fv(tmpMesh->modelMatrix_uniform      , 1, false, glm::value_ptr(newmodel));
 
 			glBindBuffer(GL_ARRAY_BUFFER, tmpMesh->uvBufferPlane);
 			glVertexAttribPointer(
@@ -179,12 +182,14 @@ public:
 	GameObject(){
 		t = new  Transform();
 		parentT = new  Transform();
+		physic = new PhysicComponent();
 		mesh = Mesh();
 		vis =1.;
 	}
 	GameObject(Mesh m_mesh){
 		t = new Transform();
 		parentT = new Transform();
+		physic = new PhysicComponent();
 		mesh = m_mesh;
 		vis =1.;
 	}

@@ -55,6 +55,7 @@ class SceneGraphComposite : public SceneGraphInterface
 
         void apply(Transform *t)
         {
+            // recursion papi
 
             gameObject->apply(t);
             
@@ -81,6 +82,7 @@ class SceneGraphComposite : public SceneGraphInterface
 
         void add(SceneGraphInterface* child)
         {
+            
             child->gameObject->parentT = gameObject->t;
             children.push_back(child);
             

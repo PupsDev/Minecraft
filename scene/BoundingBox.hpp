@@ -109,8 +109,7 @@ class AABB : public BoundingBox
             computeMaxMin(model.indexed_vertices);
 
             size = glm::vec3(abs(vmini[0]-vmaxi[0]),abs(vmini[1]-vmaxi[1]),abs(vmini[2]-vmaxi[2]));
-            Transform * Transformation = new Transform();
-            Transformation->model = glm::scale(glm::mat4(1.f),size);
+            Transform * Transformation = new Transform(glm::scale(glm::mat4(1.f),size));
             apply(Transformation);
         }
         void computeMaxMin(std::vector<glm::vec3> indexed_vertices)
