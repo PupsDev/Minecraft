@@ -8,13 +8,17 @@ in vec3 pos;
 // Ouput data
 out vec4 color;
 
+uniform sampler2D myTextureSampler[1];
 
 void main(){       
 
         
 
-        color = vec4(1.,0.,0.,0.5);
+        //color = vec4(1.,0.,0.,0.5);
 
-        color.a = 0.3;
+        //color.a = 0.3;
+
+        color = vec4(texture( myTextureSampler[0], UV).rgb,1);
+        //color = vec4(vec2(UV.x, 1-UV.y),0,1);
 
 }

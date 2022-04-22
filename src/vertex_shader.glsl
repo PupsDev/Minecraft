@@ -9,7 +9,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-uniform sampler2D myTextureSampler[5];
+uniform sampler2D myTextureSampler[1];
 
 uniform float seaLevel;
 

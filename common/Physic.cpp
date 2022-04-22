@@ -8,4 +8,5 @@ class PhysicComponent
         glm::vec3 vitesse;
         // Taille x,y,z
         glm::vec3 size; 
+        
 };

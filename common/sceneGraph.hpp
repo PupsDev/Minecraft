@@ -17,6 +17,10 @@ class SceneGraphInterface
         }
 
         virtual void apply(Transform *t) = 0;
+        void applyPhysics()
+        {
+
+        }
 
 
     
@@ -39,6 +43,10 @@ class SceneGraphLeaf : public SceneGraphInterface
         {
            
             gameObject->apply(t);
+        }
+                void applyPhysics()
+        {
+            
         }
 
 
@@ -71,10 +79,9 @@ class SceneGraphComposite : public SceneGraphInterface
             add(graphMonkeyBB);
             
         }
-        void applyPhysics()
+        void applyPhysics(float deltaTime)
         {
-            float deltaTime = 0.001f;
-            Transform * translation = new Transform(gameObject->physic->vitesse + deltaTime * gameObject->physic->gravity );
+            Transform * translation = new Transform(gameObject->physic->vitesse + 0.2f*deltaTime * gameObject->physic->gravity );
             translation->model = translation->getMat4();
             apply(translation);
         }

@@ -32,17 +32,19 @@ using namespace std;
 
 #include "scene/Transform.hpp"
 
+#include "scene/LoaderObj.hpp"
 #include "scene/Camera.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Physic.hpp"
 #include "scene/GameObject.hpp"
 #include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
-#include "scene/Scene.hpp"
+
 
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
+#include "scene/Scene.hpp"
 
 #include "scene/Plane.hpp"
 
@@ -156,6 +158,7 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
     bool displayFPS = false;
 
     glm::vec3 vitesse = glm::vec3(0.,0.,0.);
+    scene.startFrame = glfwGetTime()+2.;
     do{
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -172,7 +175,8 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         scene.setCamera(camera);
 
         map.draw(camera);
-        scene.update();
+        
+        scene.update(&map);
         scene.draw();
 
         glfwSwapBuffers(window);
