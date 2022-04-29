@@ -1,5 +1,6 @@
 #include <map>
 #include <time.h> 
+#include "common/testObj.hpp"
 
 class Scene
 {
@@ -9,6 +10,7 @@ class Scene
         Camera camera;
 
         SceneGraphComposite* graphMonkey;
+        SceneGraphComposite* graphHand;
         SceneGraphComposite* graphMonkey2;
 
         glm::vec3 vitesse;
@@ -30,8 +32,68 @@ class Scene
             srand (time(NULL));
             frameCount =0;
 
+                       /* GameObject * Hand = new GameObject();
+            Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
+            Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
+            
+            LoaderObj loader2 = LoaderObj("hand.obj");
 
-            for(int i = 0 ; i < 40 ; i++)
+            Hand->mesh.indexed_vertices = loader2.vertices;
+            Hand->mesh.indices =loader2.indices;
+            Hand->mesh.normals =loader2.normals;
+            Hand->mesh.uvs =loader2.textures;
+            Hand->mesh.loadTexture("peppers.bmp");
+
+            graphHand = new SceneGraphComposite();
+            graphHand->gameObject = Hand;
+            graphHand->setBoundingBox(BoxShader);
+
+            Hand->physic->size = graphHand->BBsize;
+
+            Transform * translation3 = new Transform(glm::vec3( (float) 7,7.,4.));
+            translation3->model = translation3->getMat4();
+            
+        
+            graphHand->apply(translation);
+            graphHand->apply(translation3);
+            add(graphHand);*/
+                            GameObject * Hand = new GameObject();
+                Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
+                Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
+                
+                LoaderObj loader = LoaderObj("hand.obj");
+
+                Hand->mesh.indexed_vertices = loader.vertices;
+                Hand->mesh.indices =loader.indices;
+                Hand->mesh.normals =loader.normals;
+                Hand->mesh.uvs =loader.textures;
+                
+                Hand->mesh.loadTexture("dorian.bmp");
+
+
+                Hand->loadOnGpu(BoxShader);
+                 Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(1.)));
+                scaling->model = scaling->getMat4();
+                
+
+                graphHand = new SceneGraphComposite();
+                graphHand->gameObject = Hand;
+                graphHand->apply(scaling);
+                graphHand->setBoundingBox(BoxShader);
+
+
+                Hand->physic->size = graphHand->BBsize;
+
+                  Transform * translation3 = new Transform(glm::vec3( (float) 5,5.,4.));
+                translation3->model = translation3->getMat4();
+                
+               
+                graphHand->apply(translation);
+                graphHand->apply(translation3);
+
+                add(graphHand);
+
+            for(int i = 0 ; i < 10 ; i++)
             {
                 GameObject * simpleMonkey = new GameObject();
                 simpleMonkey->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
@@ -41,8 +103,10 @@ class Scene
 
                 simpleMonkey->mesh.indexed_vertices = loader.vertices;
                 simpleMonkey->mesh.indices =loader.indices;
-                //simpleMonkey->mesh.normals =loader.normals;
+                simpleMonkey->mesh.normals =loader.normals;
                 simpleMonkey->mesh.uvs =loader.textures;
+                //loadOBJ2("dorian2.obj", simpleMonkey->mesh.indexed_vertices,  simpleMonkey->mesh.uvs,simpleMonkey->mesh.normals);
+	
                 simpleMonkey->mesh.loadTexture("dorian.bmp");
 
 
@@ -70,6 +134,7 @@ class Scene
             }
 
 
+            
             GameObject * simpleMonkey2 = new GameObject();
             simpleMonkey2->physic = new PhysicComponent(glm::vec3(0.,0.,0.));
             simpleMonkey2->physic->vitesse = 0.01f*glm::vec3(-1.,0.,0.);
@@ -113,11 +178,39 @@ class Scene
 
             
         }
+        glm::vec3 mouseToSpace(double x, double y)
+        {
+            //cout<<"1: "<<x<<" && 2: "<<y<<endl;
+            float new_x = 2*(x / 800) - 1.0;
+            float new_y = 1. - 2*(y / 600);
+
+            //cout<<"new_1: "<<new_x<<" && new_2: "<<new_y<<endl;
+            //cout << "Cursor Position at (" << new_x << " : " << new_y << ")"<<endl;
+
+            glm::vec4 m1 = glm::vec4(new_x,new_y,1.,1.);
+
+            glm::mat4 iProjection = glm::inverse(camera.projectionMatrix);
+            glm::vec4 m1_eye = iProjection * m1;
+
+
+        
+            glm::mat4 iView = glm::inverse(camera.viewMatrix);
+
+            glm::vec4 m1_space = glm::vec4(m1_eye.x,m1_eye.y,m1_eye.z,0.);
+
+            glm::vec4 ray4 = iView * m1_space;
+
+            glm::vec3 ray = glm::vec3(ray4.x,ray4.y,ray4.z);
+            glm::vec3 mouse_ray = normalize(ray);
+
+            return mouse_ray;
+        }
         // Updated each frame
         void update(Map* map)
         {   
 
             //graphMonkey->gameObject->physic->display();
+            /*
             glm::vec3 collisionNormal;
             float collisiontime = graphMonkey->gameObject->physic->SweptAABB(graphMonkey2->gameObject->physic, collisionNormal); 
             graphMonkey->gameObject->physic->position += graphMonkey->gameObject->physic->vitesse * collisiontime; 
@@ -139,9 +232,11 @@ class Scene
                     }
                 }
             }
-
+            */
             //graphMonkey->applyPhysics();
             //graphMonkey2->applyPhysics();
+
+            /*
 
             float currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrame;
@@ -161,6 +256,31 @@ class Scene
                     graph->gameObject->physic->vitesse[1] = 0.;
                     
                 }
+                for(auto & graph2 : graphs)
+                {
+                    glm::vec3 collisionNormal;
+                    float collisiontime = graph->gameObject->physic->SweptAABB(graph2->gameObject->physic, collisionNormal); 
+                    graph->gameObject->physic->position += graph->gameObject->physic->vitesse * collisiontime; 
+                    
+        
+                    float remainingtime = 1.0f - collisiontime;
+                    //cout<<collisiontime<<endl;
+                    //cout<<graph->gameObject->physic->position<<endl;
+                    if(collisiontime < 0.01f)
+                    {
+                        //cout<<"collide"<<endl;
+                        graph->gameObject->physic->vitesse *= remainingtime;
+                        graph2->gameObject->physic->vitesse *= remainingtime;
+                        for(int i = 0 ; i < 3 ; i++)
+                        {
+                            if(abs(collisionNormal[i])>0.0001f)
+                            {
+                                graph->gameObject->physic->vitesse[i] *= -1.f;
+                                graph2->gameObject->physic->vitesse[i] *= -1.f;
+                            }
+                        }
+                    }
+                }
                 if(changeDirection && frameCount >2 )
                 {
                     int direction = rand() % 4 + 1;
@@ -175,7 +295,22 @@ class Scene
             }
             changeDirection = false;
             frameCount ++;
+            */
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
 
+            //cout<<xpos<<" : "<<ypos<<endl;
+            
+            glm::vec3 mvec = mouseToSpace(xpos,ypos);
+            
+            glm::vec3 pos = objects[0].computePosition();
+            //cout<<pos<<endl;
+            glm::vec3 pos2 = glm::vec3(8.,20.,2.);
+            glm::vec3 trans = (5.f*mvec +camera.position) -pos;
+            Transform * translation3 = new Transform(trans);
+            translation3->model = translation3->getMat4();
+            //cout<<trans<<endl;
+            graphHand->apply(translation3);
 
         }
         void draw()

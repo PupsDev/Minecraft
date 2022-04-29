@@ -94,6 +94,15 @@ bool pvp = false;
 bool keyPressed = false;
 bool makeMeGravitate = false;
 
+typedef struct COORD {
+    double x,y;
+}COORD;
+
+COORD lastMouse;
+
+
+void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 int init()
 {
     // Initialise GLFW
@@ -103,7 +112,7 @@ int init()
         getchar();
         return -1;
     }
-
+    
     glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -131,6 +140,8 @@ int init()
 
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, mouse_cursor_callback);
     // Hide the mouse and enable unlimited mouvemezanne0.off cannot be opened
     //  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -173,6 +184,8 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         camera.set(camera_position,camera_target,camera_up);
         camera.giveItToMe();
         scene.setCamera(camera);
+
+
 
         map.draw(camera);
         
@@ -221,6 +234,58 @@ int main( void )
     glfwTerminate();
 
     return 0;
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+
+        cout<<xpos<<" : "<<ypos<<endl;
+        lastMouse.x = xpos;
+        lastMouse.y = ypos;
+    }
+}
+void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)  
+{
+
+  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) 
+  {
+     return;
+  }
+  cout<<"DRAG"<<endl;
+  //cout<<xpos<<" : "<<ypos<<endl;
+  double diffx = lastMouse.x - xpos; 
+  double diffy = lastMouse.y - ypos;
+
+  if(abs(diffx)>abs(diffy))
+  {
+      //HORI
+    if (diffx>0)
+    {
+        cout<<"LEFT"<<endl;
+    }
+    else
+    {
+        cout<<"RIGHT"<<endl;
+    }
+  } 
+  else
+  {
+      //VERT
+    if (diffy>0)
+    {
+        cout<<"UP"<<endl;
+    }
+    else
+    {
+        cout<<"DOWN"<<endl;
+    }
+
+
+  }
+
 }
 void processInput(GLFWwindow *window)
 {

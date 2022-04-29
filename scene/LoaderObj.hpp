@@ -2,7 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <algorithm>
+#include <bits/stdc++.h>
 
 class LoaderObj 
 {
@@ -54,6 +55,11 @@ LoaderObj(std::string filename)
     std::vector<glm::vec3> normalsByIndice;
     std::vector<glm::vec2> texturesByIndice;
 
+    std::map<std::string, unsigned short> hashedTuplet;
+
+    // like face indice
+    unsigned short currentIndice =0;
+
      unsigned short faceCount = 0;
     
 
@@ -94,24 +100,47 @@ LoaderObj(std::string filename)
                 */
                 for( unsigned short j = 1 ; j < 4 ; j++)
                 {
-                    vertTexNorm = parseToken(pointToken[j], "/");
+                    string tupletString = pointToken[j];
+                    vertTexNorm = parseToken(tupletString, "/");
                     // j : 1 - 4 -> point 1 - 4  as vtn
                     tempFaceindices.push_back(( unsigned short)(std::stoi(vertTexNorm[0])-1));
-                    tempFaceTextureindices.push_back(( unsigned short)(std::stoi(vertTexNorm[1])-1));
-
-
+                    int item = ( unsigned short)std::stoi(vertTexNorm[1])-1;
+                    tempFaceTextureindices.push_back(item);
                     tempFaceNormalindices.push_back(( unsigned short)(std::stoi(vertTexNorm[2])-1));
+
+                    // not found
+                    if ( hashedTuplet.find(tupletString) == hashedTuplet.end() ) {
+
+                        hashedTuplet.insert( std::pair<string,int>(tupletString,currentIndice));
+
+                        this->vertices.push_back(vertices[tempFaceindices[faceCount +j-1]]);
+                        this->textures.push_back(mtextures[tempFaceTextureindices[faceCount +j-1]]);
+                        this->normals.push_back(normals[tempFaceNormalindices[faceCount +j-1]]*-1.f);
+
+                        this->indices.push_back(currentIndice);
+                        
+                    }
+                    else // found
+                    {
+                        this->vertices.push_back(this->vertices[hashedTuplet[tupletString]]);
+                        this->textures.push_back(this->textures[hashedTuplet[tupletString]]);
+                        this->normals.push_back(this->normals[hashedTuplet[tupletString]]); 
+                        this->indices.push_back(hashedTuplet[tupletString]);
+                    }
+                    currentIndice++;
+                    
+
                 }
                 // Making triangle
                 
                             
-                indices.push_back(tempFaceindices[faceCount]);
-                indices.push_back(tempFaceindices[faceCount+1]);
-                indices.push_back(tempFaceindices[faceCount+2]);
-                normalsByIndice.push_back(normals[tempFaceNormalindices[faceCount]]);
-                texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount]]);
-                texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount+1]]);
-                texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount+2]]);
+                //indices.push_back(tempFaceindices[faceCount]);
+                //indices.push_back(tempFaceindices[faceCount+1]);
+                //indices.push_back(tempFaceindices[faceCount+2]);
+                //normalsByIndice.push_back(normals[tempFaceNormalindices[faceCount]]);
+                //texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount]]);
+                //texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount+1]]);
+                //texturesByIndice.push_back(mtextures[tempFaceTextureindices[faceCount+2]]);
                 faceCount+=3;
 
 
@@ -121,12 +150,19 @@ LoaderObj(std::string filename)
 
         }
     }
-    this->vertices = vertices;
-    this->indices = indices;
-    this->normals = normalsByIndice;
-    this->textures = texturesByIndice;
-
+    //this->vertices = vertices;
+    //this->indices = indices;
+    //this->normals = normalsByIndice;
+    //this->textures = texturesByIndice;
+    //for(auto& textIndice : tempFaceTextureindices)
+    //{
+    //    cout<<std::count(tempFaceTextureindices.begin(), tempFaceTextureindices.end(), textIndice)<<endl;
+    //}
     std::cout<<"Done !\n";
+    std::cout<<"size : "<<vertices.size()<<"\n";
+    std::cout<<"size : "<<normals.size()<<"\n";
+    std::cout<<"size : "<<textures.size()<<"\n";
+    input_stream.close();
 
 
 }
