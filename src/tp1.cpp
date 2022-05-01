@@ -39,6 +39,8 @@ using namespace std;
 #include "scene/GameObject.hpp"
 #include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
+#define MINIAUDIO_IMPLEMENTATION
+#include "scene/miniaudio.h"
 
 #include "scene/ForestGenerator.hpp"
 #include "Terrain.hpp"
@@ -159,6 +161,13 @@ int init()
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
+
+
+
+
+    
+
+
     return 1;
 }
 
@@ -171,6 +180,8 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
     glm::vec3 vitesse = glm::vec3(0.,0.,0.);
     scene.startFrame = glfwGetTime()+2.;
+    ForestGenerator fg = ForestGenerator();
+    
     do{
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -189,7 +200,11 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
 
         map.draw(camera);
-        
+        if(map.drawn)
+            scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
+        //cout<<"Size chunk: "<<map.chunks.size()<<endl;
+        //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
+
         scene.update(&map);
         scene.draw();
 
@@ -206,6 +221,19 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 int main( void )
 {
     init();
+        // mini audio player
+
+    ma_result result;
+    ma_engine engine;
+
+    std::string input = "test.mp3";
+    result = ma_engine_init(NULL, &engine);
+    if (result != MA_SUCCESS) {
+        printf("Failed to initialize audio engine.");
+        return -1;
+    }
+
+    ma_engine_play_sound(&engine, &input[0], NULL);
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
@@ -218,11 +246,12 @@ int main( void )
     camera.setProgramId(programID);
 
     Map map = Map(GameObjectShader,100,10);
-    ForestGenerator fg = ForestGenerator();
+    
+    
     Scene scene = Scene();
     scene.setCamera(camera);
 
-
+    //map.draw(camera);
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
@@ -234,6 +263,7 @@ int main( void )
     glDeleteProgram(GameObjectShader);
 
     glfwTerminate();
+    ma_engine_uninit(&engine);
 
     return 0;
 }

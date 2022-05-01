@@ -35,10 +35,12 @@ class Map {
 
     int maxThread = 10;
     int nbThread = 0;
+    bool drawn;
 
     Map(GLuint GameObjectShader, int size=100, int renderDistance =15){
 
         gigaTexture = loadBMP_custom("../textures/minecraft/gigaTexture.bmp",false);
+        drawn = false;
         size=size;
         this->renderDistance = renderDistance;
 
@@ -66,16 +68,18 @@ class Map {
 
     void draw(Camera camera){
         ivec2 playerChunk = vec2(camera.position[0]/16,camera.position[2]/16);
-
+        //cout<<playerChunk[0]<<" "<<playerChunk[1]<<endl;
+        //cout<<renderDistance<<endl;
+        // 0-0
         //glUseProgram(programID);
 		//camera.giveItToMe(programID);
 
         //cout<<"nbThread "<<nbThread<<endl;
 
-        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
-            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
-                int ix = (x<0 ? x*-2 +1 : x*2);
-                int iy = (x<0 ? y*-2 +1 : y*2);
+        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance +1; x++ ){
+            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance +1; y ++ ){
+                int ix = x;//(x<0 ? x*-2 +1 : x*2);
+                int iy = y;//(x<0 ? y*-2 +1 : y*2);
 
                 if(chunks.find(ix) == chunks.end())
                     chunks[ix] = map<int, Chunk>();
@@ -90,6 +94,7 @@ class Map {
                     if(nbThread < maxThread){
                         //nbThread ++;
                         chunks[ix][iy].status = 1;
+                        chunks[ix][iy].worldPos = ivec2(x*16,y*16);
                         chunks[ix][iy].myOwnThread = new thread(constructChunk, &chunks[ix][iy], perlin, x*16, y*16, &c, &nbThread);
                         
                         
@@ -105,9 +110,11 @@ class Map {
                     float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
                     if(dist<64 || ang>cos(camera.fov)){
                         chunks[ix][iy].draw(camera, programID);
+                        chunks[ix][iy].drawn = true;
                     }
                 }
             }
         }
+        drawn = true;
     }
 };

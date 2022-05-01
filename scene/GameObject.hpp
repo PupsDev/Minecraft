@@ -26,7 +26,10 @@ public:
 	
 	PhysicComponent* physic;
 
+	bool drawable = true;
+
 	void draw(Camera camera, Transform* parent = new Transform()){ 
+
 
 		double cameraDistance = camera.getDistance(t->apply(vec3(0,0,0)));
 		//cameraDistance-=40;
@@ -129,6 +132,7 @@ public:
 
 
 	}
+
 	void apply(Transform* parent)
 	{
 

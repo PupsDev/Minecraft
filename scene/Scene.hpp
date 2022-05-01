@@ -1,6 +1,7 @@
 #include <map>
 #include <time.h> 
 #include "common/testObj.hpp"
+#include <unistd.h>
 
 class Scene
 {
@@ -20,9 +21,15 @@ class Scene
         bool changeDirection;
 
         int frameCount ;
+        bool generatedTrees;
+
+        vector<vector<glm::vec3>> treeMapPosition;
+        GLuint BoxShader;
+         int treeCount = 0;
+         Mesh treeMesh;
         Scene()
         {
-            GLuint BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
+            BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
             Transform * translation = new Transform(glm::vec3(2.,20.,2.));
             Transform * translation2 = new Transform(glm::vec3(8.,20.,2.));
             translation->model = translation->getMat4();
@@ -31,6 +38,16 @@ class Scene
             vitesse = glm::vec3(0.,0.,0.);
             srand (time(NULL));
             frameCount =0;
+            generatedTrees = false;
+
+            LoaderObj loaderTree = LoaderObj("tree2.obj");
+            treeMesh = Mesh();
+            treeMesh.indexed_vertices = loaderTree.vertices;
+            treeMesh.indices =loaderTree.indices;
+            treeMesh.normals =loaderTree.normals;
+            treeMesh.uvs =loaderTree.textures;
+            
+            treeMesh.loadTexture2("tree.DDS");
 
                        /* GameObject * Hand = new GameObject();
             Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
@@ -57,42 +74,43 @@ class Scene
             graphHand->apply(translation);
             graphHand->apply(translation3);
             add(graphHand);*/
+           
                 {
-                    GameObject * Hand = new GameObject();
-                Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
-                Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
+                    GameObject * Sky = new GameObject();
+                Sky->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
+                Sky->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
                 
                 LoaderObj loader = LoaderObj("skyDome.obj");
 
-                Hand->mesh.indexed_vertices = loader.vertices;
-                Hand->mesh.indices =loader.indices;
-                Hand->mesh.normals =loader.normals;
-                Hand->mesh.uvs =loader.textures;
+                Sky->mesh.indexed_vertices = loader.vertices;
+                Sky->mesh.indices =loader.indices;
+                Sky->mesh.normals =loader.normals;
+                Sky->mesh.uvs =loader.textures;
                 
-                Hand->mesh.loadTexture2("skydomeEarly.DDS");
+                Sky->mesh.loadTexture2("skydomeEarly.DDS");
 
 
-                Hand->loadOnGpu(BoxShader);
+                Sky->loadOnGpu(BoxShader);
                  Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(80.)));
                 scaling->model = scaling->getMat4();
                 
 
-                graphHand = new SceneGraphComposite();
-                graphHand->gameObject = Hand;
-                graphHand->apply(scaling);
-                graphHand->setBoundingBox(BoxShader);
+                SceneGraphComposite *graphSky = new SceneGraphComposite();
+                graphSky->gameObject = Sky;
+                graphSky->apply(scaling);
+                graphSky->setBoundingBox(BoxShader);
 
 
-                Hand->physic->size = graphHand->BBsize;
+                Sky->physic->size = graphSky->BBsize;
 
                   Transform * translation3 = new Transform(glm::vec3( (float) 0,-80.,0.));
                 translation3->model = translation3->getMat4();
                 
                
-                graphHand->apply(translation);
-                graphHand->apply(translation3);
+                graphSky->apply(translation);
+                graphSky->apply(translation3);
 
-                add(*Hand);
+                add(*Sky);
                 }
 
                 
@@ -350,8 +368,147 @@ class Scene
             translation3->model = translation3->getMat4();
             //cout<<trans<<endl;
             graphHand->apply(translation3);
+            
+            
+            
+            //cout<<hight<<endl;
 
         }
+        void GenerateTrees(vector<vector<int>> treeMap,int count,Map *map)
+        {
+            //cout<<"ok"<<endl;
+            //printMap(map->chunks);
+
+            //int x = -160/16;
+            //int y = -160/16;
+
+
+
+            //cout<<"ix:"<<ix<<"iy:"<<iy<<endl;
+            //cout<<count<<endl;
+
+            if(treeCount > 0.3*count)
+            {
+                
+                generatedTrees = true;
+            }
+            if(!generatedTrees)
+            {
+               
+                int size = treeMap.size();
+                treeMapPosition.resize(size);
+                for(auto& line : treeMapPosition)
+                    line.resize(size);
+
+
+
+                for(int i = 0 ; i < size ; i++)
+                {
+
+                    int resti = i%16;
+                    for(int j = 0 ; j < size ; j++)
+                    {
+                        if(treeMap[i][j])
+                        {
+    
+                            int restj = j%16;
+
+                            int x = (i -size/2)/16;
+                            int y = (j -size/2)/16;
+
+                            Chunk *chonky = getChunk(map,x, y);
+
+                            
+                            if(chonky!=NULL && chonky->drawn)
+                            {
+   
+                                int hight = findHighest(chonky, ivec2(chonky->startX +resti,chonky->startY+restj));
+                                //cout<<mapi<<endl;
+                                //cout<<hight<<endl;
+                                glm::vec3 pos = glm::vec3(chonky->startX +resti,hight,chonky->startY+restj);
+                                //cout<<pos<<endl;
+                                treeMapPosition[i][j]=pos;
+
+                                GameObject * Tree = new GameObject();
+                                
+                                Tree->mesh=treeMesh;
+                                Tree->loadOnGpu(BoxShader);
+                                Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(1.)));
+                                scaling->model = scaling->getMat4();
+                                
+
+                                SceneGraphComposite *graphTree = new SceneGraphComposite();
+                                graphTree->gameObject = Tree;
+                                graphTree->apply(scaling);
+                                graphTree->setBoundingBox(BoxShader);
+
+
+                                Tree->physic->size = graphTree->BBsize;
+                                //pos+=glm::vec3(0,graphTree->BBsize[1]*0.5f,0);
+                                Transform * translation3 = new Transform(pos);
+                                translation3->model = translation3->getMat4();
+                                
+                                graphTree->apply(translation3);
+                                
+                                add(*Tree);
+                                treeCount++;
+                                treeMap[i][j]=0;
+                                cout<<"generating .."<<100.*(float)treeCount/(float)count<<"\n";
+                                if(treeCount > 0.3*count)
+                                    cout<<"Done generating forest ! \n";
+
+
+
+                            }
+                            
+
+                        }
+                        
+                    }
+                }
+                
+                
+            }
+            
+
+            
+        }
+        void printBendel(map<int, map<int, map<int, int>>> bendel)
+        {
+            map<int, map<int, map<int, int>>> ::iterator it;
+
+            for (it = bendel.begin(); it != bendel.end(); it++)
+            {
+                std::cout << it->first    // string (key)
+                        << ':'
+                        << "it->second"   // string's value 
+                        << std::endl;
+                map<int, map<int, int>> ::iterator it2;
+                for (it2 = it->second.begin(); it2 != it->second.end(); it2++)
+                {
+                    std::cout << it2->first <<endl;
+                }
+            }
+        }
+        void printMap(map<int, map<int, Chunk>> chunks)
+        {
+            map<int, map<int, Chunk>> ::iterator it;
+
+            for (it = chunks.begin(); it != chunks.end(); it++)
+            {
+                std::cout << it->first    // string (key)
+                        << ':'
+                        << "it->second:"   // string's value 
+                        << std::endl;
+                map<int, Chunk> ::iterator it2;
+                for (it2 = it->second.begin(); it2 != it->second.end(); it2++)
+                {
+                    std::cout << it2->first <<endl;
+                }
+
+            }
+        }
+        
         void draw()
         {
             for(auto & object : objects)
@@ -399,8 +556,8 @@ class Scene
 
         ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
 
-        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
-            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
+        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance+1 ; x++ ){
+            for(int y = playerChunk[1]-renderDistance+1 ; y < playerChunk[1]+renderDistance+1; y ++ ){
                 int ix = (x<0 ? x*-2 +1 : x*2);
                 int iy = (x<0 ? y*-2 +1 : y*2);
         
@@ -412,6 +569,7 @@ class Scene
                         {
 
                             coord.push_back(make_pair(ix,iy));
+                            
                             //chunkY->second.gigaObject.vis = 0;     
                         }
                 }
@@ -441,9 +599,14 @@ class Scene
                                 return ret;
                             }
 
+
                         }
                     }
+                    
+                            
             }
+            
+                            
             return ret;
     }
     int findCube(Chunk *chonky,  ivec3 pos)

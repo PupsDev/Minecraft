@@ -21,21 +21,22 @@ class ForestGenerator
         vector<vector<int>> shape;
         // PPM image
         vector<vector<vector<int>>> image;
-        int width = 256;
-        int height = 256;
+        int width = 320;
+        int height = 320;
         // MAP WITH TREE POS
         vector<vector<int>> treeMap;
         vector<std::pair<int,int>> treeList;
 
         vector<vector<int>> seedMap;
+        int countTree=0;
     ForestGenerator()
     {
-        startTreeCount=50;
+        startTreeCount=25;
         travelRadius=10;
         amountSeeding=5;
         lifeTime = 2;
         decayRate=1;
-        coverPercentage=0.05;
+        coverPercentage=0.0025;
 
         shape = { {0,1,0},{1,1,1},{0,1,0}};
         image.resize(height);
@@ -224,6 +225,7 @@ class ForestGenerator
             {
                 if(treeMap[i][j]){
                     c++;
+                    countTree++;
                 }
                 
             }

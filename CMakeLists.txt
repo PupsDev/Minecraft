@@ -37,6 +37,7 @@ include_directories(
 	#external/glm-0.9.7.1/
 	external/glm-0.9.9.9/
 	external/glew-1.13.0/include/
+
 	.
 )
 
@@ -44,6 +45,7 @@ set(ALL_LIBS
 	${OPENGL_LIBRARY}
 	glfw
 	GLEW_1130
+
 )
 
 add_definitions(

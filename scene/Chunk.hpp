@@ -31,11 +31,14 @@ class Chunk{
         GLuint projectionMatrix_uniform;
         GLuint viewPosUniform;
 
+        bool drawn;
+
 
     Chunk(){
         status = 0;
         gigaObject =  GameObject();
         gigaObject.mesh = Mesh();
+        drawn = false;
     }
 
 
@@ -217,9 +220,11 @@ class Chunk{
         
         Transform * tmp = new  Transform();
         gigaObject.apply(tmp);
+        
          if(gigaObject.vis ==1)
         {
             gigaObject.draw(camera);
+            drawn = true;
 
 
         }
@@ -227,6 +232,7 @@ class Chunk{
         {
              gigaObject.vis =1;
         }
+        
 
     }
     bool intersect(float &t,glm::vec3 o, glm::vec3 d,ivec3 &cube)
