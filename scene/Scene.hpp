@@ -112,20 +112,20 @@ class Scene
 
                 add(*Sky);
                 }
-
+                
                 
                 GameObject * Hand = new GameObject();
                 Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
                 Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
                 
-                LoaderObj loader = LoaderObj("kevin.obj");
+                LoaderObj loader = LoaderObj("hand.obj");
 
                 Hand->mesh.indexed_vertices = loader.vertices;
                 Hand->mesh.indices =loader.indices;
                 Hand->mesh.normals =loader.normals;
                 Hand->mesh.uvs =loader.textures;
                 
-                Hand->mesh.loadTexture2("citrus.DDS");
+                Hand->mesh.loadTexture2("hand.DDS");
 
 
                 Hand->loadOnGpu(BoxShader);
@@ -149,6 +149,9 @@ class Scene
                 graphHand->apply(translation3);
 
                 add(graphHand);
+
+                //cout<<"SizeObj :"<<objects.size()<<endl;
+                loadBuilding();
 
             for(int i = 0 ; i < 10 ; i++)
             {
@@ -360,7 +363,7 @@ class Scene
             
             glm::vec3 mvec = mouseToSpace(xpos,ypos);
             
-            glm::vec3 pos = objects[0].computePosition();
+            glm::vec3 pos = objects[1].computePosition();
             //cout<<pos<<endl;
             glm::vec3 pos2 = glm::vec3(8.,20.,2.);
             glm::vec3 trans = (5.f*mvec +camera.position) -pos;
@@ -372,6 +375,46 @@ class Scene
             
             
             //cout<<hight<<endl;
+
+        }
+
+        void loadBuilding()
+        {
+            
+            GameObject * Temple = new GameObject();
+            
+            LoaderObj loader = LoaderObj("temple.obj");
+
+            Temple->mesh.indexed_vertices = loader.vertices;
+            Temple->mesh.indices =loader.indices;
+            Temple->mesh.normals =loader.normals;
+            Temple->mesh.uvs =loader.textures;
+            
+            Temple->mesh.loadTexture2("checker.DDS");
+
+
+            Temple->loadOnGpu(BoxShader);
+            
+            Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(5.)));
+            scaling->model = scaling->getMat4();
+        
+
+            SceneGraphComposite *graphTemple = new SceneGraphComposite();
+            graphTemple->gameObject = Temple;
+            graphTemple->apply(scaling);
+            graphTemple->setBoundingBox(BoxShader);
+
+
+            Temple->physic->size = graphTemple->BBsize;
+
+            Transform * translation3 = new Transform(glm::vec3( (float) -12,10.,-10.));
+            translation3->model = translation3->getMat4();
+            
+        
+            graphTemple->apply(translation3);
+
+            add(*Temple);
+                
 
         }
         void GenerateTrees(vector<vector<int>> treeMap,int count,Map *map)
