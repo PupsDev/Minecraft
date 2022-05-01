@@ -57,7 +57,46 @@ class Scene
             graphHand->apply(translation);
             graphHand->apply(translation3);
             add(graphHand);*/
-                            GameObject * Hand = new GameObject();
+                {
+                    GameObject * Hand = new GameObject();
+                Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
+                Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
+                
+                LoaderObj loader = LoaderObj("skyDome.obj");
+
+                Hand->mesh.indexed_vertices = loader.vertices;
+                Hand->mesh.indices =loader.indices;
+                Hand->mesh.normals =loader.normals;
+                Hand->mesh.uvs =loader.textures;
+                
+                Hand->mesh.loadTexture2("skydomeEarly.DDS");
+
+
+                Hand->loadOnGpu(BoxShader);
+                 Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(80.)));
+                scaling->model = scaling->getMat4();
+                
+
+                graphHand = new SceneGraphComposite();
+                graphHand->gameObject = Hand;
+                graphHand->apply(scaling);
+                graphHand->setBoundingBox(BoxShader);
+
+
+                Hand->physic->size = graphHand->BBsize;
+
+                  Transform * translation3 = new Transform(glm::vec3( (float) 0,-80.,0.));
+                translation3->model = translation3->getMat4();
+                
+               
+                graphHand->apply(translation);
+                graphHand->apply(translation3);
+
+                add(*Hand);
+                }
+
+                
+                GameObject * Hand = new GameObject();
                 Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
                 Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
                 

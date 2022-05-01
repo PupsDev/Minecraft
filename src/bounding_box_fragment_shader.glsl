@@ -18,7 +18,7 @@ void main(){
 
         //color.a = 0.3;
 
-        color = vec4(texture( myTextureSampler[0], vec2(UV.x, 1-UV.y)).brg,1);
+        color = vec4(texture( myTextureSampler[0], vec2(UV.x, 1-UV.y)).rgb,1);
         //color = vec4(vec2(UV.x, UV.y),0,1);
 
 }
