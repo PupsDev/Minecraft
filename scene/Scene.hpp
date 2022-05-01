@@ -61,14 +61,14 @@ class Scene
                 Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
                 Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
                 
-                LoaderObj loader = LoaderObj("hand.obj");
+                LoaderObj loader = LoaderObj("kevin.obj");
 
                 Hand->mesh.indexed_vertices = loader.vertices;
                 Hand->mesh.indices =loader.indices;
                 Hand->mesh.normals =loader.normals;
                 Hand->mesh.uvs =loader.textures;
                 
-                Hand->mesh.loadTexture("dorian.bmp");
+                Hand->mesh.loadTexture2("citrus.DDS");
 
 
                 Hand->loadOnGpu(BoxShader);
@@ -107,7 +107,7 @@ class Scene
                 simpleMonkey->mesh.uvs =loader.textures;
                 //loadOBJ2("dorian2.obj", simpleMonkey->mesh.indexed_vertices,  simpleMonkey->mesh.uvs,simpleMonkey->mesh.normals);
 	
-                simpleMonkey->mesh.loadTexture("dorian.bmp");
+                simpleMonkey->mesh.loadTexture2("citrus.DDS");
 
 
                 simpleMonkey->loadOnGpu(BoxShader);

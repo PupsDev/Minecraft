@@ -158,10 +158,17 @@ LoaderObj(std::string filename)
     //{
     //    cout<<std::count(tempFaceTextureindices.begin(), tempFaceTextureindices.end(), textIndice)<<endl;
     //}
+
+    /*for(auto& texture : textures)
+    {
+       cout<<texture[0]<<" "<<texture[1]<<endl;
+    }
+    */
     std::cout<<"Done !\n";
     std::cout<<"size : "<<vertices.size()<<"\n";
     std::cout<<"size : "<<normals.size()<<"\n";
     std::cout<<"size : "<<textures.size()<<"\n";
+    std::cout<<"size : "<<this->indices.size()<<"\n";
     input_stream.close();
 
 

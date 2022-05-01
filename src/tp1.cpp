@@ -40,7 +40,7 @@ using namespace std;
 #include "scene/BoundingBox.hpp"
 #include "common/sceneGraph.hpp"
 
-
+#include "scene/ForestGenerator.hpp"
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
@@ -158,6 +158,7 @@ int init()
 
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+
     return 1;
 }
 
@@ -217,6 +218,7 @@ int main( void )
     camera.setProgramId(programID);
 
     Map map = Map(GameObjectShader,100,10);
+    ForestGenerator fg = ForestGenerator();
     Scene scene = Scene();
     scene.setCamera(camera);
 
