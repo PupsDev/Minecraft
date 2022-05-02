@@ -13,6 +13,7 @@ class Scene
         SceneGraphComposite* graphMonkey;
         SceneGraphComposite* graphHand;
         SceneGraphComposite* graphMonkey2;
+         SceneGraphComposite *graphmapObj;
 
         glm::vec3 vitesse;
         float startFrame;
@@ -22,6 +23,7 @@ class Scene
 
         int frameCount ;
         bool generatedTrees;
+        GameObject * mapObj;
 
         vector<vector<glm::vec3>> treeMapPosition;
         GLuint BoxShader;
@@ -151,7 +153,7 @@ class Scene
                 add(graphHand);
 
                 //cout<<"SizeObj :"<<objects.size()<<endl;
-                loadBuilding();
+                //loadBuilding();
 
             for(int i = 0 ; i < 10 ; i++)
             {
@@ -213,6 +215,42 @@ class Scene
             graphMonkey2->apply(translation2);
 
             add(graphMonkey2);
+            mapObj = new GameObject();
+            {        
+               
+                GLuint HUDShader = LoadShaders( "HUD_vertex_shader.glsl", "HUD_fragment_shader.glsl" );
+
+                LoaderObj loader = LoaderObj("simplePlan.obj");
+
+                mapObj->mesh.indexed_vertices = loader.vertices;
+                mapObj->mesh.indices =loader.indices;
+                mapObj->mesh.normals =loader.normals;
+                mapObj->mesh.uvs =loader.textures;
+                
+                mapObj->mesh.generateTexture();
+
+                mapObj->loadOnGpu(HUDShader);
+                
+                Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(0.25)));
+                scaling->model = scaling->getMat4();
+            
+
+                graphmapObj = new SceneGraphComposite();
+                graphmapObj->gameObject = mapObj;
+                graphmapObj->apply(scaling);
+                graphmapObj->setBoundingBox(HUDShader);
+
+
+                mapObj->physic->size = graphmapObj->BBsize;
+
+                Transform * translation3 = new Transform(glm::vec3( (float) 0,0.,0.));
+                translation3->model = translation3->getMat4();
+                
+            
+                graphmapObj->apply(translation3);
+
+                add(*mapObj);
+            }
            
             
         }
@@ -296,8 +334,8 @@ class Scene
             //graphMonkey->applyPhysics();
             //graphMonkey2->applyPhysics();
 
+            
             /*
-
             float currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
@@ -353,6 +391,7 @@ class Scene
                 }
     
             }
+
             changeDirection = false;
             frameCount ++;
             */
@@ -366,14 +405,116 @@ class Scene
             glm::vec3 pos = objects[1].computePosition();
             //cout<<pos<<endl;
             glm::vec3 pos2 = glm::vec3(8.,20.,2.);
-            glm::vec3 trans = (5.f*mvec +camera.position) -pos;
-            Transform * translation3 = new Transform(trans);
-            translation3->model = translation3->getMat4();
-            //cout<<trans<<endl;
-            graphHand->apply(translation3);
+
+
+            glm::vec3 cube;
+            bool isIntersect = intersect(map, camera.position, mvec, cube);
+            if(isIntersect)
+            {
+                //cout<<"INTERSECT ";
+                //cout<<cube[1]<<endl;
+                glm::vec3 trans = (cube + glm::vec3(0.,3.5,0.) ) -pos;
+                Transform * translation3 = new Transform(trans);
+                translation3->model = translation3->getMat4();
+                graphHand->apply(translation3);
+                
+
+            }
+            else
+            {
+                //cout<<"NON INTERSECT \n";
+                glm::vec3 trans = (5.f*mvec +camera.position) -pos;
+                Transform * translation3 = new Transform(trans);
+                translation3->model = translation3->getMat4();
+                graphHand->apply(translation3);
+
+            }
+            
+            //mapObj->mesh.generateTexture(map->imageMap);
+            mapObj->mesh.reloadTexture(map->imageMap);
+            glm::vec3 posMap = mapObj->computePosition();
+
+            
+            glm::mat3 view3 =  Transform::convertMat4(camera.viewMatrix);
+            glm::mat3 iview3 = glm::inverse(view3);
+
+
+
+            //glm::vec3 transMap = glm::vec3(0.,0.,0.) -posMap;
+
+            /*Transform * translationMap = new Transform(transMap);
+            translationMap->model = translationMap->getMat4();
+            graphmapObj->apply(translationMap);
+            cout<<mapObj->computePosition()<<endl;
+            */
+            /*glm::mat4 viewMatrix = glm::lookAt(posMap, camera.direction+posMap, glm::vec3(0.0f, 1.0f,  0.0f));
+            glm::vec4 np = viewMatrix*glm::vec4(mapObj->computePosition(),1); 
+            if( abs(np[3]) >0.0001 )
+                np *= 1.f/np[3];
+            glm::vec3 deplace = glm::vec3(np[0],np[1],np[2])-posMap;
+            */
+            //glm::mat4 mat = camera.viewMatrix * 
+           // glm::mat4 np = glm::inverse(camera.viewMatrix); 
+            
+            /*if( abs(np[3]) >0.0001 )
+                np *= 1.f/np[3];
+            */
+            /*
+            glm::vec3 pos3 = mapObj->computePosition();
+            
+            glm::vec3 directionMap = pos3 -camera.position;
+            //glm::normalize(directionMap);
+            glm::vec3 dir = camera.direction-camera.position;
+            dir = glm::normalize(dir);
+            //cout<<"LONGEUUR"<<glm::length(glm::cross(directionMap,dir))<<endl;
+            //cout<<glm::cross(directionMap,dir)<<endl;
+
+            Transform * translationMap = new Transform();
+            translationMap->model = glm::mat4(Transform::convertMat4(camera.viewMatrix));
+            
+            glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)M_PI_2, glm::vec3(1., 0., 0.));
+            
+            glm::vec3 np = (camera.position +4.f*dir)-pos3;
+            if(glm::length(np)>2.)
+            {
+                cout<<np<<endl;
+                Transform * transMap = new Transform(np);
+                mapObj->t->model = transMap->model *translationMap->model*rot;
+
+            }
+            */
+
+            
+            //cout<<pos3<<endl;
+
             
             
+            /*else
+            {
+                Transform * noT = new Transform(-1.f*mapObj->computePosition());
+                glm::vec3 np = (camera.position + 4.f*dir) -mapObj->computePosition();
+                Transform * transMap = new Transform(np);
+                mapObj->t->model = transMap->model * noT->model *mapObj->t->model;
+
+            }*/
+
+            /*
+            translationMap = new Transform(transMap);
+            translationMap->model = translationMap->getMat4();
+            graphmapObj->apply(translationMap);*/
+
             
+            
+
+        
+
+            //transMap = (camera.position + 2.f*camera.direction) -mapObj->computePosition();;
+            //translationMap = new Transform(transMap);
+            //translationMap->model = translationMap->getMat4();
+            //graphmapObj->apply(translationMap);
+            //cout<<mapObj->computePosition()<<endl;
+
+        
             //cout<<hight<<endl;
 
         }
@@ -673,7 +814,40 @@ class Scene
             }
             return ret;
     }
+    bool intersect(Map *map, glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube)
+    {
+        bool select = false;
+        float k = 0.; 
+        glm::vec3 pos = glm::vec3(0.,0.,0.);
+        while(k<100. && pos[1]>=0 && !select)
+        {
+            glm::vec3 pos = origin + k*direction;
+            int x = pos[0]/16;
+            int y = pos[2]/16;
+            int resti = (int)pos[0]%16;
+            int restj = (int)pos[2]%16;
 
+            Chunk* chonky = getChunk(map,pos[0], pos[2]);
+            if(chonky!=NULL)
+            {
+                int hight = findHighest(chonky, ivec2(chonky->startX +resti,chonky->startY+restj));
+                if (hight != -1)
+                {
+                    cube = glm::vec3(chonky->startX +resti,hight,chonky->startY+restj);
+                    //chonky->hideCube(ivec3((int)chonky->startX +resti,hight,(int)chonky->startY+restj));
+                    select = true;
+                }
+            }
+            else
+            {
+                k+=10.;
+            }
+            k+=0.1;
+
+
+        }
+        return select;
+    }
 
     bool collide(Map *map, SceneGraphInterface* object)
     {

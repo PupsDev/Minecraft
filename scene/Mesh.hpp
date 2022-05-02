@@ -50,6 +50,97 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     	glGenerateMipmap(GL_TEXTURE_2D);*/
 	}
+	void generateTexture(/*vector<vector<glm::vec3>> imageArray*/)
+	{
+
+		// Create one OpenGL texture
+		GLuint textureID;
+		glGenTextures(1, &textureID);
+		
+		// "Bind" the newly created texture : all future texture functions will modify this texture
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		//int size =imageArray.size();
+		//int * data = (int*) malloc(size*size*3 * sizeof(int));
+
+		GLubyte checkImage[320][320][3];
+
+		int p=0;
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		for(int i =0; i< 320;i++)
+		{
+			for(int j = 0;j<320;j++)
+			{
+				for(int k = 0 ; k < 3 ; k++)
+				{
+					checkImage[i][j][k]=(GLubyte) std::min(127,i);
+				}
+			}
+		}
+		// Give the image to OpenGL
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, 320, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, checkImage);
+
+		// OpenGL has now copied the data. Free our own version
+		//delete [] checkImage;
+
+		// Poor filtering, or ...
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+
+		// ... nice trilinear filtering ...
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		// ... which requires mipmaps. Generate them automatically.
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// Return the ID of the texture we just created
+		texture = textureID;
+	}
+	void reloadTexture(vector<vector<glm::vec3>> imageArray)
+	{
+				glBindTexture(GL_TEXTURE_2D, texture);
+
+		int size =imageArray.size();
+		//int * data = (int*) malloc(size*size*3 * sizeof(int));
+
+		GLubyte checkImage[320][320][3];
+
+		int p=0;
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		for(int i =0; i< size;i++)
+			for(int j =0; j< size;j++)
+			{
+				for(int k = 0 ; k < 3 ; k++)
+				{
+				
+					checkImage[i][j][k]=(GLubyte) imageArray[i][j][k];
+				}
+			}
+
+		// Give the image to OpenGL
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, 320, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, checkImage);
+
+		// OpenGL has now copied the data. Free our own version
+		//delete [] checkImage;
+
+		// Poor filtering, or ...
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+
+		// ... nice trilinear filtering ...
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		// ... which requires mipmaps. Generate them automatically.
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+	}
 
 	void reloadOnGpu(){
 		if(normals.size()!=indexed_vertices.size())

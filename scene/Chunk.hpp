@@ -33,12 +33,16 @@ class Chunk{
 
         bool drawn;
 
+        vector<vector<glm::vec3>> imageChunk;
 
     Chunk(){
         status = 0;
         gigaObject =  GameObject();
         gigaObject.mesh = Mesh();
         drawn = false;
+        imageChunk.resize(16);
+        for(auto &line : imageChunk )
+            line.resize(16);
     }
 
 
@@ -116,6 +120,27 @@ class Chunk{
                     ivec3 pos = vec3(x,y,k);
                     deletedCUbe.push_back(false);
                     cubes.push_back(pos);
+                    //cout<<"realType:"<<realType<<endl;
+                    switch(realType)
+                    {
+                        case 0:
+                            imageChunk[x-startX][y-startY] = glm::vec3(0,255,0);
+                        break;
+                        case 1:
+                            imageChunk[x-startX][y-startY] = glm::vec3(0,255,0);
+                        break;
+                        case 2:
+                            imageChunk[x-startX][y-startY] = glm::vec3(255,255,0);
+                        break;
+                        case 3:
+                            imageChunk[x-startX][y-startY] = glm::vec3(127,127,127);
+                        break;
+                        default:
+                            imageChunk[x-startX][y-startY] = glm::vec3(0,0,255);
+                        break;
+                        
+                    }
+
                     type.push_back(realType);
                     bendel[pos[0]][pos[1]][pos[2]] = i++;
                 };                

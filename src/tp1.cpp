@@ -60,9 +60,9 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-glm::vec3 camera_position   = glm::vec3(5.0, 20.0, -5.0);
+glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
 //vec3(8.16655, 0.26985, -9.64445), vec3(7.8268, -0.136002, -8.79601)
-glm::vec3 camera_target = glm::vec3(0.0, 0.0, 1.0);//-camera_position;
+glm::vec3 camera_target = glm::vec3(0.0, 0.0, 1.0);
 glm::vec3 camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
 
 //Suzie
@@ -92,7 +92,7 @@ float resolution = 64.0;
 float rotationSpeed = 1.0f;
 bool cameraMode = true;
 bool pvp = false;
-
+bool drawMap = false;
 bool keyPressed = false;
 bool makeMeGravitate = false;
 
@@ -101,6 +101,7 @@ typedef struct COORD {
 }COORD;
 
 COORD lastMouse;
+
 
 
 void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos);
@@ -162,8 +163,8 @@ int init()
     glDepthFunc(GL_LESS);
 
 
-
-
+    // hide mouse
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     
 
@@ -200,8 +201,10 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
 
         map.draw(camera);
-        if(map.drawn)
-            scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
+        if(drawMap)
+            map.drawMap(); 
+        //if(map.drawn)
+        //    scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
         //cout<<"Size chunk: "<<map.chunks.size()<<endl;
         //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
 
@@ -234,6 +237,7 @@ int main( void )
     }
 
     ma_engine_play_sound(&engine, &input[0], NULL);
+    
 
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
@@ -245,8 +249,8 @@ int main( void )
 
     camera.setProgramId(programID);
 
-    Map map = Map(GameObjectShader,100,10);
-    
+    Map mymap = Map(100,10);
+    mymap.programID = GameObjectShader;
     
     Scene scene = Scene();
     scene.setCamera(camera);
@@ -256,7 +260,7 @@ int main( void )
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
-    gameLoop(map,scene,programID);
+    gameLoop(mymap,scene,programID);
 
 
     glDeleteProgram(programID);
@@ -423,6 +427,12 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_G) ==  GLFW_PRESS &&
     glfwGetKey(window, GLFW_KEY_L) ==  GLFW_PRESS ){
         makeMeGravitate=!makeMeGravitate;
+        //cout<<"seaLevel"<<seaLevel<<endl;
+    }
+    
+    if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS){
+        //mymap.drawMap();
+        drawMap = !drawMap;
         //cout<<"seaLevel"<<seaLevel<<endl;
     }
 

@@ -37,6 +37,34 @@ class Map {
     int nbThread = 0;
     bool drawn;
 
+    vector<vector<glm::vec3>> imageMap;
+  /*  Map()
+    {
+
+    }
+*/
+    Map( int size=100, int renderDistance =15){
+
+        gigaTexture = loadBMP_custom("../textures/minecraft/gigaTexture.bmp",false);
+        drawn = false;
+        size=size;
+        this->renderDistance = renderDistance;
+
+        int caseSize = 1;
+        int lineSize = 16*2*renderDistance;
+
+        imageMap.resize(caseSize*lineSize);
+        for(auto &line : imageMap)
+        {
+            line.resize(caseSize*lineSize);
+        }
+        
+        //c_types = vector<Cube>(5,Cube());
+
+        c = Cube();
+
+        chunks = map<int, map<int, Chunk>>();
+    }
     Map(GLuint GameObjectShader, int size=100, int renderDistance =15){
 
         gigaTexture = loadBMP_custom("../textures/minecraft/gigaTexture.bmp",false);
@@ -45,25 +73,40 @@ class Map {
         this->renderDistance = renderDistance;
 
         programID = GameObjectShader;
+
+        int caseSize = 1;
+        int lineSize = 16*renderDistance;
+
+        imageMap.resize(caseSize*lineSize);
+        for(auto &line : imageMap)
+        {
+            line.resize(caseSize*lineSize);
+        }
         
         //c_types = vector<Cube>(5,Cube());
 
         c = Cube();
 
-        // c_types[0].loadOnGpu(GameObjectShader); 
-        // c_types[1].loadOnGpu(GameObjectShader); 
-        // c_types[2].loadOnGpu(GameObjectShader); 
-        // c_types[3].loadOnGpu(GameObjectShader); 
-        // c_types[4].loadOnGpu(GameObjectShader); 
-
-        // c_types[0].setTexture("../textures/minecraft/grass.bmp");
-        // c_types[1].setTexture("../textures/minecraft/dirt.bmp");
-        // c_types[2].setTexture("../textures/minecraft/stone.bmp");
-        // c_types[3].setTexture("../textures/minecraft/sand.bmp");
-        // c_types[4].setTexture("../textures/minecraft/water.bmp");
-
-        //chunks = vector<vector<Chunk>>(1,vector<Chunk>(1,Chunk()));
         chunks = map<int, map<int, Chunk>>();
+    }
+    Map& operator=(const Map& map2)
+    {
+        gigaTexture = map2.gigaTexture;
+        drawn = map2.drawn;
+        size = map2.size;
+        renderDistance = map2.renderDistance;
+        programID = map2.programID;
+        c = map2.c;
+        //chunks = map2.chunks;
+        for (auto const& [key, val] : map2.chunks)
+        {
+            chunks[key] = map<int, Chunk>();
+            for (auto const& [key2, val2] : val)
+            {
+                chunks[key][key2] = val2; 
+            }
+        }
+
     }
 
     void draw(Camera camera){
@@ -98,6 +141,7 @@ class Map {
                         chunks[ix][iy].myOwnThread = new thread(constructChunk, &chunks[ix][iy], perlin, x*16, y*16, &c, &nbThread);
                         
                         
+                        
                     }
                 }
                 if(chunks[ix][iy].status == 2){
@@ -112,9 +156,60 @@ class Map {
                         chunks[ix][iy].draw(camera, programID);
                         chunks[ix][iy].drawn = true;
                     }
+                    int nx = x+renderDistance -  playerChunk[0];
+                    int ny = y+renderDistance -  playerChunk[1];
+                    for(int i=0 ; i< 16 ; i++)
+                    {
+                        for(int j=0 ; j<16 ; j++)
+                        {
+                            imageMap[nx*15+i][ny*15+j]=chunks[ix][iy].imageChunk[i][j];
+                        }
+                    }
                 }
             }
         }
         drawn = true;
     }
+    void drawMap() 
+    {
+
+        ofstream myfile;
+
+
+        std::string output = "../map/map.ppm";
+        myfile.open (&output[0]);
+        int width = 320;
+        int height = 320;
+        myfile << "P3\n";
+        myfile << width<<" "<<height<<"\n255\n";
+        /*
+        for (auto const& line : chunks)
+        {
+            for(auto const& chunk: line.second)
+            {
+                for(int i=0 ; i< 16 ; i++)
+                {
+                    for(int j=0 ; j<16 ; j++)
+                    {
+                        for(int k=0 ; k<3 ; k++)
+                            myfile << chunk.second.imageChunk[i][j][k]<<" ";
+                        myfile<<"\n";
+                    }
+                }
+            }
+        }
+        */
+        for (auto const& line : imageMap)
+        {
+            for(auto const& chunk: line)
+            {
+                for(int k=0 ; k<3 ; k++)
+                    myfile << chunk[k]<<" ";
+                myfile<<"\n";
+            }
+        }
+
+        myfile.close();
+    }
+
 };
