@@ -56,8 +56,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1024;
+const unsigned int SCR_HEIGHT = 1024;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);

@@ -221,7 +221,7 @@ class Scene
                
                 GLuint HUDShader = LoadShaders( "HUD_vertex_shader.glsl", "HUD_fragment_shader.glsl" );
 
-                LoaderObj loader = LoaderObj("simplePlan.obj");
+                LoaderObj loader = LoaderObj("simplePlanCloseUp.obj");
 
                 mapObj->mesh.indexed_vertices = loader.vertices;
                 mapObj->mesh.indices =loader.indices;
@@ -531,22 +531,27 @@ class Scene
                 shapeCamera[i][j] = 1;
 
             }*/
-            int sizex = 19;
+            int sizex = 1;
             int sizey =sizex;
             int default_value = 1;
             std::vector<int> v(sizex, default_value);
             std::vector<std::vector<int>> shapeCamera(sizey, v);
-            /*
-            for(int i = 0 ; i < shape.size();i++)
-            {
-                for(int j = 0 ; j < shape[i].size();j++)
-                {
-                    cout<<shape[i][j]<<" ";
-                }
-                cout<<"\n";
-            }
-            */
 
+            int squareSize = 16;
+            int borderSize = 1;
+            std::vector<int> v2(squareSize+borderSize, default_value);
+            std::vector<std::vector<int>> shapeBorder(squareSize+borderSize, v2);
+            
+            for(int i = borderSize ; i < squareSize-borderSize;i++)
+            {
+                for(int j = borderSize ; j < squareSize-borderSize;j++)
+                {
+                    shapeBorder[i][j]=0;
+                }
+                
+            }
+            //sizex=17;
+            //sizey=17;
             int offsetx = (int)camera.position[0]%16;
             int offsety = (int)camera.position[2]%16;
             for(int s=-sizey/2 ; s<sizey/2 +1 ; s++)
@@ -555,13 +560,36 @@ class Scene
                 {   
                     if(shapeCamera[s+sizey/2][t+sizex/2])
                     {
+                        // DRAW CAMERA
                         map->imageMap[160+offsetx+s][160+offsety+t]= glm::vec3(255,0.,0.);
+                       
                     }
-                    
                     
                 }
 
             }
+            /*
+            for(int i = 8 ; i < map->imageMap.size()-8;i+=16)
+            {
+                for(int j = 8  ; j < map->imageMap[i].size()-8 ; j+=16)
+                {
+                    for(int s=-(squareSize+borderSize)/2 ; s<(squareSize+borderSize)/2 +1 ; s++)
+                    {
+                        for(int t=-(squareSize+borderSize)/2 ; t<(squareSize+borderSize)/2+1 ; t++)
+                        {   
+                            if(shapeBorder[s+(squareSize+borderSize)/2][t+(squareSize+borderSize)/2])
+                            {
+                                // DRAW CUNK
+                                map->imageMap[i+s][j+t]= glm::vec3(255,0.,0.);
+                            }
+                            
+                        }
+
+                    }
+
+                }
+            }*/
+
             mapObj->mesh.reloadTexture(map->imageMap);
             
 

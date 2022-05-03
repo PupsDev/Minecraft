@@ -35,6 +35,7 @@ class Chunk{
 
         vector<vector<glm::vec3>> imageChunk;
 
+
     Chunk(){
         status = 0;
         gigaObject =  GameObject();
@@ -43,6 +44,10 @@ class Chunk{
         imageChunk.resize(16);
         for(auto &line : imageChunk )
             line.resize(16);
+
+        int squareSize = 16;
+        int borderSize = 1;
+
     }
 
 
@@ -139,6 +144,10 @@ class Chunk{
                             imageChunk[x-startX][y-startY] = glm::vec3(0,0,255);
                         break;
                         
+                    }
+                    if( x-startX ==0 || y-startY ==0)
+                    {
+                        imageChunk[x-startX][y-startY] = glm::vec3(0,0,0);
                     }
 
                     type.push_back(realType);
