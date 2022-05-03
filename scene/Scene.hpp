@@ -88,6 +88,7 @@ class Scene
                 Sky->mesh.indices =loader.indices;
                 Sky->mesh.normals =loader.normals;
                 Sky->mesh.uvs =loader.textures;
+                Sky->HUD = true;
                 
                 Sky->mesh.loadTexture2("skydomeEarly.DDS");
 
@@ -126,7 +127,7 @@ class Scene
                 Hand->mesh.indices =loader.indices;
                 Hand->mesh.normals =loader.normals;
                 Hand->mesh.uvs =loader.textures;
-                
+                Hand->HUD = true;
                 Hand->mesh.loadTexture2("hand.DDS");
 
 
@@ -226,7 +227,7 @@ class Scene
                 mapObj->mesh.indices =loader.indices;
                 mapObj->mesh.normals =loader.normals;
                 mapObj->mesh.uvs =loader.textures;
-                
+                mapObj->HUD = true;
                 mapObj->mesh.generateTexture();
 
                 mapObj->loadOnGpu(HUDShader);
@@ -431,7 +432,7 @@ class Scene
             }
             
             //mapObj->mesh.generateTexture(map->imageMap);
-            mapObj->mesh.reloadTexture(map->imageMap);
+           
             glm::vec3 posMap = mapObj->computePosition();
 
             
@@ -516,6 +517,53 @@ class Scene
 
         
             //cout<<hight<<endl;
+            
+            /*
+            vector<vector<int>> shapeCamera;
+            int sizex =5;
+            int sizey =sizex;
+            int i,j;
+            shapeCamera.resize(sizey);
+
+            for(i = 0; i < sizey; i++)
+            {
+                shapeCamera[i].resize(sizex);
+                shapeCamera[i][j] = 1;
+
+            }*/
+            int sizex = 19;
+            int sizey =sizex;
+            int default_value = 1;
+            std::vector<int> v(sizex, default_value);
+            std::vector<std::vector<int>> shapeCamera(sizey, v);
+            /*
+            for(int i = 0 ; i < shape.size();i++)
+            {
+                for(int j = 0 ; j < shape[i].size();j++)
+                {
+                    cout<<shape[i][j]<<" ";
+                }
+                cout<<"\n";
+            }
+            */
+
+            int offsetx = (int)camera.position[0]%16;
+            int offsety = (int)camera.position[2]%16;
+            for(int s=-sizey/2 ; s<sizey/2 +1 ; s++)
+            {
+                for(int t=-sizex/2 ; t<sizex/2+1 ; t++)
+                {   
+                    if(shapeCamera[s+sizey/2][t+sizex/2])
+                    {
+                        map->imageMap[160+offsetx+s][160+offsety+t]= glm::vec3(255,0.,0.);
+                    }
+                    
+                    
+                }
+
+            }
+            mapObj->mesh.reloadTexture(map->imageMap);
+            
 
         }
 
@@ -571,7 +619,7 @@ class Scene
             //cout<<"ix:"<<ix<<"iy:"<<iy<<endl;
             //cout<<count<<endl;
 
-            if(treeCount > 0.3*count)
+            if(treeCount > 0.75*count)
             {
                 
                 generatedTrees = true;
@@ -617,6 +665,7 @@ class Scene
                                 
                                 Tree->mesh=treeMesh;
                                 Tree->loadOnGpu(BoxShader);
+                                Tree->chunksIds = ivec2(x,y);
                                 Transform * scaling = new Transform(glm::scale(glm::mat4(1.f),glm::vec3(1.)));
                                 scaling->model = scaling->getMat4();
                                 
@@ -637,9 +686,9 @@ class Scene
                                 add(*Tree);
                                 treeCount++;
                                 treeMap[i][j]=0;
-                                cout<<"generating .."<<100.*(float)treeCount/(float)count<<"\n";
-                                if(treeCount > 0.3*count)
-                                    cout<<"Done generating forest ! \n";
+                                //cout<<"generating .."<<100.*(float)treeCount/(float)count<<"\n";
+                                //if(treeCount > 0.3*count)
+                                //    cout<<"Done generating forest ! \n";
 
 
 
@@ -693,21 +742,30 @@ class Scene
             }
         }
         
-        void draw()
+        void draw(Map *map)
         {
             for(auto & object : objects)
             {   
-                if(object.wireframe)
+                Chunk * chonky = getChunk(map,object.chunksIds[0],object.chunksIds[1]);
+                if(chonky )
                 {
-                    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-                    object.draw(camera);
-                     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                    if(chonky->drawn || object.HUD)
+                    {
+                        if(object.wireframe)
+                        {
+                            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                            object.draw(camera);
+                            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                        }
+                        else
+                        {
+                            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                            object.draw(camera);
+                        }
+                    }
+
                 }
-                else
-                {
-                     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-                    object.draw(camera);
-                }
+
                 
             }
         }

@@ -203,13 +203,13 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         map.draw(camera);
         if(drawMap)
             map.drawMap(); 
-        //if(map.drawn)
-        //    scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
+        if(map.drawn)
+            scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
         //cout<<"Size chunk: "<<map.chunks.size()<<endl;
         //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
 
         scene.update(&map);
-        scene.draw();
+        scene.draw(&map);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

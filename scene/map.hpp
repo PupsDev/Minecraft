@@ -75,7 +75,7 @@ class Map {
         programID = GameObjectShader;
 
         int caseSize = 1;
-        int lineSize = 16*renderDistance;
+        int lineSize = 16*2*renderDistance;
 
         imageMap.resize(caseSize*lineSize);
         for(auto &line : imageMap)
@@ -119,8 +119,8 @@ class Map {
 
         //cout<<"nbThread "<<nbThread<<endl;
 
-        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance +1; x++ ){
-            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance +1; y ++ ){
+        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance ; x++ ){
+            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance ; y ++ ){
                 int ix = x;//(x<0 ? x*-2 +1 : x*2);
                 int iy = y;//(x<0 ? y*-2 +1 : y*2);
 
@@ -152,6 +152,7 @@ class Map {
                     vec3 pos = vec3(chunks[ix][iy].startX+8,camera.position[1],chunks[ix][iy].startY+8);
                     float dist = (length(pos-camera.position));
                     float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
+                    chunks[ix][iy].drawn = false;
                     if(dist<64 || ang>cos(camera.fov)){
                         chunks[ix][iy].draw(camera, programID);
                         chunks[ix][iy].drawn = true;
@@ -162,7 +163,7 @@ class Map {
                     {
                         for(int j=0 ; j<16 ; j++)
                         {
-                            imageMap[nx*15+i][ny*15+j]=chunks[ix][iy].imageChunk[i][j];
+                            imageMap[nx*16+i][ny*16+j]=chunks[ix][iy].imageChunk[i][j];
                         }
                     }
                 }

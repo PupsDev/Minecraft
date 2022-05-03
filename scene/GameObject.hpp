@@ -27,6 +27,8 @@ public:
 	PhysicComponent* physic;
 
 	bool drawable = true;
+	ivec2 chunksIds;
+	bool HUD;
 
 	void draw(Camera camera, Transform* parent = new Transform()){ 
 
@@ -189,6 +191,8 @@ public:
 		physic = new PhysicComponent();
 		mesh = Mesh();
 		vis =1.;
+		chunksIds = ivec2(0,0);
+		HUD = false;
 	}
 	GameObject(Mesh m_mesh){
 		t = new Transform();
@@ -196,6 +200,8 @@ public:
 		physic = new PhysicComponent();
 		mesh = m_mesh;
 		vis =1.;
+		chunksIds = ivec2(0,0);
+		HUD = false;
 	}
 
 
