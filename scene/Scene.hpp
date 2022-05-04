@@ -3,12 +3,19 @@
 #include "common/testObj.hpp"
 #include <unistd.h>
 
+typedef struct COORD {
+    double x,y;
+}COORD;
+typedef struct MOUSE{
+    COORD lastMouse;
+    bool pressed;
+}MOUSE;
 class Scene
 {
     public :
         vector<GameObject> objects;
         vector<SceneGraphComposite*> graphs;
-        Camera camera;
+        Camera *camera;
 
         SceneGraphComposite* graphMonkey;
         SceneGraphComposite* graphHand;
@@ -24,6 +31,8 @@ class Scene
         int frameCount ;
         bool generatedTrees;
         GameObject * mapObj;
+        glm::vec3 diff;
+        glm::vec3 olddiff;
 
         vector<vector<glm::vec3>> treeMapPosition;
         GLuint BoxShader;
@@ -38,6 +47,9 @@ class Scene
             translation2->model = translation2->getMat4();
 
             vitesse = glm::vec3(0.,0.,0.);
+            diff = glm::vec3(0.,0.,0.);
+            olddiff = glm::vec3(0.,0.,0.);
+            
             srand (time(NULL));
             frameCount =0;
             generatedTrees = false;
@@ -255,7 +267,7 @@ class Scene
            
             
         }
-        void setCamera(Camera m_camera)
+        void setCamera(Camera* m_camera)
         {
             camera = m_camera;
         }
@@ -280,20 +292,20 @@ class Scene
         glm::vec3 mouseToSpace(double x, double y)
         {
             //cout<<"1: "<<x<<" && 2: "<<y<<endl;
-            float new_x = 2*(x / (double)camera.width) - 1.0;
-            float new_y = 1. - 2*(y / (double)camera.height);
+            float new_x = 2*(x / (double)camera->width) - 1.0;
+            float new_y = 1. - 2*(y / (double)camera->height);
 
             //cout<<"new_1: "<<new_x<<" && new_2: "<<new_y<<endl;
             //cout << "Cursor Position at (" << new_x << " : " << new_y << ")"<<endl;
 
             glm::vec4 m1 = glm::vec4(new_x,new_y,0.1,1.);
 
-            glm::mat4 iProjection = glm::inverse(camera.projectionMatrix);
+            glm::mat4 iProjection = glm::inverse(camera->projectionMatrix);
             glm::vec4 m1_eye = iProjection * m1;
 
             m1_eye = m1_eye * 1.f/m1_eye[3];
         
-            glm::mat4 iView = glm::inverse(camera.viewMatrix);
+            glm::mat4 iView = glm::inverse(camera->viewMatrix);
 
             glm::vec4 m1_space = glm::vec4(m1_eye.x,m1_eye.y,m1_eye.z,0.);
 
@@ -304,9 +316,81 @@ class Scene
 
             return mouse_ray;
         }
+        void dragMouse(Map* map, float kdistance, MOUSE drag)
+        {
+                       double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
 
+
+            glm::vec3 mvec0 = mouseToSpace(xpos ,ypos);
+            //glm::vec3 mvec1 = mouseToSpace2(xpos,ypos);
+
+            //cout<<mvec0<<endl;
+            //glm::vec3 mvec = mvec0;
+            //cout<<"PRESSED -> "<<drag.pressed<<endl;
+            //cout<<"MOUSE -> "<<drag.lastMouse.x<<endl;
+            //cout<<"MOUSE -> "<<drag.lastMouse.y<<endl;
+
+            glm::vec3 pos = objects[1].computePosition();
+            //cout<<pos<<endl;
+            glm::vec3 pos2 = glm::vec3(8.,20.,2.);
+
+
+            glm::vec3 cube = glm::vec3(0.,0.,0.); 
+            glm::vec3 cube2 = glm::vec3(0.,0.,0.); 
+
+            bool isIntersect = intersect(map, camera->position, mvec0, cube);
+            
+            if(isIntersect)
+            {
+
+                glm::vec3 trans = (cube + glm::vec3(0.,1.,0.) ) -pos;
+                Transform * translation3 = new Transform(trans);
+                translation3->model = translation3->getMat4();
+                graphHand->apply(translation3);
+                
+
+            }
+            else
+            {
+                glm::vec3 trans = (camera->position + kdistance*mvec0) -pos;
+                Transform * translation3 = new Transform(trans);
+                translation3->model = translation3->getMat4();
+                graphHand->apply(translation3);
+            }
+            //diff = glm::vec3(0.,0.,0.);
+            if(drag.pressed)
+            {
+                
+                glm::vec3 mvec = mouseToSpace(drag.lastMouse.x ,drag.lastMouse.y);
+                //cout<<"MOUSE OLD -> "<<mvec<<endl;
+                //cout<<"MOUSE NEW -> "<<mvec0<<endl;
+                bool isIntersect2 = intersect(map, camera->position, mvec, cube2);
+                cout<<"DIFF "<<cube - cube2<<endl;
+                diff =  cube2-cube;
+                diff[1]=0.;
+                camera->position += 4.f*deltaTime *diff;
+                olddiff += diff;
+                //camera->set(camera->position,camera->direction,glm::vec3(0.0f, 1.0f,  0.0f));
+                //camera->giveItToMe();
+                cout<<"CAMERA "<<camera->position<<endl;
+
+            }
+            else
+            {
+                 cout<<"RELEASE "<<endl;
+                 cout<<"CAMERA "<<camera->position<<endl;
+                /*camera->position += 10.f*deltaTime *olddiff;
+                camera->set(camera->position,camera->direction,glm::vec3(0.0f, 1.0f,  0.0f));
+                camera->giveItToMe();
+                olddiff = glm::vec3(0.,0.,0.);*/
+                
+            }
+
+
+        }
         // Updated each frame
-        void update(Map* map, float kdistance)
+        void update(Map* map, float kdistance, MOUSE drag)
         {   
 
             //graphMonkey->gameObject->physic->display();
@@ -405,16 +489,20 @@ class Scene
             //glm::vec3 mvec1 = mouseToSpace2(xpos,ypos);
 
             //cout<<mvec0<<endl;
-            glm::vec3 mvec = mvec0;
-            
+            //glm::vec3 mvec = mvec0;
+            //cout<<"PRESSED -> "<<drag.pressed<<endl;
+            //cout<<"MOUSE -> "<<drag.lastMouse.x<<endl;
+            //cout<<"MOUSE -> "<<drag.lastMouse.y<<endl;
+
             glm::vec3 pos = objects[1].computePosition();
             //cout<<pos<<endl;
             glm::vec3 pos2 = glm::vec3(8.,20.,2.);
 
 
             glm::vec3 cube = glm::vec3(0.,0.,0.); 
+            glm::vec3 cube2 = glm::vec3(0.,0.,0.); 
 
-            bool isIntersect = intersect(map, camera.position, mvec0, cube);
+            bool isIntersect = intersect(map, camera->position, mvec0, cube);
             
             if(isIntersect)
             {
@@ -428,18 +516,35 @@ class Scene
             }
             else
             {
-                glm::vec3 trans = (camera.position + kdistance*mvec0) -pos;
+                glm::vec3 trans = (camera->position + kdistance*mvec0) -pos;
                 Transform * translation3 = new Transform(trans);
                 translation3->model = translation3->getMat4();
                 graphHand->apply(translation3);
             }
-            
+            /*glm::vec3 diff = glm::vec3(0.,0.,0.);
+            if(drag.pressed)
+            {
+                glm::vec3 mvec = mouseToSpace(drag.lastMouse.x ,drag.lastMouse.y);
+                //cout<<"MOUSE OLD -> "<<mvec<<endl;
+                //cout<<"MOUSE NEW -> "<<mvec0<<endl;
+                bool isIntersect2 = intersect(map, camera->position, mvec, cube2);
+                cout<<"DIFF "<<cube - cube2<<endl;
+                diff =  cube2-cube;
+                diff[1]=0.;
+                            camera->position += 10.f*deltaTime *camera->direction;
+            camera->set(camera->position,camera->direction,glm::vec3(0.0f, 1.0f,  0.0f));
+            camera->giveItToMe();
+            map->draw(camera);
+
+            }*/
+
+
 
            
             glm::vec3 posMap = mapObj->computePosition();
 
             
-            glm::mat3 view3 =  Transform::convertMat4(camera.viewMatrix);
+            glm::mat3 view3 =  Transform::convertMat4(camera->viewMatrix);
             glm::mat3 iview3 = glm::inverse(view3);
 
 
@@ -451,14 +556,14 @@ class Scene
             graphmapObj->apply(translationMap);
             cout<<mapObj->computePosition()<<endl;
             */
-            /*glm::mat4 viewMatrix = glm::lookAt(posMap, camera.direction+posMap, glm::vec3(0.0f, 1.0f,  0.0f));
+            /*glm::mat4 viewMatrix = glm::lookAt(posMap, camera->direction+posMap, glm::vec3(0.0f, 1.0f,  0.0f));
             glm::vec4 np = viewMatrix*glm::vec4(mapObj->computePosition(),1); 
             if( abs(np[3]) >0.0001 )
                 np *= 1.f/np[3];
             glm::vec3 deplace = glm::vec3(np[0],np[1],np[2])-posMap;
             */
-            //glm::mat4 mat = camera.viewMatrix * 
-           // glm::mat4 np = glm::inverse(camera.viewMatrix); 
+            //glm::mat4 mat = camera->viewMatrix * 
+           // glm::mat4 np = glm::inverse(camera->viewMatrix); 
             
             /*if( abs(np[3]) >0.0001 )
                 np *= 1.f/np[3];
@@ -466,19 +571,19 @@ class Scene
             /*
             glm::vec3 pos3 = mapObj->computePosition();
             
-            glm::vec3 directionMap = pos3 -camera.position;
+            glm::vec3 directionMap = pos3 -camera->position;
             //glm::normalize(directionMap);
-            glm::vec3 dir = camera.direction-camera.position;
+            glm::vec3 dir = camera->direction-camera->position;
             dir = glm::normalize(dir);
             //cout<<"LONGEUUR"<<glm::length(glm::cross(directionMap,dir))<<endl;
             //cout<<glm::cross(directionMap,dir)<<endl;
 
             Transform * translationMap = new Transform();
-            translationMap->model = glm::mat4(Transform::convertMat4(camera.viewMatrix));
+            translationMap->model = glm::mat4(Transform::convertMat4(camera->viewMatrix));
             
             glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)M_PI_2, glm::vec3(1., 0., 0.));
             
-            glm::vec3 np = (camera.position +4.f*dir)-pos3;
+            glm::vec3 np = (camera->position +4.f*dir)-pos3;
             if(glm::length(np)>2.)
             {
                 cout<<np<<endl;
@@ -496,7 +601,7 @@ class Scene
             /*else
             {
                 Transform * noT = new Transform(-1.f*mapObj->computePosition());
-                glm::vec3 np = (camera.position + 4.f*dir) -mapObj->computePosition();
+                glm::vec3 np = (camera->position + 4.f*dir) -mapObj->computePosition();
                 Transform * transMap = new Transform(np);
                 mapObj->t->model = transMap->model * noT->model *mapObj->t->model;
 
@@ -512,7 +617,7 @@ class Scene
 
         
 
-            //transMap = (camera.position + 2.f*camera.direction) -mapObj->computePosition();;
+            //transMap = (camera->position + 2.f*camera->direction) -mapObj->computePosition();;
             //translationMap = new Transform(transMap);
             //translationMap->model = translationMap->getMat4();
             //graphmapObj->apply(translationMap);
@@ -555,8 +660,8 @@ class Scene
             }
             //sizex=17;
             //sizey=17;
-            int offsetx = (int)camera.position[0]%16;
-            int offsety = (int)camera.position[2]%16;
+            int offsetx = (int)camera->position[0]%16;
+            int offsety = (int)camera->position[2]%16;
             for(int s=-sizey/2 ; s<sizey/2 +1 ; s++)
             {
                 for(int t=-sizex/2 ; t<sizex/2+1 ; t++)
@@ -574,9 +679,9 @@ class Scene
             /*
             std::vector<int> v3(9, default_value);
             std::vector<std::vector<int>> shapeChunk(9, v3);
-            int x = (camera.position[0])/16;
-            int y = (camera.position[2])/16;
-            std::vector<pair<int,int>> chunksIds = findChunks(map, camera.position);
+            int x = (camera->position[0])/16;
+            int y = (camera->position[2])/16;
+            std::vector<pair<int,int>> chunksIds = findChunks(map, camera->position);
             
             for(int s=-9/2 ; s<9/2 +1 ; s++)
             {

@@ -74,8 +74,9 @@ float lastFrame = 0.0f;
 //input 
 glm::vec3 mouse_ray    = glm::vec3(0.0f, 0.f,0.f);
 bool selectClick = false;
+bool mousePressed = false;
 
-Camera camera;
+Camera *camera = new Camera();
 double  mouse_x;
 double  mouse_y;
 //rotation
@@ -96,13 +97,12 @@ bool drawMap = false;
 bool keyPressed = false;
 bool makeMeGravitate = false;
 
-typedef struct COORD {
-    double x,y;
-}COORD;
+
 
 COORD lastMouse;
 
 
+MOUSE drag;
 
 void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -197,10 +197,15 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         processInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
 
-        camera.set(camera_position,camera_target,camera_up);
-        camera.giveItToMe();
+        camera->set(camera_position,camera_target,camera_up);
+        camera->giveItToMe();
         scene.setCamera(camera);
+        scene.deltaTime = deltaTime;
+        scene.dragMouse(&map,kdistance,drag);
+        camera_position = scene.camera->position;
+
 
 
 
@@ -212,7 +217,7 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         //cout<<"Size chunk: "<<map.chunks.size()<<endl;
         //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
 
-        scene.update(&map,kdistance);
+        scene.update(&map,kdistance,drag);
         scene.draw(&map);
 
         glfwSwapBuffers(window);
@@ -251,9 +256,9 @@ int main( void )
     GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
 
-    camera.setProgramId(programID);
-    camera.width = SCR_WIDTH;
-    camera.height = SCR_HEIGHT;
+    camera->setProgramId(programID);
+    camera->width = SCR_WIDTH;
+    camera->height = SCR_HEIGHT;
 
     Map mymap = Map(100,10);
     mymap.programID = GameObjectShader;
@@ -284,9 +289,17 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
-        cout<<xpos<<" : "<<ypos<<endl;
-        lastMouse.x = xpos;
-        lastMouse.y = ypos;
+        //cout<<xpos<<" : "<<ypos<<endl;
+        drag.lastMouse.x = xpos;
+        drag.lastMouse.y = ypos;
+        
+        
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+    {
+
+        drag.pressed = false;
+        
     }
 }
 void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)  
@@ -294,13 +307,22 @@ void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)
 
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) 
   {
-     return;
+    //cout<<"RELEASE\n";
+    //drag.pressed = false;
+    return;
   }
-  cout<<"DRAG"<<endl;
+   /*if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) 
+  {
+     cout<<"PRESS\n";
+  }
+  */
+  drag.pressed = true;
+ // cout<<"DRAG"<<endl;
   //cout<<xpos<<" : "<<ypos<<endl;
   double diffx = lastMouse.x - xpos; 
   double diffy = lastMouse.y - ypos;
-
+  //cout<<diffx<<" "<<diffy<<endl;
+  /*
   if(abs(diffx)>abs(diffy))
   {
       //HORI
@@ -325,8 +347,8 @@ void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)
         cout<<"DOWN"<<endl;
     }
 
-
   }
+  */
 
 }
 void processInput(GLFWwindow *window)

@@ -244,13 +244,13 @@ class Chunk{
         status = 3;
     }
 
-    void draw(Camera camera, GLuint programID){
+    void draw(Camera* camera, GLuint programID){
 
         glUseProgram(programID);
 
-		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
-        glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
-		glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+		glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera->viewMatrix));
+        glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera->projectionMatrix));
+		glUniform3fv(viewPosUniform, 1, &camera->position[0]);
         
         Transform * tmp = new  Transform();
         gigaObject.apply(tmp);

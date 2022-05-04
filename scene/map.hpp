@@ -109,13 +109,13 @@ class Map {
 
     }
 
-    void draw(Camera camera){
-        ivec2 playerChunk = vec2(camera.position[0]/16,camera.position[2]/16);
+    void draw(Camera* camera){
+        ivec2 playerChunk = vec2(camera->position[0]/16,camera->position[2]/16);
         //cout<<playerChunk[0]<<" "<<playerChunk[1]<<endl;
         //cout<<renderDistance<<endl;
         // 0-0
         //glUseProgram(programID);
-		//camera.giveItToMe(programID);
+		//camera->giveItToMe(programID);
 
         //cout<<"nbThread "<<nbThread<<endl;
 
@@ -132,7 +132,7 @@ class Map {
                     chunks[ix][iy].worldPos = ivec2(ix,iy);
                 }
                 
-                //camera.giveItToMe(programID);
+                //camera->giveItToMe(programID);
                 if(chunks[ix][iy].status == 0){
                     if(nbThread < maxThread){
                         //nbThread ++;
@@ -149,11 +149,11 @@ class Map {
                     //nbThread --;
                 }
                 if(chunks[ix][iy].status == 3){
-                    vec3 pos = vec3(chunks[ix][iy].startX+8,camera.position[1],chunks[ix][iy].startY+8);
-                    float dist = (length(pos-camera.position));
-                    float ang = dot(pos-camera.position,camera.direction) / ((dist)*length(camera.direction));
+                    vec3 pos = vec3(chunks[ix][iy].startX+8,camera->position[1],chunks[ix][iy].startY+8);
+                    float dist = (length(pos-camera->position));
+                    float ang = dot(pos-camera->position,camera->direction) / ((dist)*length(camera->direction));
                     chunks[ix][iy].drawn = false;
-                    if(dist<64 || ang>cos(camera.fov)){
+                    if(dist<64 || ang>cos(camera->fov)){
                         chunks[ix][iy].draw(camera, programID);
                         chunks[ix][iy].drawn = true;
                     }

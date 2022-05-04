@@ -30,10 +30,10 @@ public:
 	ivec2 chunksIds;
 	bool HUD;
 
-	void draw(Camera camera, Transform* parent = new Transform()){ 
+	void draw(Camera* camera, Transform* parent = new Transform()){ 
 
 
-		double cameraDistance = camera.getDistance(t->apply(vec3(0,0,0)));
+		double cameraDistance = camera->getDistance(t->apply(vec3(0,0,0)));
 		//cameraDistance-=40;
 	
 		//cout<<"cameraDstance : "<<cameraDistance<<endl;
@@ -53,9 +53,9 @@ public:
 		
 			glUseProgram(programID);
 
-			glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera.viewMatrix));
-			glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera.projectionMatrix));
-			glUniform3fv(viewPosUniform, 1, &camera.position[0]);
+			glUniformMatrix4fv(viewMatrix_uniform       , 1, false, glm::value_ptr(camera->viewMatrix));
+			glUniformMatrix4fv(projectionMatrix_uniform , 1, false, glm::value_ptr(camera->projectionMatrix));
+			glUniform3fv(viewPosUniform, 1, &camera->position[0]);
 
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
