@@ -280,18 +280,18 @@ class Scene
         glm::vec3 mouseToSpace(double x, double y)
         {
             //cout<<"1: "<<x<<" && 2: "<<y<<endl;
-            float new_x = 2*(x / 800) - 1.0;
-            float new_y = 1. - 2*(y / 600);
+            float new_x = 2*(x / (double)camera.width) - 1.0;
+            float new_y = 1. - 2*(y / (double)camera.height);
 
             //cout<<"new_1: "<<new_x<<" && new_2: "<<new_y<<endl;
             //cout << "Cursor Position at (" << new_x << " : " << new_y << ")"<<endl;
 
-            glm::vec4 m1 = glm::vec4(new_x,new_y,1.,1.);
+            glm::vec4 m1 = glm::vec4(new_x,new_y,0.1,1.);
 
             glm::mat4 iProjection = glm::inverse(camera.projectionMatrix);
             glm::vec4 m1_eye = iProjection * m1;
 
-
+            m1_eye = m1_eye * 1.f/m1_eye[3];
         
             glm::mat4 iView = glm::inverse(camera.viewMatrix);
 
@@ -304,8 +304,9 @@ class Scene
 
             return mouse_ray;
         }
+
         // Updated each frame
-        void update(Map* map)
+        void update(Map* map, float kdistance)
         {   
 
             //graphMonkey->gameObject->physic->display();
@@ -399,22 +400,26 @@ class Scene
             double xpos, ypos;
             glfwGetCursorPos(window, &xpos, &ypos);
 
-            //cout<<xpos<<" : "<<ypos<<endl;
-            
-            glm::vec3 mvec = mouseToSpace(xpos,ypos);
+
+            glm::vec3 mvec0 = mouseToSpace(xpos ,ypos);
+            //glm::vec3 mvec1 = mouseToSpace2(xpos,ypos);
+
+            //cout<<mvec0<<endl;
+            glm::vec3 mvec = mvec0;
             
             glm::vec3 pos = objects[1].computePosition();
             //cout<<pos<<endl;
             glm::vec3 pos2 = glm::vec3(8.,20.,2.);
 
 
-            glm::vec3 cube;
-            bool isIntersect = intersect(map, camera.position, mvec, cube);
+            glm::vec3 cube = glm::vec3(0.,0.,0.); 
+
+            bool isIntersect = intersect(map, camera.position, mvec0, cube);
+            
             if(isIntersect)
             {
-                //cout<<"INTERSECT ";
-                //cout<<cube[1]<<endl;
-                glm::vec3 trans = (cube + glm::vec3(0.,3.5,0.) ) -pos;
+
+                glm::vec3 trans = (cube + glm::vec3(0.,1.,0.) ) -pos;
                 Transform * translation3 = new Transform(trans);
                 translation3->model = translation3->getMat4();
                 graphHand->apply(translation3);
@@ -423,15 +428,13 @@ class Scene
             }
             else
             {
-                //cout<<"NON INTERSECT \n";
-                glm::vec3 trans = (5.f*mvec +camera.position) -pos;
+                glm::vec3 trans = (camera.position + kdistance*mvec0) -pos;
                 Transform * translation3 = new Transform(trans);
                 translation3->model = translation3->getMat4();
                 graphHand->apply(translation3);
-
             }
             
-            //mapObj->mesh.generateTexture(map->imageMap);
+
            
             glm::vec3 posMap = mapObj->computePosition();
 
@@ -568,6 +571,55 @@ class Scene
                 }
 
             }
+            /*
+            std::vector<int> v3(9, default_value);
+            std::vector<std::vector<int>> shapeChunk(9, v3);
+            int x = (camera.position[0])/16;
+            int y = (camera.position[2])/16;
+            std::vector<pair<int,int>> chunksIds = findChunks(map, camera.position);
+            
+            for(int s=-9/2 ; s<9/2 +1 ; s++)
+            {
+                for(int t=-9/2 ; t<9/2+1 ; t++)
+                {   
+                    if(shapeChunk[s+9/2][t+9/2])
+                    {
+                        // DRAW CAMERA
+                        for(auto & chunk : chunksIds)
+                            map->imageMap[160+chunk.first*16 +8 ][160+chunk.second*16 +8]= glm::vec3(255,255.,0.);
+                       
+                    }
+                    
+                }
+
+            }*/
+       
+            // DRAW CUBE
+            /*int x = (cube[0])/16;
+            int y = (cube[2])/16;*/
+            //cout<<"CUBE --> "<<cube<<endl;
+
+            /*for(int s=-9/2 ; s<9/2 +1 ; s++)
+            {
+                for(int t=-9/2 ; t<9/2+1 ; t++)
+                {   
+                    if(shapeChunk[s+9/2][t+9/2])
+                    {
+    
+                        map->imageMap[160+cube[0]+s][160+cube[2]+t]= glm::vec3(255,255.,255.);
+                    
+                    }
+                    
+                }
+
+            }*/
+            
+
+                       
+ 
+
+
+
             /*
             for(int i = 8 ; i < map->imageMap.size()-8;i+=16)
             {
@@ -821,15 +873,15 @@ class Scene
 
         int x = mapToChunkId((int)pos[0],1);
         int y = mapToChunkId((int)pos[2],1);
-        int renderDistance =1;
+        int renderDistance =2;
         std::vector<pair<int,int>> coord;
 
         ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
 
-        for(int x = playerChunk[0]-renderDistance ; x < playerChunk[0]+renderDistance+1 ; x++ ){
-            for(int y = playerChunk[1]-renderDistance+1 ; y < playerChunk[1]+renderDistance+1; y ++ ){
-                int ix = (x<0 ? x*-2 +1 : x*2);
-                int iy = (x<0 ? y*-2 +1 : y*2);
+        for(int x = playerChunk[0]-renderDistance; x < playerChunk[0]+renderDistance ; x++ ){
+            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
+                int ix = x;//(x<0 ? x*-2 +1 : x*2);
+                int iy = y;//(x<0 ? y*-2 +1 : y*2);
         
                 auto chunkX = map->chunks.find(ix);
                 if( chunkX != map->chunks.end())
@@ -866,6 +918,7 @@ class Scene
                             {
                                 //cout<<"Z = "<<z<<endl;
                                 ret = z;
+                                
                                 return ret;
                             }
 
@@ -902,10 +955,88 @@ class Scene
     }
     bool intersect(Map *map, glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube)
     {
+        
+        std::vector<pair<int,int>> chunksIds = findChunks(map, origin);
+        cube = glm::vec3(0.,0.,0.);
         bool select = false;
+        //cout<<"UN TEST\n";
+        for(auto& chunkId : chunksIds)
+        {
+            
+            float k = 0.; 
+           
+            glm::vec3 pos = glm::vec3(0.,0.,0.);
+            while(k<100. && pos[1]>=0 && !select)
+            {
+                glm::vec3 pos = origin + k*direction;
+                int x = pos[0]/16;
+                int y = pos[2]/16;
+                int resti = (int)pos[0]%16;
+                int restj = (int)pos[2]%16;
+                Chunk* chonky = getChunk(map,chunkId.first, chunkId.second);
+                if(chonky!=NULL)
+                {
+                    int hight = findHighest(chonky, ivec2(pos[0],pos[2]));
+                    if (hight != -1 && abs(hight-pos[1]) < 1 )
+                    {
+                        cube = glm::vec3(pos[0],hight,pos[2]);
+                        //chonky->hideCube(ivec3((int)chonky->startX +resti,hight,(int)chonky->startY+restj));
+                        //chonky->hideCube(cube);
+                        select = true;
+                        return select;
+
+                    }
+                }
+                k+=0.1;
+            }
+        }
+
+        return select;
+    }
+    
+    /*bool intersect(Map *map, glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube)
+    {
+        bool select = false;
+
+            
         float k = 0.; 
         glm::vec3 pos = glm::vec3(0.,0.,0.);
         while(k<100. && pos[1]>=0 && !select)
+        {
+            glm::vec3 pos = glm::vec3(0.,0.,0.) + k*direction;
+            std::vector<pair<int,int>> chunksIds = findChunks(map, origin);
+            for(auto& chunkId : chunksIds)
+            {
+                int x = pos[0]/16;
+                int y = pos[2]/16;
+                int resti = (int)pos[0]%16;
+                int restj = (int)pos[2]%16;
+                Chunk* chonky = getChunk(map,x, y);
+                if(chonky!=NULL)
+                {
+                    int hight = findHighest(chonky, ivec2(pos[0],pos[2]));
+                    if (hight != -1)
+                    {
+                        cube = glm::vec3(pos[0],hight,pos[2]);
+                        //chonky->hideCube(ivec3((int)chonky->startX +resti,hight,(int)chonky->startY+restj));
+                        select = true;
+                        return select;
+                    }
+                }
+            }
+            k+=0.1;
+        }
+        
+
+        return select;
+    }*/
+    /*
+     bool intersect(Map *map, glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube)
+    {
+        bool select = false;
+        float k = 0.; 
+        glm::vec3 pos = glm::vec3(0.,0.,0.);
+        while(k<20. && pos[1]>=0 && !select)
         {
             glm::vec3 pos = origin + k*direction;
             int x = pos[0]/16;
@@ -913,27 +1044,27 @@ class Scene
             int resti = (int)pos[0]%16;
             int restj = (int)pos[2]%16;
 
-            Chunk* chonky = getChunk(map,pos[0], pos[2]);
+            Chunk* chonky = getChunk(map,x, y);
             if(chonky!=NULL)
             {
-                int hight = findHighest(chonky, ivec2(chonky->startX +resti,chonky->startY+restj));
+                int hight = findHighest(chonky, ivec2(pos[0],pos[2]));
                 if (hight != -1)
                 {
-                    cube = glm::vec3(chonky->startX +resti,hight,chonky->startY+restj);
+                    cube = glm::vec3(pos[0],hight,pos[2]);
                     //chonky->hideCube(ivec3((int)chonky->startX +resti,hight,(int)chonky->startY+restj));
                     select = true;
                 }
             }
             else
             {
-                k+=10.;
+                cout<<"pas de chonk"<<endl;
             }
             k+=0.1;
 
 
         }
         return select;
-    }
+    }*/
 
     bool collide(Map *map, SceneGraphInterface* object)
     {

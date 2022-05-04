@@ -8,6 +8,8 @@ public:
     vec3 direction;
 
 	GLuint programID;
+	int width;
+	int height;;
 
 	GLuint viewMatrix_uniform;
 	GLuint projectionMatrix_uniform;

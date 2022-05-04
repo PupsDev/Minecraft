@@ -56,8 +56,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1024;
-const unsigned int SCR_HEIGHT = 1024;
+const unsigned int SCR_WIDTH = 1440;
+const unsigned int SCR_HEIGHT = 900;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
@@ -88,7 +88,7 @@ float terrainAngle = 0.0f;
 
 //resolution
 float resolution = 64.0;
-
+float  kdistance = 8.;
 float rotationSpeed = 1.0f;
 bool cameraMode = true;
 bool pvp = false;
@@ -123,7 +123,11 @@ int init()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( SCR_WIDTH  ,SCR_HEIGHT, "TP1 - GLFW", NULL, NULL);
+    
+
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "My Title",  glfwGetPrimaryMonitor(), NULL);
+
+    //window = glfwCreateWindow( SCR_WIDTH  ,SCR_HEIGHT, "TP1 - GLFW", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -164,7 +168,7 @@ int init()
 
 
     // hide mouse
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     
 
@@ -208,7 +212,7 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
         //cout<<"Size chunk: "<<map.chunks.size()<<endl;
         //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
 
-        scene.update(&map);
+        scene.update(&map,kdistance);
         scene.draw(&map);
 
         glfwSwapBuffers(window);
@@ -248,6 +252,8 @@ int main( void )
     GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
 
     camera.setProgramId(programID);
+    camera.width = SCR_WIDTH;
+    camera.height = SCR_HEIGHT;
 
     Map mymap = Map(100,10);
     mymap.programID = GameObjectShader;
@@ -444,6 +450,14 @@ void processInput(GLFWwindow *window)
 
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE){
         pvp = false;
+    }
+    
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
+        kdistance-=0.1;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS){
+        kdistance+=0.1;
     }
 
 
