@@ -97,7 +97,7 @@ class Chunk{
 
         
         int i = 0;
-        int levelDivisor = 5;
+        int levelDivisor = 3;
         
         for(int x = startX ; x < startX+16 ; x++){
             for(int y = startY ; y < startY+16 ; y ++){

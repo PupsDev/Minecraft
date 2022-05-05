@@ -34,6 +34,7 @@ using namespace std;
 
 #include "scene/LoaderObj.hpp"
 #include "scene/Camera.hpp"
+#include "scene/Triangle.hpp"
 #include "scene/Mesh.hpp"
 #include "scene/Physic.hpp"
 #include "scene/GameObject.hpp"
@@ -56,8 +57,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1440;
-const unsigned int SCR_HEIGHT = 900;
+const unsigned int SCR_WIDTH = 1440/2;
+const unsigned int SCR_HEIGHT = 900/2;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
@@ -125,9 +126,9 @@ int init()
     // Open a window and create its OpenGL context
     
 
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "My Title",  glfwGetPrimaryMonitor(), NULL);
+    //window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "My Title",  glfwGetPrimaryMonitor(), NULL);
 
-    //window = glfwCreateWindow( SCR_WIDTH  ,SCR_HEIGHT, "TP1 - GLFW", NULL, NULL);
+    window = glfwCreateWindow( SCR_WIDTH  ,SCR_HEIGHT, "GodCraft", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
         getchar();
@@ -154,7 +155,7 @@ int init()
 
     // Set the mouse at the center of the screen
     glfwPollEvents();
-    glfwSetCursorPos(window, 1024/2, 768/2);
+    glfwSetCursorPos(window, SCR_WIDTH/2, SCR_HEIGHT/2);
 
     // Dark blue background
     glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
@@ -208,8 +209,9 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
 
 
-
+        
         map.draw(camera);
+        
         if(drawMap)
             map.drawMap(); 
         if(map.drawn)
@@ -219,6 +221,7 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
         scene.update(&map,kdistance,drag);
         scene.draw(&map);
+        
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -301,6 +304,16 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         drag.pressed = false;
         
     }
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+    {
+        drag.pressedRight = true;
+    }
+        if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
+    {
+
+        drag.pressedRight = false;
+        
+    }
 }
 void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)  
 {
@@ -317,6 +330,7 @@ void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)
   }
   */
   drag.pressed = true;
+ 
  // cout<<"DRAG"<<endl;
   //cout<<xpos<<" : "<<ypos<<endl;
   double diffx = lastMouse.x - xpos; 

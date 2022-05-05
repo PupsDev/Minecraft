@@ -50,6 +50,37 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     	glGenerateMipmap(GL_TEXTURE_2D);*/
 	}
+	bool intersect(const glm::vec3 &o,const glm::vec3 &dir,Intersection& intersection, glm::mat4 model) const
+	{
+		Intersection temp_rec;
+		bool hit_anything = false;
+		auto closest_so_far = 100.;
+
+		for (size_t i = 0 ; i < indices.size();i+=3) {
+			Triangle  triangle =  Triangle(
+											indexed_vertices[indices[i+0]]  ,
+											indexed_vertices[indices[i+1]],
+											indexed_vertices[indices[i+2]]
+											);
+			for(int i = 0 ; i < 3 ; i++)
+			{
+				glm::vec4 v = glm::vec4(triangle.v[i],1.);
+				glm::vec4 nv = model * v;
+				triangle.v[i] = glm::vec3(nv[0],nv[1],nv[2]);
+			}
+
+			if (triangle.intersect(o,dir,temp_rec)) {
+				hit_anything = true;
+				if(temp_rec.t<closest_so_far)
+				{
+					closest_so_far = temp_rec.t;
+					intersection = temp_rec;    
+				}
+			}
+		}
+
+		return hit_anything;
+	}
 	void generateTexture(/*vector<vector<glm::vec3>> imageArray*/)
 	{
 

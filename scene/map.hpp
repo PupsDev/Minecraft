@@ -3,6 +3,7 @@
 # include <iostream>
 # include <fstream>
 # include <sstream>
+# include <unordered_map>
 # include <map>
 #include <thread> 
 
@@ -145,11 +146,22 @@ class Map {
                     }
                 }
                 if(chunks[ix][iy].status == 2){
+                            //Je me met à jours avec les copains déja là
+                    //chunks[ix][iy].updateGigaMesh(&chunks[x+1][iy]);
+                    //chunks[ix][iy].updateGigaMesh(&chunks[x-1][iy]);
+                    //chunks[ix][iy].updateGigaMesh(&chunks[ix][y+1]);
+                    //chunks[ix][iy].updateGigaMesh(&chunks[ix][y-1]);
+                    ////Je met à jours les copains qui étaient là avant moi, avec moi
+                    //chunks[x+1][iy].updateGigaMesh(&chunks[ix][iy]);
+                    //chunks[x-1][iy].updateGigaMesh(&chunks[ix][iy]);
+                    //chunks[ix][y+1].updateGigaMesh(&chunks[ix][iy]);
+                    //chunks[ix][y-1].updateGigaMesh(&chunks[ix][iy]);
                     chunks[ix][iy].loadOnGpu(programID, gigaTexture);
                     //nbThread --;
                 }
                 if(chunks[ix][iy].status == 3){
                     vec3 pos = vec3(chunks[ix][iy].startX+8,camera->position[1],chunks[ix][iy].startY+8);
+                    //vec3 pos = vec3(chunks[ix][iy].startX+8,0,chunks[ix][iy].startY+8);
                     float dist = (length(pos-camera->position));
                     float ang = dot(pos-camera->position,camera->direction) / ((dist)*length(camera->direction));
                     chunks[ix][iy].drawn = false;

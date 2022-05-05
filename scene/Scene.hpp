@@ -9,6 +9,7 @@ typedef struct COORD {
 typedef struct MOUSE{
     COORD lastMouse;
     bool pressed;
+    bool pressedRight;
 }MOUSE;
 class Scene
 {
@@ -52,6 +53,7 @@ class Scene
             
             srand (time(NULL));
             frameCount =0;
+            deltaTime = 0;
             generatedTrees = false;
 
             LoaderObj loaderTree = LoaderObj("tree2.obj");
@@ -180,6 +182,7 @@ class Scene
                 simpleMonkey->mesh.indices =loader.indices;
                 simpleMonkey->mesh.normals =loader.normals;
                 simpleMonkey->mesh.uvs =loader.textures;
+                simpleMonkey->HUD = true;
                 //loadOBJ2("dorian2.obj", simpleMonkey->mesh.indexed_vertices,  simpleMonkey->mesh.uvs,simpleMonkey->mesh.normals);
 	
                 simpleMonkey->mesh.loadTexture2("citrus.DDS");
@@ -198,7 +201,7 @@ class Scene
 
                 simpleMonkey->physic->size = graphMonkey->BBsize;
 
-                  Transform * translation3 = new Transform(glm::vec3( (float) i,10.,2.));
+                  Transform * translation3 = new Transform(glm::vec3( (float) i,15.,2.));
                 translation3->model = translation3->getMat4();
                 
                
@@ -365,27 +368,56 @@ class Scene
                 glm::vec3 mvec = mouseToSpace(drag.lastMouse.x ,drag.lastMouse.y);
                 //cout<<"MOUSE OLD -> "<<mvec<<endl;
                 //cout<<"MOUSE NEW -> "<<mvec0<<endl;
+                
                 bool isIntersect2 = intersect(map, camera->position, mvec, cube2);
-                cout<<"DIFF "<<cube - cube2<<endl;
+                //cout<<"DIFF "<<cube - cube2<<endl;
                 diff =  cube2-cube;
                 diff[1]=0.;
                 camera->position += 4.f*deltaTime *diff;
                 olddiff += diff;
                 //camera->set(camera->position,camera->direction,glm::vec3(0.0f, 1.0f,  0.0f));
                 //camera->giveItToMe();
-                cout<<"CAMERA "<<camera->position<<endl;
+                //cout<<"CAMERA "<<camera->position<<endl;
+
+
+
 
             }
-            else
+            if(drag.pressedRight)
             {
-                 cout<<"RELEASE "<<endl;
-                 cout<<"CAMERA "<<camera->position<<endl;
-                /*camera->position += 10.f*deltaTime *olddiff;
-                camera->set(camera->position,camera->direction,glm::vec3(0.0f, 1.0f,  0.0f));
-                camera->giveItToMe();
-                olddiff = glm::vec3(0.,0.,0.);*/
+                bool isIntersect2=false;
+                for(int i = 2; i < objects.size(); i++)
+                {
+                    Intersection inter; 
+                    
+                    isIntersect2 = objects[i].mesh.intersect(camera->position, mvec0, inter,objects[i].t->model);
+                    if(isIntersect2 )
+                    {
+                        //cout<<isIntersect2<<endl;
+                        cout<<"Object "<<i<<endl;
+                        /*
+                        glm::vec3 pos = graphMonkey2->gameObject->computePosition();
+                        Transform * trans = new Transform(inter.hitPoint - pos);
+                        trans->model = trans->getMat4();
+                        graphMonkey2->apply(trans);
+                        */
+                        glm::vec3 pos = objects[i].computePosition();
+                        glm::vec3 posHand = graphHand->gameObject->computePosition();
+                        Transform * trans = new Transform(posHand);
+                        //cout<<posHand- pos<<endl;
+                        trans->model = trans->getMat4();
+                        objects[i].t = graphHand->gameObject->t;
+
+  
                 
+                        break;
+                    }
+                }
+                if(!isIntersect2)
+                    cout<<"MISSED"<<endl;
             }
+
+
 
 
         }
@@ -421,7 +453,7 @@ class Scene
             //graphMonkey2->applyPhysics();
 
             
-            /*
+            
             float currentFrame = glfwGetTime();
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
@@ -433,13 +465,14 @@ class Scene
             }
             for(auto & graph : graphs)
             {
-
+                
                 graph->applyPhysics(deltaTime);
                 if(collide(map,graph))
                 {
                     graph->gameObject->physic->vitesse[1] = 0.;
                     
                 }
+                
                 for(auto & graph2 : graphs)
                 {
                     glm::vec3 collisionNormal;
@@ -465,12 +498,15 @@ class Scene
                         }
                     }
                 }
-                if(changeDirection && frameCount >2 )
+                
+                int frame = rand() % 20 + 10;
+
+                if(changeDirection && frameCount > frame  )
                 {
                     int direction = rand() % 4 + 1;
 
                     graph->gameObject->physic->vitesse =
-                    deltaTime*(direction == 1  ? vec3(1,0,0) : direction == 2 ? vec3(-1,0,0) : direction== 3 ? vec3(0,0,1)  : vec3(0,0,-1));
+                    deltaTime*(direction == 1  ? vec3(1,0,0) : direction == 2 ? vec3(-1,0,0) : direction== 3 ? vec3(0,0,1)  :vec3(0,0,-1));
                     
 
 
@@ -480,7 +516,8 @@ class Scene
 
             changeDirection = false;
             frameCount ++;
-            */
+            
+            
             double xpos, ypos;
             glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -932,7 +969,7 @@ class Scene
             for(auto & object : objects)
             {   
                 Chunk * chonky = getChunk(map,object.chunksIds[0],object.chunksIds[1]);
-                if(chonky )
+                if(chonky || object.HUD)
                 {
                     if(chonky->drawn || object.HUD)
                     {
@@ -1206,7 +1243,7 @@ class Scene
         //cout<<"hauteur : "<<hauteurMax<<endl<<endl;
 
         // 1 rayon sphere suzanne + 0.5 cube et 1 offset
-        if( (pos[1]-hauteurMax) <  3.5)
+        if( (pos[1]-hauteurMax) <  10)
         {
             newPos = glm::vec3(pos[0],hauteurMax+3.5f,pos[2]);
             glm::vec3 translate = newPos-pos;
@@ -1215,6 +1252,7 @@ class Scene
 
             translation->model = translation->getMat4();
             object->gameObject->apply(translation);
+            //cout<<"Collide : "<<endl;
       
             return true;
         }

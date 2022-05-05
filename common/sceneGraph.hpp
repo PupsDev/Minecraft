@@ -81,9 +81,16 @@ class SceneGraphComposite : public SceneGraphInterface
         }
         void applyPhysics(float deltaTime)
         {
-            Transform * translation = new Transform(gameObject->physic->vitesse + 0.2f*deltaTime * gameObject->physic->gravity );
-            translation->model = translation->getMat4();
-            apply(translation);
+            if(abs(deltaTime)< 1.f)
+            {
+                glm::vec3 move = gameObject->physic->vitesse + deltaTime * gameObject->physic->gravity;
+                //move = glm::vec3( glm::vec3(0.,-9.8,0.));
+                Transform * translation = new Transform(move);
+                translation->model = translation->getMat4();
+                apply(translation);
+
+            }
+
         }
 
 
