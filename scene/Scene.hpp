@@ -31,6 +31,8 @@ class Scene
 
         int frameCount ;
         bool generatedTrees;
+        bool handFull = false;
+        int grabedObject=-1;
         GameObject * mapObj;
         glm::vec3 diff;
         glm::vec3 olddiff;
@@ -383,7 +385,7 @@ class Scene
 
 
             }
-            if(drag.pressedRight)
+            if(drag.pressedRight && !handFull)
             {
                 bool isIntersect2=false;
                 for(int i = 2; i < objects.size(); i++)
@@ -395,26 +397,28 @@ class Scene
                     {
                         //cout<<isIntersect2<<endl;
                         cout<<"Object "<<i<<endl;
-                        /*
-                        glm::vec3 pos = graphMonkey2->gameObject->computePosition();
-                        Transform * trans = new Transform(inter.hitPoint - pos);
-                        trans->model = trans->getMat4();
-                        graphMonkey2->apply(trans);
-                        */
-                        glm::vec3 pos = objects[i].computePosition();
-                        glm::vec3 posHand = graphHand->gameObject->computePosition();
-                        Transform * trans = new Transform(posHand);
-                        //cout<<posHand- pos<<endl;
-                        trans->model = trans->getMat4();
+                        grabedObject =i;
+
                         objects[i].t = graphHand->gameObject->t;
+                        handFull = true;
 
   
                 
                         break;
                     }
                 }
-                if(!isIntersect2)
-                    cout<<"MISSED"<<endl;
+
+            }
+            if(!drag.pressedRight && grabedObject!=-1)
+            {
+                handFull = false;
+                cout<<"rels"<<endl;
+                glm::vec3 pos = objects[grabedObject].computePosition();
+                glm::vec3 posHand = graphHand->gameObject->computePosition();
+
+                objects[grabedObject].t = new Transform(posHand+glm::vec3(0.,-1.,0.));
+                objects[grabedObject].t->model = objects[grabedObject].t->getMat4();
+                grabedObject=-1;
             }
 
 
