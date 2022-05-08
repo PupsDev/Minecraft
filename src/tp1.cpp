@@ -44,6 +44,7 @@ using namespace std;
 #include "scene/miniaudio.h"
 
 #include "scene/ForestGenerator.hpp"
+#include "scene/Voronoi.hpp"
 #include "Terrain.hpp"
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
@@ -57,8 +58,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1440/2;
-const unsigned int SCR_HEIGHT = 900/2;
+const unsigned int SCR_WIDTH = 1440;
+const unsigned int SCR_HEIGHT = 900;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
@@ -250,7 +251,7 @@ int main( void )
 
     ma_engine_play_sound(&engine, &input[0], NULL);
     
-
+    Voronoi v = Voronoi();
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
@@ -259,12 +260,11 @@ int main( void )
     GLuint programID = LoadShaders( "vertex_shader.glsl", "fragment_shader.glsl" );
     GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
 
-    camera->setProgramId(programID);
+    camera->setProgramId(GameObjectShader);
     camera->width = SCR_WIDTH;
     camera->height = SCR_HEIGHT;
 
-    Map mymap = Map(100,10);
-    mymap.programID = GameObjectShader;
+    Map mymap = Map(GameObjectShader,100,10);
     
     Scene scene = Scene();
     scene.setCamera(camera);
@@ -274,7 +274,7 @@ int main( void )
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
-    gameLoop(mymap,scene,programID);
+    gameLoop(mymap,scene,GameObjectShader);
 
 
     glDeleteProgram(programID);

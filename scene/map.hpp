@@ -90,25 +90,7 @@ class Map {
 
         chunks = map<int, map<int, Chunk>>();
     }
-    Map& operator=(const Map& map2)
-    {
-        gigaTexture = map2.gigaTexture;
-        drawn = map2.drawn;
-        size = map2.size;
-        renderDistance = map2.renderDistance;
-        programID = map2.programID;
-        c = map2.c;
-        //chunks = map2.chunks;
-        for (auto const& [key, val] : map2.chunks)
-        {
-            chunks[key] = map<int, Chunk>();
-            for (auto const& [key2, val2] : val)
-            {
-                chunks[key][key2] = val2; 
-            }
-        }
 
-    }
 
     void draw(Camera* camera){
         ivec2 playerChunk = vec2(camera->position[0]/16,camera->position[2]/16);
@@ -146,29 +128,37 @@ class Map {
                     }
                 }
                 if(chunks[ix][iy].status == 2){
-                            //Je me met à jours avec les copains déja là
-                    //chunks[ix][iy].updateGigaMesh(&chunks[x+1][iy]);
-                    //chunks[ix][iy].updateGigaMesh(&chunks[x-1][iy]);
-                    //chunks[ix][iy].updateGigaMesh(&chunks[ix][y+1]);
-                    //chunks[ix][iy].updateGigaMesh(&chunks[ix][y-1]);
-                    ////Je met à jours les copains qui étaient là avant moi, avec moi
-                    //chunks[x+1][iy].updateGigaMesh(&chunks[ix][iy]);
-                    //chunks[x-1][iy].updateGigaMesh(&chunks[ix][iy]);
-                    //chunks[ix][y+1].updateGigaMesh(&chunks[ix][iy]);
-                    //chunks[ix][y-1].updateGigaMesh(&chunks[ix][iy]);
+                    //Je me met à jours avec les copains déja là
+                    chunks[ix][iy].updateGigaMesh(&chunks[x+1][iy]);
+                    chunks[ix][iy].updateGigaMesh(&chunks[x-1][iy]);
+                    chunks[ix][iy].updateGigaMesh(&chunks[ix][y+1]);
+                    chunks[ix][iy].updateGigaMesh(&chunks[ix][y-1]);
+                    //Je met à jours les copains qui étaient là avant moi, avec moi
+                    chunks[x+1][iy].updateGigaMesh(&chunks[ix][iy]);
+                    chunks[x-1][iy].updateGigaMesh(&chunks[ix][iy]);
+                    chunks[ix][y+1].updateGigaMesh(&chunks[ix][iy]);
+                    chunks[ix][y-1].updateGigaMesh(&chunks[ix][iy]);
+
+                    // chunks[ix][iy].updateGigaMesh(&chunks[((x+1)<0 ? (x+1)*-2 +1 : (x+1)*2)][iy]);
+                    // chunks[ix][iy].updateGigaMesh(&chunks[((x-1)<0 ? (x-1)*-2 +1 : (x-1)*2)][iy]);
+                    // chunks[ix][iy].updateGigaMesh(&chunks[ix][(x<0 ? (y+1)*-2 +1 : (y+1)*2)]);
+                    // chunks[ix][iy].updateGigaMesh(&chunks[ix][(x<0 ? (y-1)*-2 +1 : (y-1)*2)]);
+
+                    // chunks[((x+1)<0 ? (x+1)*-2 +1 : (x+1)*2)][iy].updateGigaMesh(&chunks[ix][iy]);//Je met à jours les copains qui étaient là avant moi, avec moi
+                    // chunks[((x-1)<0 ? (x-1)*-2 +1 : (x-1)*2)][iy].updateGigaMesh(&chunks[ix][iy]);
+                    // chunks[ix][(x<0 ? (y+1)*-2 +1 : (y+1)*2)].updateGigaMesh(&chunks[ix][iy]);
+                    // chunks[ix][(x<0 ? (y-1)*-2 +1 : (y-1)*2)].updateGigaMesh(&chunks[ix][iy]);
                     chunks[ix][iy].loadOnGpu(programID, gigaTexture);
                     //nbThread --;
                 }
                 if(chunks[ix][iy].status == 3){
-                    vec3 pos = vec3(chunks[ix][iy].startX+8,camera->position[1],chunks[ix][iy].startY+8);
-                    //vec3 pos = vec3(chunks[ix][iy].startX+8,0,chunks[ix][iy].startY+8);
+                    vec3 pos = vec3(chunks[ix][iy].startX+8,0,chunks[ix][iy].startY+8);
                     float dist = (length(pos-camera->position));
                     float ang = dot(pos-camera->position,camera->direction) / ((dist)*length(camera->direction));
-                    chunks[ix][iy].drawn = false;
                     if(dist<64 || ang>cos(camera->fov)){
                         chunks[ix][iy].draw(camera, programID);
-                        chunks[ix][iy].drawn = true;
                     }
+                
                     int nx = x+renderDistance -  playerChunk[0];
                     int ny = y+renderDistance -  playerChunk[1];
                     for(int i=0 ; i< 16 ; i++)
@@ -178,6 +168,7 @@ class Map {
                             imageMap[nx*16+i][ny*16+j]=chunks[ix][iy].imageChunk[i][j];
                         }
                     }
+                    
                 }
             }
         }

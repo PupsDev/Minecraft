@@ -173,9 +173,15 @@ public:
 
 	}
 
-	void reloadOnGpu(){
+
+	void reloadOnGpu(GLuint id){
+
 		if(normals.size()!=indexed_vertices.size())
-		computeNormals();
+			computeNormals();
+
+
+		programID = id;
+		modelMatrix_uniform = glGetUniformLocation(programID,"model");
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	    glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
@@ -188,6 +194,7 @@ public:
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uvBufferPlane);
 	    glBufferData(GL_ELEMENT_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0] , GL_STATIC_DRAW);
+		textureLocation0 = glGetUniformLocation(programID,"myTextureSampler[0]");
 
 
 	}

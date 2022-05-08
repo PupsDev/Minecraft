@@ -27,7 +27,7 @@ out vec3 pos;
 void main(){
         gl_Position = projection * view * model * vec4(vertices_position_modelspace,1) ;
         UV = vertexUV;
-        normal = (model * vec4(normalIn,0)).xyz;
+        normal = normalIn;
         pos = (model * vec4(vertices_position_modelspace,1)).xyz;
 
 

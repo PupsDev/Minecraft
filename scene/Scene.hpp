@@ -43,6 +43,7 @@ class Scene
          Mesh treeMesh;
         Scene()
         {
+            
             BoxShader = LoadShaders( "bounding_box_vertex_shader.glsl", "bounding_box_fragment_shader.glsl" );
             Transform * translation = new Transform(glm::vec3(2.,20.,2.));
             Transform * translation2 = new Transform(glm::vec3(8.,20.,2.));
@@ -67,31 +68,33 @@ class Scene
             
             treeMesh.loadTexture2("tree.DDS");
 
-                       /* GameObject * Hand = new GameObject();
-            Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
-            Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
+            //  GameObject * Hand = new GameObject();
+            // Hand->physic = new PhysicComponent(glm::vec3(0.,-9.8f,0.));
+            // Hand->physic->vitesse = 0.01f*glm::vec3(0.,0.,0.);
             
-            LoaderObj loader2 = LoaderObj("hand.obj");
+            // LoaderObj loader2 = LoaderObj("hand.obj");
 
-            Hand->mesh.indexed_vertices = loader2.vertices;
-            Hand->mesh.indices =loader2.indices;
-            Hand->mesh.normals =loader2.normals;
-            Hand->mesh.uvs =loader2.textures;
-            Hand->mesh.loadTexture("peppers.bmp");
+            // Hand->mesh.indexed_vertices = loader2.vertices;
+            // Hand->mesh.indices =loader2.indices;
+            // Hand->mesh.normals =loader2.normals;
+            // Hand->mesh.uvs =loader2.textures;
+            // Hand->mesh.loadTexture("peppers.bmp");
 
-            graphHand = new SceneGraphComposite();
-            graphHand->gameObject = Hand;
-            graphHand->setBoundingBox(BoxShader);
+            // graphHand = new SceneGraphComposite();
+            // graphHand->gameObject = Hand;
+            // graphHand->setBoundingBox(BoxShader);
 
-            Hand->physic->size = graphHand->BBsize;
+            // Hand->physic->size = graphHand->BBsize;
 
-            Transform * translation3 = new Transform(glm::vec3( (float) 7,7.,4.));
-            translation3->model = translation3->getMat4();
+            // Transform * translation3 = new Transform(glm::vec3( (float) 7,7.,4.));
+            // translation3->model = translation3->getMat4();
             
         
-            graphHand->apply(translation);
-            graphHand->apply(translation3);
-            add(graphHand);*/
+            // graphHand->apply(translation);
+            // graphHand->apply(translation3);
+            // add(graphHand);
+
+            
            
                 {
                     GameObject * Sky = new GameObject();
@@ -169,8 +172,8 @@ class Scene
 
                 add(graphHand);
 
-                //cout<<"SizeObj :"<<objects.size()<<endl;
-                //loadBuilding();
+                cout<<"SizeObj :"<<objects.size()<<endl;
+                loadBuilding();
 
             for(int i = 0 ; i < 10 ; i++)
             {
@@ -215,24 +218,24 @@ class Scene
 
 
             
-            GameObject * simpleMonkey2 = new GameObject();
-            simpleMonkey2->physic = new PhysicComponent(glm::vec3(0.,0.,0.));
-            simpleMonkey2->physic->vitesse = 0.01f*glm::vec3(-1.,0.,0.);
+            // GameObject * simpleMonkey2 = new GameObject();
+            // simpleMonkey2->physic = new PhysicComponent(glm::vec3(0.,0.,0.));
+            // simpleMonkey2->physic->vitesse = 0.01f*glm::vec3(-1.,0.,0.);
             
-            simpleMonkey2->loadMesh("suzanne.off");
-            simpleMonkey2->loadOnGpu(BoxShader);
+            // simpleMonkey2->loadMesh("suzanne.off");
+            // simpleMonkey2->loadOnGpu(BoxShader);
 
-            graphMonkey2 = new SceneGraphComposite();
-            graphMonkey2->gameObject = simpleMonkey2;
-            graphMonkey2->setBoundingBox(BoxShader);
+            // graphMonkey2 = new SceneGraphComposite();
+            // graphMonkey2->gameObject = simpleMonkey2;
+            // graphMonkey2->setBoundingBox(BoxShader);
 
 
-            simpleMonkey2->physic->size = graphMonkey2->BBsize;
+            // simpleMonkey2->physic->size = graphMonkey2->BBsize;
 
       
-            graphMonkey2->apply(translation2);
+            // graphMonkey2->apply(translation2);
 
-            add(graphMonkey2);
+            // add(graphMonkey2);
             mapObj = new GameObject();
             {        
                
@@ -970,8 +973,11 @@ class Scene
         
         void draw(Map *map)
         {
+            //int cpt = 0;
             for(auto & object : objects)
             {   
+                //cout<<"cpt : "<<cpt++<<endl;
+
                 Chunk * chonky = getChunk(map,object.chunksIds[0],object.chunksIds[1]);
                 if(chonky || object.HUD)
                 {

@@ -19,7 +19,7 @@ class Chunk{
         vector<ivec3> cubes;
         vector<int> type;
         vector<int> visibility;
-
+        int gigaMeshInd = 0;
         map<int, map<int, map<int, int>>> bendel;
 
 
@@ -59,7 +59,7 @@ class Chunk{
         gigaObject.mesh.uvs.clear();
 
 
-        int ind = 0;
+        gigaMeshInd =0;
         for(int i = 0 ; i < cubes.size() ; i++)if(!deletedCUbe[i]){
             int p2 = 1;
             for(int j = 0 ; j< 6 ; j ++){
@@ -67,11 +67,11 @@ class Chunk{
                     cubeSample->faces[j];
 
                     for(int k = 0 ; k < cubeSample->faces[j].indices.size() ; k ++){
-                        gigaObject.mesh.indices.push_back(cubeSample->faces[j].indices[k] + ind);
+                        gigaObject.mesh.indices.push_back(cubeSample->faces[j].indices[k] + gigaMeshInd);
                     }
 
                     for(int k = 0 ; k < cubeSample->faces[j].indexed_vertices.size() ; k ++){
-                        ind++;
+                        gigaMeshInd++;
                         vec3 pos = vec3(cubes[i][0], cubes[i][2], cubes[i][1]);  
                         vec2 uvShift = vec2(type[i]*1.0/5.0,0.0);
                         vec2 uv = cubeSample->faces[j].uvs[k];
@@ -87,6 +87,81 @@ class Chunk{
         }
     }
 
+    void updateCubeVisibility(int cubeInd, int faceToAdd){
+        for(int k = 0 ; k < cubeSample->faces[faceToAdd].indices.size() ; k ++){
+            gigaObject.mesh.indices.push_back(cubeSample->faces[faceToAdd].indices[k] + gigaMeshInd);
+        }
+
+        for(int k = 0 ; k < cubeSample->faces[faceToAdd].indexed_vertices.size() ; k ++){
+            gigaMeshInd++;
+            vec3 pos = vec3(cubes[cubeInd][0], cubes[cubeInd][2], cubes[cubeInd][1]);  
+            vec2 uvShift = vec2(type[cubeInd]*1.0/5.0,0.0);
+            vec2 uv = cubeSample->faces[faceToAdd].uvs[k];
+            uv.x = uv.x*0.2 + type[cubeInd]*0.2;
+
+            gigaObject.mesh.indexed_vertices.push_back(cubeSample->faces[faceToAdd].indexed_vertices[k]+pos);
+            gigaObject.mesh.normals.push_back(cubeSample->faces[faceToAdd].normals[k]);
+            gigaObject.mesh.uvs.push_back(uv);
+        }
+        
+    }
+
+    void updateGigaMesh(Chunk * neighbor){
+        
+        if(neighbor == NULL || neighbor->status < 2 || status < 2){
+            return;
+        }
+
+        else if(neighbor->startX == startX && neighbor->startY > startY){
+            for(int j = 0 ; j < cubes.size();j++){
+                if(cubes[j][1] == startY+15){
+                    int tmpVis = visibility[j];
+                    if(neighbor->getCube(cubes[j]+ivec3(0,1,0)) == -1){
+                        tmpVis = tmpVis | 8;
+                        updateCubeVisibility(j,3);
+                    }
+                    visibility[j] = tmpVis;
+                }
+            }
+        }
+        else if(neighbor->startX == startX && neighbor->startY < startY){
+            for(int j = 0 ; j < cubes.size();j++){
+                if(cubes[j][1] == startY){
+                    int tmpVis = visibility[j];
+                    if(neighbor->getCube(cubes[j]+ivec3(0,-1,0)) == -1){
+                        tmpVis = tmpVis | 4;
+                        updateCubeVisibility(j,2);
+                    }
+                    visibility[j] = tmpVis;
+                }
+            }
+        }
+        else if(neighbor->startY == startY && neighbor->startX > startX){
+            for(int j = 0 ; j < cubes.size();j++){
+                if(cubes[j][0] == startX+15){
+                    int tmpVis = visibility[j];
+                    if(neighbor->getCube(cubes[j]+ivec3(1,0,0)) == -1){
+                        tmpVis = tmpVis | 16;
+                        updateCubeVisibility(j,4);
+                    }
+                    visibility[j] = tmpVis;
+                }
+            }
+        }
+        else if(neighbor->startY == startY && neighbor->startX < startX){
+            for(int j = 0 ; j < cubes.size();j++){
+                if(cubes[j][0] == startX){
+                    int tmpVis = visibility[j];
+                    if(neighbor->getCube(cubes[j]+ivec3(-1,0,0)) == -1){
+                        tmpVis = tmpVis | 1;
+                        updateCubeVisibility(j,0);
+                    }
+                    visibility[j] = tmpVis;
+                }
+            }
+        }
+        reloadOnGpu(myProgId);
+    }
     //Chunk(const siv::PerlinNoise &perlin, int sx, int sy, Cube * c, GLuint programID, GLuint texture){
     void generate(const siv::PerlinNoise &perlin, int sx, int sy, Cube * c){
         cubeSample = c;
@@ -97,7 +172,7 @@ class Chunk{
 
         
         int i = 0;
-        int levelDivisor = 3;
+        int levelDivisor = 1;
         
         for(int x = startX ; x < startX+16 ; x++){
             for(int y = startY ; y < startY+16 ; y ++){
@@ -175,7 +250,7 @@ class Chunk{
     }
 
 
-    void computeVisibility(){
+    /*void computeVisibility(){
         visibility.clear();
          for(int j = 0 ; j < cubes.size();j++){
             int tmpVis = 63;
@@ -189,6 +264,31 @@ class Chunk{
                 tmpVis = tmpVis & (~8);
             }
             if(getCube(cubes[j]+ivec3(0,-1,0)) != -1){
+                tmpVis = tmpVis & (~4);
+            }
+            if(getCube(cubes[j]+ivec3(0,0,1)) != -1){
+                tmpVis = tmpVis & (~32);
+            }
+            if(getCube(cubes[j]+ivec3(0,0,-1)) != -1){
+                tmpVis = tmpVis & (~2);
+            }
+            visibility.push_back(tmpVis);
+        }
+    }*/
+    void computeVisibility(){
+        visibility.clear();
+        for(int j = 0 ; j < cubes.size();j++){
+            int tmpVis = 63;
+            if(getCube(cubes[j]+ivec3(-1,0,0)) != -1 || cubes[j][0] == startX){
+                tmpVis = tmpVis & (~1);
+            }
+            if(getCube(cubes[j]+ivec3(1,0,0)) != -1 || cubes[j][0] == startX+15){
+                tmpVis = tmpVis & (~16);
+            }
+            if(getCube(cubes[j]+ivec3(0,1,0)) != -1 || cubes[j][1] == startY+15){
+                tmpVis = tmpVis & (~8);
+            }
+            if(getCube(cubes[j]+ivec3(0,-1,0)) != -1 || cubes[j][1] == startY){
                 tmpVis = tmpVis & (~4);
             }
             if(getCube(cubes[j]+ivec3(0,0,1)) != -1){
@@ -219,18 +319,21 @@ class Chunk{
             ///////////////
             computeVisibility();
             makeGigaMesh();
-            reloadOnGpu();
+            reloadOnGpu(myProgId);
         }
     }
 
-    void reloadOnGpu(){
+    void reloadOnGpu(GLuint programID){
         glUseProgram(myProgId);
-        gigaObject.mesh.reloadOnGpu();
+        //cout<<"PROGRAM RELOAD"<<myProgId<<endl;
+
+        gigaObject.mesh.reloadOnGpu(myProgId);
     }
 
-    void loadOnGpu(GLuint programID, GLuint texture){
+    void loadOnGpu(GLuint programID, GLuint texture)
+    {
         myProgId    = programID;
-
+        //cout<<"PROGRAM LOAD "<<myProgId<<endl;
         glUseProgram(programID);
 
         gigaObject.mesh.texture = texture;

@@ -127,6 +127,7 @@ public:
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
 			glDisableVertexAttribArray(2);
+			glDisableVertexAttribArray(3);
 		}
 		//mesh.draw(t);
 	
