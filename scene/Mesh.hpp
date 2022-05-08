@@ -130,6 +130,7 @@ public:
 
 		// Return the ID of the texture we just created
 		texture = textureID;
+
 	}
 	void reloadTexture(vector<vector<glm::vec3>> imageArray)
 	{
@@ -149,6 +150,7 @@ public:
 				{
 				
 					checkImage[i][j][k]=(GLubyte) imageArray[i][j][k];
+					
 				}
 			}
 

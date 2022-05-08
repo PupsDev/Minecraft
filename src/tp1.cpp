@@ -49,6 +49,7 @@ using namespace std;
 #include "scene/Cube.hpp"
 #include "scene/map.hpp"
 #include "scene/Scene.hpp"
+#include "scene/GodCraft.hpp"
 
 #include "scene/Plane.hpp"
 
@@ -58,8 +59,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1440;
-const unsigned int SCR_HEIGHT = 900;
+const unsigned int SCR_WIDTH = 1440/2;
+const unsigned int SCR_HEIGHT = 900/2;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
@@ -149,8 +150,9 @@ int init()
 
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
+        glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, mouse_cursor_callback);
+
     // Hide the mouse and enable unlimited mouvemezanne0.off cannot be opened
     //  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -179,16 +181,15 @@ int init()
 }
 
 
-int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
+int gameLoop(Scene* scene, GLuint GameObjectShader)
 {
 
     
     bool displayFPS = false;
 
     glm::vec3 vitesse = glm::vec3(0.,0.,0.);
-    scene.startFrame = glfwGetTime()+2.;
+    scene->startFrame = glfwGetTime()+2.;
     ForestGenerator fg = ForestGenerator();
-    
     do{
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -200,28 +201,26 @@ int gameLoop(Map map,Scene scene, GLuint GameObjectShader)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-
-        camera->set(camera_position,camera_target,camera_up);
-        camera->giveItToMe();
-        scene.setCamera(camera);
-        scene.deltaTime = deltaTime;
-        scene.dragMouse(&map,kdistance,drag);
-        camera_position = scene.camera->position;
-
-
-
         
-        map.draw(camera);
+        scene->camera->set(camera_position,camera_target,camera_up);
+        scene->camera->giveItToMe();
         
+        scene->deltaTime = deltaTime;
+        scene->getInput(drag);
+        camera_position = scene->camera->position;
+        scene->map->draw(scene->camera);
         if(drawMap)
-            map.drawMap(); 
-        if(map.drawn)
-            scene.GenerateTrees(fg.treeMap,fg.countTree, &map);
-        //cout<<"Size chunk: "<<map.chunks.size()<<endl;
-        //cout<<"Size chunk: "<<map.chunks[0].size()<<endl;
+            scene->map->drawMap(); 
+        
+        if(scene->map->drawn)
+        {
+            scene->GenerateTrees(fg.treeMap,fg.countTree);
+            
+        }
+        
 
-        scene.update(&map,kdistance,drag);
-        scene.draw(&map);
+        scene->update();
+        scene->draw();
         
 
         glfwSwapBuffers(window);
@@ -263,18 +262,19 @@ int main( void )
     camera->setProgramId(GameObjectShader);
     camera->width = SCR_WIDTH;
     camera->height = SCR_HEIGHT;
-
-    Map mymap = Map(GameObjectShader,100,10);
+ 
     
-    Scene scene = Scene();
-    scene.setCamera(camera);
+    Scene* scene = new GodCraft();
+    scene->map = new Map(GameObjectShader,100,10);
+    scene->window = window;
+    scene->camera = camera;
 
     //map.draw(camera);
     // For speed computation
     double lastTime = glfwGetTime();
     int nbFrames = 0;
 
-    gameLoop(mymap,scene,GameObjectShader);
+    gameLoop(scene,GameObjectShader);
 
 
     glDeleteProgram(programID);
@@ -295,6 +295,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         //cout<<xpos<<" : "<<ypos<<endl;
         drag.lastMouse.x = xpos;
         drag.lastMouse.y = ypos;
+        drag.push = false;
         
         
     }
@@ -335,34 +336,7 @@ void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)
   //cout<<xpos<<" : "<<ypos<<endl;
   double diffx = lastMouse.x - xpos; 
   double diffy = lastMouse.y - ypos;
-  //cout<<diffx<<" "<<diffy<<endl;
-  /*
-  if(abs(diffx)>abs(diffy))
-  {
-      //HORI
-    if (diffx>0)
-    {
-        cout<<"LEFT"<<endl;
-    }
-    else
-    {
-        cout<<"RIGHT"<<endl;
-    }
-  } 
-  else
-  {
-      //VERT
-    if (diffy>0)
-    {
-        cout<<"UP"<<endl;
-    }
-    else
-    {
-        cout<<"DOWN"<<endl;
-    }
 
-  }
-  */
 
 }
 void processInput(GLFWwindow *window)
@@ -474,7 +448,7 @@ void processInput(GLFWwindow *window)
     
     if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS){
         //mymap.drawMap();
-        drawMap = !drawMap;
+        drag.push = true;
         //cout<<"seaLevel"<<seaLevel<<endl;
     }
 

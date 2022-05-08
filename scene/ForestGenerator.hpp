@@ -36,7 +36,7 @@ class ForestGenerator
         amountSeeding=5;
         lifeTime = 2;
         decayRate=1;
-        coverPercentage=0.0025;
+        coverPercentage=0.0005;
 
         shape = { {0,1,0},{1,1,1},{0,1,0}};
         image.resize(height);
@@ -146,7 +146,7 @@ class ForestGenerator
        {
            int nj = rand()%(int)(2*travelRadius) - travelRadius + j;
            int ni = rand()%(int)(2*travelRadius) - travelRadius + i;
-           if( checkBounds(ni,nj) && !treeMap[ni][nj] && distance(i,j,ni,nj) < travelRadius )
+           if( checkBounds(ni,nj) && !treeMap[ni][nj] && seedMap[ni][nj]==0 && distance(i,j,ni,nj) < travelRadius )
            {
                seedMap[ni][nj]=lifeTime;
                seeded+=1;

@@ -30,6 +30,8 @@ public:
 	ivec2 chunksIds;
 	bool HUD;
 
+	bool hand;
+
 	void draw(Camera* camera, Transform* parent = new Transform()){ 
 
 
@@ -194,6 +196,7 @@ public:
 		vis =1.;
 		chunksIds = ivec2(0,0);
 		HUD = false;
+		hand= false;
 	}
 	GameObject(Mesh m_mesh){
 		t = new Transform();
@@ -203,6 +206,7 @@ public:
 		vis =1.;
 		chunksIds = ivec2(0,0);
 		HUD = false;
+		hand= false;
 	}
 
 

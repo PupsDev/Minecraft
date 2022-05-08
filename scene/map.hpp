@@ -155,8 +155,11 @@ class Map {
                     vec3 pos = vec3(chunks[ix][iy].startX+8,0,chunks[ix][iy].startY+8);
                     float dist = (length(pos-camera->position));
                     float ang = dot(pos-camera->position,camera->direction) / ((dist)*length(camera->direction));
+                    chunks[ix][iy].drawn = false;
+
                     if(dist<64 || ang>cos(camera->fov)){
                         chunks[ix][iy].draw(camera, programID);
+                        chunks[ix][iy].drawn = true;
                     }
                 
                     int nx = x+renderDistance -  playerChunk[0];
@@ -166,6 +169,7 @@ class Map {
                         for(int j=0 ; j<16 ; j++)
                         {
                             imageMap[nx*16+i][ny*16+j]=chunks[ix][iy].imageChunk[i][j];
+
                         }
                     }
                     
@@ -173,6 +177,88 @@ class Map {
             }
         }
         drawn = true;
+    }
+    Chunk* getChunk(int ix, int iy)
+    {
+            auto chunkX = chunks.find(ix);
+            if( chunkX != chunks.end())
+            {
+                    auto chunkY = chunkX->second.find(iy);
+                    if( chunkY != chunkX->second.end())
+                    {
+                        return &chunkY->second;   
+                    }
+            }
+            return NULL;
+    }
+    std::vector<pair<int,int>> findChunks(glm::vec3 pos)
+    {
+        
+
+        int x = mapToChunkId((int)pos[0],1);
+        int y = mapToChunkId((int)pos[2],1);
+        int renderDistance =2;
+        std::vector<pair<int,int>> coord;
+
+        ivec2 playerChunk = vec2(pos[0]/16,pos[2]/16);
+
+        for(int x = playerChunk[0]-renderDistance; x < playerChunk[0]+renderDistance ; x++ ){
+            for(int y = playerChunk[1]-renderDistance ; y < playerChunk[1]+renderDistance; y ++ ){
+                int ix = x;//(x<0 ? x*-2 +1 : x*2);
+                int iy = y;//(x<0 ? y*-2 +1 : y*2);
+        
+                auto chunkX = chunks.find(ix);
+                if( chunkX != chunks.end())
+                {
+                        auto chunkY = chunkX->second.find(iy);
+                        if( chunkY != chunkX->second.end())
+                        {
+
+                            coord.push_back(make_pair(ix,iy));
+                            
+                            //chunkY->second.gigaObject.vis = 0;     
+                        }
+                }
+            }
+        }
+
+        return coord;
+    }
+        int mapToChunkId(int x, int renderDistance)
+    {
+        return (renderDistance*15 +x)/(renderDistance*15)-1;
+    }
+    int findHighest(Chunk *chonky,  ivec2 pos)
+    {
+        int hauteurMax = 200;
+        std::map<int, std::map<int, std::map<int, int>>> bendel;
+        int ret =-1;
+        auto cubeX = chonky->bendel.find(pos[0]);
+            if( cubeX != chonky->bendel.end())
+            {
+                    auto cubeY = cubeX->second.find(pos[1]);
+                    if( cubeY != cubeX->second.end())
+                    {
+                        for( int z = hauteurMax;z>=0;z-- )
+                        {
+                                auto cubeZ = cubeY->second.find(z);
+                            if( cubeZ != cubeY->second.end())
+                            {
+                                //cout<<"Z = "<<z<<endl;
+                                ret = z;
+                                
+                                return ret;
+                            }
+
+
+                        }
+                    }
+                    
+                            
+            }
+            
+                            
+            return ret;
     }
     void drawMap() 
     {
