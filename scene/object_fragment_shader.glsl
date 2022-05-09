@@ -3,10 +3,11 @@
 in vec2 UV;
 in vec3 normal;
 in vec3 pos;
+in float dist;
 //in float debug;
 
 // Ouput data
-out vec3 color;
+out vec4 color;
 
 
 uniform sampler2D myTextureSampler[1];
@@ -38,13 +39,27 @@ void main(){
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
         vec3 specular = specularStrength * spec * lightColor;
 
+        float renderDist = 160.;
+        float fogLen = 16.0;
+
         
 
         vec3 result = (ambient + diffuse + specular) * objectColor;
         //vec3 result = (ambient + diffuse + specular) * vec3(0.5,0.5,0.5);
         
         //color = vec3(1.0, 0.0, 1.0);
-        color = result;
+
+        if(dist > renderDist - fogLen){
+                float val = clamp(map(dist,renderDist - fogLen, renderDist, 1 ,0),0,1);
+                //color = vec3(1.0)*val+result*(1-val);
+                color = vec4(result,val);
+        }else{
+                color = vec4(result,1);
+        }
+
+        //color = vec4(result,0.3);
+
+        //color = vec3(dist);
         //color = normalize(viewPos);
         //color = normal;
 

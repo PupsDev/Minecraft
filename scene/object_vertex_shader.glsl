@@ -22,13 +22,20 @@ out vec2 UV;
 out float debug;
 out vec3 normal;
 out vec3 pos;
+out float dist;
 
 
 void main(){
         gl_Position = projection * view * model * vec4(vertices_position_modelspace,1) ;
         UV = vertexUV;
         normal = normalIn;
+
         pos = (model * vec4(vertices_position_modelspace,1)).xyz;
+
+        mat4 viewModel = inverse(view * model);
+        vec3 cameraPos = viewModel[3].xyz;
+
+        dist = distance(pos,cameraPos);
 
 
         //gl_Position = projection * vec4(vertices_position_modelspace,1);

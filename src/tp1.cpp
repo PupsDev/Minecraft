@@ -174,6 +174,14 @@ int init()
     // hide mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
+<<<<<<< Updated upstream
+=======
+    // alpha
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    
+>>>>>>> Stashed changes
 
     return 1;
 }
