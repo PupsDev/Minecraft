@@ -6,6 +6,9 @@ class Chunk{
         // 1 : en cours de fabrication
         // 2 : fabriqué mais pas sur le gpu
         // 3 : tout bon
+        
+        int nbBlockTypes;
+        float textureDivisor;
 
         thread * myOwnThread;
 
@@ -32,11 +35,15 @@ class Chunk{
         GLuint viewPosUniform;
 
         bool drawn;
+        vector<vector<int>> typeMap;
+        vector<vector<double>> heightMap;
 
         vector<vector<glm::vec3>> imageChunk;
 
 
-    Chunk(){
+    Chunk(int nbTypes = 9){
+        nbBlockTypes = nbTypes;
+        textureDivisor = 1.0/nbBlockTypes;
         status = 0;
         gigaObject =  GameObject();
         gigaObject.mesh = Mesh();
@@ -47,7 +54,15 @@ class Chunk{
 
         int squareSize = 16;
         int borderSize = 1;
+    }
 
+       void freeVoroMaps(){
+        for(int i = 0 ; i < typeMap.size() ; i ++){
+            typeMap[i].clear();
+            heightMap[i].clear();
+        }
+        typeMap.clear();
+        heightMap.clear();
     }
 
 
@@ -73,9 +88,9 @@ class Chunk{
                     for(int k = 0 ; k < cubeSample->faces[j].indexed_vertices.size() ; k ++){
                         gigaMeshInd++;
                         vec3 pos = vec3(cubes[i][0], cubes[i][2], cubes[i][1]);  
-                        vec2 uvShift = vec2(type[i]*1.0/5.0,0.0);
+                        //vec2 uvShift = vec2(type[i]*1.0/5.0,0.0);
                         vec2 uv = cubeSample->faces[j].uvs[k];
-                        uv.x = uv.x*0.2 + type[i]*0.2;
+                        uv.x = uv.x*textureDivisor + type[i]*textureDivisor;
 
                         gigaObject.mesh.indexed_vertices.push_back(cubeSample->faces[j].indexed_vertices[k]+pos);
                         gigaObject.mesh.normals.push_back(cubeSample->faces[j].normals[k]);
@@ -95,9 +110,9 @@ class Chunk{
         for(int k = 0 ; k < cubeSample->faces[faceToAdd].indexed_vertices.size() ; k ++){
             gigaMeshInd++;
             vec3 pos = vec3(cubes[cubeInd][0], cubes[cubeInd][2], cubes[cubeInd][1]);  
-            vec2 uvShift = vec2(type[cubeInd]*1.0/5.0,0.0);
+            //vec2 uvShift = vec2(type[cubeInd]*1.0/5.0,0.0);
             vec2 uv = cubeSample->faces[faceToAdd].uvs[k];
-            uv.x = uv.x*0.2 + type[cubeInd]*0.2;
+            uv.x = uv.x*textureDivisor + type[cubeInd]*textureDivisor;
 
             gigaObject.mesh.indexed_vertices.push_back(cubeSample->faces[faceToAdd].indexed_vertices[k]+pos);
             gigaObject.mesh.normals.push_back(cubeSample->faces[faceToAdd].normals[k]);
@@ -172,22 +187,96 @@ class Chunk{
 
         
         int i = 0;
-        int levelDivisor = 5;
+        int levelDivisor = 1;
         
         for(int x = startX ; x < startX+16 ; x++){
             for(int y = startY ; y < startY+16 ; y ++){
-                const double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
+                double noise = perlin.octave2D_01((x * 0.01), (y * 0.01), 4);
+
+                int vx = x+typeMap.size()/2;
+                int vy = y+typeMap.size()/2;
+
+                //cout<<"typeMap[0].size() : "<<typeMap[0].size()<<endl;
+
+                //cout<<"x : "<<vx<<endl;
+                //cout<<"y : "<<vy<<endl;
+
+
+
                 //std::cout << noise << '\t';
                 double seaLevel = 0.25;
                 int z = (noise>seaLevel?noise:seaLevel)*100-seaLevel*100+5;
-                //std::cout << z << '\t';
+                int baseType;
                 
-                int baseType = 
+                // if(!(vx>=0 && vx<typeMap.size() && vy>=0 && vy < typeMap[0].size())){
+                //     cout<<"dosent voronoi : "<<endl;
+                //     cout<<"\ttypeMap.size() : "<<typeMap.size()<<endl;
+                //     cout<<"\ttypeMap[0].size() : "<<typeMap[0].size()<<endl;
+                //     cout<<"\tx : "<<x<<" vx : "<<vx<<endl;
+                //     cout<<"\ty : "<<y<<" vy : "<<vy<<endl;
+                //     cout<<"\tvx>=0 : "<<(vx >= 0)<<endl;
+                //     cout<<"\tvx<typeMap.size() : "<<(vx<typeMap.size())<<endl;
+                //     cout<<"\tvy>=0 : "<<(vy>=0)<<endl;
+                //     cout<<"\tvy < typeMap[0].size() : "<<(vy < typeMap[0].size())<<endl;
+
+                // }
+
+                if(vx>=0 && vx<typeMap.size() && vy>=0 && vy < typeMap[0].size()){
+                    
+
+
+                    z = z*heightMap[vx][vy];// == 0 ? z*0.5 : z;
+                    int biomeType = typeMap[vx][vy]%5;
+
+                    switch(biomeType){
+                        case 0:
+                            baseType =4;
+                        break;
+                        case 1:
+                            baseType = 
+                            noise<seaLevel?4:
+                            noise<0.3?2:
+                            noise<0.7?2:
+                            2;
+                        break;
+                        case 2:
+                            baseType = 
+                            noise<seaLevel?4:
+                            noise<0.3?5:
+                            noise<0.7?5:
+                            7;
+                        break;
+                        case 3:
+                            baseType = 
+                            noise<seaLevel?4:
+                            noise<0.3?2:
+                            noise<0.7?0:
+                            3;
+                        break;
+                        case 4:
+                            baseType = 
+                            noise<seaLevel?4:
+                            noise<0.3?0:
+                            noise<0.7?8:
+                            6;
+                        break;
+                        
+                    }
+
+                    
+
+                }else{
+                    baseType = 
                     noise<seaLevel?4:
                     noise<0.3?2:
                     noise<0.7?0:
                     3;
+                }
 
+
+                //std::cout << z << '\t';
+                
+                
                 //cout<<z<<endl;
                 z= z /levelDivisor ;
                 for(int k = 0 ; k <= z ; k ++){
@@ -231,6 +320,7 @@ class Chunk{
             }
         }
 
+        freeVoroMaps();
         computeVisibility();
         makeGigaMesh();
 

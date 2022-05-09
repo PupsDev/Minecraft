@@ -59,8 +59,8 @@ void processInput(GLFWwindow *window);
 
 
 // settings
-const unsigned int SCR_WIDTH = 1440/2;
-const unsigned int SCR_HEIGHT = 900/2;
+const unsigned int SCR_WIDTH = 1440;
+const unsigned int SCR_HEIGHT = 900;
 
 // camera
 glm::vec3 camera_position   = glm::vec3(0.0, 20.0, 0.0);
@@ -250,7 +250,7 @@ int main( void )
 
     ma_engine_play_sound(&engine, &input[0], NULL);
     
-    Voronoi v = Voronoi();
+    //Voronoi v = Voronoi();
     GLuint VertexArrayID;
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);

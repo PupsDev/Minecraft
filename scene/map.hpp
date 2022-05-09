@@ -38,7 +38,11 @@ class Map {
     int nbThread = 0;
     bool drawn;
 
+    int nbBlockTypes = 5;
+
     vector<vector<glm::vec3>> imageMap;
+
+    Voronoi voro;
   /*  Map()
     {
 
@@ -121,6 +125,10 @@ class Map {
                         //nbThread ++;
                         chunks[ix][iy].status = 1;
                         chunks[ix][iy].worldPos = ivec2(x*16,y*16);
+
+                        chunks[ix][iy].typeMap = voro.idImage;
+                        chunks[ix][iy].heightMap = voro.heightMap;
+
                         chunks[ix][iy].myOwnThread = new thread(constructChunk, &chunks[ix][iy], perlin, x*16, y*16, &c, &nbThread);
                         
                         
@@ -139,17 +147,7 @@ class Map {
                     chunks[ix][y+1].updateGigaMesh(&chunks[ix][iy]);
                     chunks[ix][y-1].updateGigaMesh(&chunks[ix][iy]);
 
-                    // chunks[ix][iy].updateGigaMesh(&chunks[((x+1)<0 ? (x+1)*-2 +1 : (x+1)*2)][iy]);
-                    // chunks[ix][iy].updateGigaMesh(&chunks[((x-1)<0 ? (x-1)*-2 +1 : (x-1)*2)][iy]);
-                    // chunks[ix][iy].updateGigaMesh(&chunks[ix][(x<0 ? (y+1)*-2 +1 : (y+1)*2)]);
-                    // chunks[ix][iy].updateGigaMesh(&chunks[ix][(x<0 ? (y-1)*-2 +1 : (y-1)*2)]);
-
-                    // chunks[((x+1)<0 ? (x+1)*-2 +1 : (x+1)*2)][iy].updateGigaMesh(&chunks[ix][iy]);//Je met à jours les copains qui étaient là avant moi, avec moi
-                    // chunks[((x-1)<0 ? (x-1)*-2 +1 : (x-1)*2)][iy].updateGigaMesh(&chunks[ix][iy]);
-                    // chunks[ix][(x<0 ? (y+1)*-2 +1 : (y+1)*2)].updateGigaMesh(&chunks[ix][iy]);
-                    // chunks[ix][(x<0 ? (y-1)*-2 +1 : (y-1)*2)].updateGigaMesh(&chunks[ix][iy]);
                     chunks[ix][iy].loadOnGpu(programID, gigaTexture);
-                    //nbThread --;
                 }
                 if(chunks[ix][iy].status == 3){
                     vec3 pos = vec3(chunks[ix][iy].startX+8,0,chunks[ix][iy].startY+8);
