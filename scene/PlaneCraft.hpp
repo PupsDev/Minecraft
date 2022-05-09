@@ -30,11 +30,17 @@ class PlaneCraft : public Scene{
 
             //graphPlane->add(graphPlaneBB);
 
-            Transform * translation = new Transform(glm::vec3(0.,-10.,0.));
+            Transform * translation = new Transform(glm::vec3(0.,50.,0.));
             //translation->model = translation->getMat4()*glm::mat4(5.);
             translation->model = translation->getMat4();
-            graphPlane->gameObject->apply(translation);
-            //graphPlaneBB->gameObject->apply(translation);
+            //graphPlane->gameObject->apply(translation);
+            cout<<"MATELAS"<<endl;
+            graphPlane->gameObject->t->model = translation->model;
+            avion->position = graphPlane->gameObject->computePosition();
+
+            graphPlane->gameObject->t->printmat4();
+            
+            add(avion);
 
             loadSky();
 
@@ -156,38 +162,69 @@ class PlaneCraft : public Scene{
     }
     void update(){   
 
+        //camera->position = avion->position  - normalize(avion->speed) * 5.0f;
+        
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        
+        //deltaTime = 0.02f;
+
         if( (currentFrame - startFrame) > 5 )
         {
             startFrame = currentFrame;
         }
 
+        
+        Plane * avion = (Plane*)objects[0];
         avion->controlesUpdate(window, deltaTime);
 
         auto tmpTransform = avion->update(deltaTime);
 
-        //camera_position = tmpTransform->applyToPoint(vec3(0,0,0)) + vec3(0,5,-5);
-        //camera_position = tmpTransform->getTranslation();// + vec3(0,5,-5);
 
-        //camera_position = tmpTransform->applyToPoint(vec3(0, 0, 0))+vec3(-5,5,0);
-        camera->position = avion->position  - normalize(avion->speed) * 5.0f;// + avion->up * 1.0f;
-        //camera_up = avion->up;
-        //camera_target =  (avion->position+ avion->up * 0.0f) - camera_position;
         
-        //cout<<"camera_position : "<<camera_position<<endl;
+        //camera->position = tmpTransform->applyToPoint(vec3(0,0,0)) + vec3(0,5,-5);
+        //camera->position = tmpTransform->getTranslation();// + vec3(0,5,-5);
+        //camera->position = tmpTransform->applyToPoint(vec3(0, 0, 0))+vec3(-5,5,0);
+        camera->position = avion->position  - normalize(avion->speed) * 5.0f;// + avion->up * 1.0f;
+        //camera->up = avion->up;
+        //camera->direction =  (avion->position+ avion->up * 0.0f) - camera->position;
+    
+        //cout<<"camera_position : "<< camera->position<<endl;
         //tmpTransform->printmat4(tmpTransform->getMat4());
 
-        graphPlane->gameObject->t = tmpTransform;
-        graphPlaneBB->gameObject->t = tmpTransform;
+        objects[0]->t = tmpTransform;
+        
+    /*
+        if(graphPlane)
+        {
+            cout<<"MATELAS"<<endl;
+
+        }*/
+            //graphPlane->gameObject->t->printmat4();
+        //graphPlane->gameObject->t = trans;
+        
+        //graphPlaneBB->gameObject->t = tmpTransform;
       
         //camera.set(camera_position,camera_target,camera_up);
     }            
 
     void draw(){
-        avion->draw(camera);
+        //avion->draw(camera);
+         for(auto & object : objects)
+        {   
+            if(object->wireframe)
+            {
+                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                object->draw(camera);
+                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+            }
+            else
+            {
+                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                object->draw(camera);
+            }
+            
+        }
     }
 
     bool intersect(glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube){

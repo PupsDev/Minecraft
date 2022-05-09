@@ -150,9 +150,7 @@ class Plane : public  GameObject
 
         position += speed*deltaTime;
 
-       
-
-
+    
         quat rot = quatLookAt(direction, up);
 
         glm:mat4 planeMat = (mat4)rot;

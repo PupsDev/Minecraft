@@ -50,8 +50,8 @@ using namespace std;
 #include "scene/map.hpp"
 #include "scene/Scene.hpp"
 #include "scene/GodCraft.hpp"
-
 #include "scene/Plane.hpp"
+#include "scene/PlaneCraft.hpp"
 
 
 
@@ -174,14 +174,11 @@ int init()
     // hide mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-<<<<<<< Updated upstream
-=======
     // alpha
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     
->>>>>>> Stashed changes
 
     return 1;
 }
@@ -226,6 +223,7 @@ int gameLoop(Scene* scene, GLuint GameObjectShader)
         
 
         scene->update();
+        camera_position = scene->camera->position;
         scene->draw();
         
 
@@ -270,7 +268,7 @@ int main( void )
     camera->height = SCR_HEIGHT;
  
     
-    Scene* scene = new GodCraft();
+    Scene* scene = new PlaneCraft();
     scene->map = new Map(GameObjectShader,100,10);
     scene->window = window;
     scene->camera = camera;
