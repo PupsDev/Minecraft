@@ -445,7 +445,13 @@ class GodCraft : public Scene
         {
             dragMouse(mdrag);
 
+            drag.lastMouse = mdrag.lastMouse;
+            drag.pressed = mdrag.pressed;
+            drag.pressedRight = mdrag.pressedRight;
+            drag.push = mdrag.push;
+            drag.pick = mdrag.pick;
         }
+        
         void update()
         {   
 
@@ -571,6 +577,19 @@ class GodCraft : public Scene
                 Transform * translation3 = new Transform(trans);
                 translation3->model = translation3->getMat4();
                 graphHand->apply(translation3);
+                
+                if(drag.pick)
+                {
+                    cout<<"OUI"<<endl;
+                    std::vector<pair<int,int>> chunksIds = map->findChunks(cube);
+                    for(auto& chunkId : chunksIds)
+                    {
+                        Chunk* chonky  =map->getChunk(chunkId.first,chunkId.second);
+                        if(chonky)
+                            chonky->hideCube(cube);
+                    }
+                   
+                }
                 
 
             }

@@ -395,6 +395,7 @@ class Chunk{
         if(status > 2){
             cout<<"hide cube : "<<cubePos<<endl;
             int cubeTohide = bendel[cubePos[0]][cubePos[1]][cubePos[2]];
+            cout<<getCube(cubePos)<<endl;
             ///////////////
             
             // cubes.erase(cubes.begin()+cubeTohide);

@@ -174,8 +174,6 @@ int init()
     // hide mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-    
-
 
     return 1;
 }
@@ -315,6 +313,18 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         drag.pressedRight = false;
         
     }
+
+        if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
+    {
+        drag.pick = true;
+    }
+        if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE)
+    {
+
+        drag.pick = false;
+        
+    }
+    
 }
 void mouse_cursor_callback( GLFWwindow * window, double xpos, double ypos)  
 {
@@ -429,8 +439,13 @@ void processInput(GLFWwindow *window)
     }
 
 
-     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
-        seaLevel -= deltaTime*0.5;
+     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
+        drag.pick = true;
+        //cout<<"seaLevel"<<seaLevel<<endl;
+    }
+    
+     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE){
+        drag.pick = false;
         //cout<<"seaLevel"<<seaLevel<<endl;
     }
 
@@ -451,6 +466,7 @@ void processInput(GLFWwindow *window)
         drag.push = true;
         //cout<<"seaLevel"<<seaLevel<<endl;
     }
+    
 
 
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS){

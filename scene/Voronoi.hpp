@@ -22,8 +22,8 @@ class Voronoi
         vector<VoronoiPoint> points;
         Voronoi()
         {
-            startingPoint = 200;
-            width=height = 1000;
+            startingPoint = 20;
+            width=height = 100;
             image.resize(height);
             idImage.resize(height);
             heightMap.resize(height);

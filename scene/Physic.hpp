@@ -6,10 +6,15 @@ class PhysicComponent
         // Position centre
         glm::vec3 position;
         glm::vec3 vitesse;
+        glm::vec3 force;
+        float mass;
+
         // Taille x,y,z
         glm::vec3 size; 
         bool fixed = true;
         glm::vec3 gravity;
+        
+
         PhysicComponent()
         {
 
@@ -20,6 +25,8 @@ class PhysicComponent
             this->position = glm::vec3(0.);
             this->size =     glm::vec3(0.);
             this->vitesse =  glm::vec3(0.);
+            this->force =  glm::vec3(0.);
+            this->mass = 10.;
             this->fixed = false;
         }
         void display()

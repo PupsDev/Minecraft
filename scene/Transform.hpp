@@ -7,12 +7,16 @@
 #include "glm/ext.hpp"
 #include "glm/gtx/string_cast.hpp"
 #include <iostream>
+#include <glm/gtc/quaternion.hpp> 
+#include <glm/gtx/quaternion.hpp>
 
 class Transform
 {
     public:
 
         glm::mat4 model;
+        quat cat;
+
 
         Transform()
         {
