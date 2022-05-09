@@ -222,7 +222,7 @@ int gameLoop(Scene* scene, GLuint GameObjectShader)
         }
         
 
-        scene->update();
+        //scene->update();
         camera_position = scene->camera->position;
         scene->draw();
         

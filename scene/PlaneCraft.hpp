@@ -12,15 +12,27 @@ class PlaneCraft : public Scene{
         //Game * game;
         PlaneCraft(){
             GLuint GameObjectShader = LoadShaders( "../scene/object_vertex_shader.glsl", "../scene/object_fragment_shader.glsl" );
+            
 
             avion = new Plane();
 
-            avion->loadMesh("avions/m2000V2.off");
-            avion->mesh.computeNormals();
+            //avion->loadMesh("avions/m2000V2.off");
+
+            LoaderObj loaderTree = LoaderObj("avions/m2000V2.obj");
+            avion->mesh = Mesh();
+            avion->mesh.indexed_vertices = loaderTree.vertices;
+            avion->mesh.indices =loaderTree.indices;
+            avion->mesh.normals =loaderTree.normals;
+            avion->mesh.uvs =loaderTree.textures;
+
+            avion->mesh.loadTexture2("m2000c.DDS");
+
+
+            //avion->mesh.computeNormals();
             avion->loadOnGpu(GameObjectShader);
 
-            planeBB = new BoundingBox();
-            planeBB->loadOnGpu(BoxShader);
+            //planeBB = new BoundingBox();
+            //planeBB->loadOnGpu(BoxShader);
 
             SceneGraphComposite* graphPlane = new SceneGraphComposite();
             //SceneGraphLeaf* graphPlaneBB = new SceneGraphLeaf();
@@ -42,7 +54,7 @@ class PlaneCraft : public Scene{
             
             add(avion);
 
-            loadSky();
+            //loadSky();
 
             // mapObj = new GameObject();
             // {        
@@ -210,7 +222,10 @@ class PlaneCraft : public Scene{
 
     void draw(){
         //avion->draw(camera);
-         for(auto & object : objects)
+        objects[0]->draw(camera);
+        
+        /*
+        for(auto & object : objects)
         {   
             if(object->wireframe)
             {
@@ -225,6 +240,7 @@ class PlaneCraft : public Scene{
             }
             
         }
+        */
     }
 
     bool intersect(glm::vec3 origin, glm::vec3 direction, glm::vec3 &cube){

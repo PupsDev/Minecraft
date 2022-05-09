@@ -32,7 +32,13 @@ public:
 
 	bool hand;
 
-	void draw(Camera* camera, Transform* parent = new Transform()){ 
+	void draw(Camera* camera, Transform* parent = new Transform()){
+
+		// if(t){
+		// 	cout<<"OK"<<endl;
+		// }else{
+		// 	cout<<"Paqs OK"<<endl;
+		// }
 
 
 		double cameraDistance = camera->getDistance(t->apply(vec3(0,0,0)));
