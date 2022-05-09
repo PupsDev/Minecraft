@@ -448,6 +448,13 @@ void processInput(GLFWwindow *window)
         drag.pick = false;
         //cout<<"seaLevel"<<seaLevel<<endl;
     }
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS){
+        drag.drop = true;
+    }
+    
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_RELEASE){
+        drag.drop = false;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
         seaLevel += deltaTime*0.5;
@@ -482,9 +489,7 @@ void processInput(GLFWwindow *window)
         kdistance-=0.1;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS){
-        kdistance+=0.1;
-    }
+
 
 
 }

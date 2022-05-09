@@ -413,6 +413,9 @@ class Chunk{
             reloadOnGpu(myProgId);
         }
     }
+    void add(ivec3 cubePos){
+        // \TAVU SYLVAIN TODO
+    }
 
     void reloadOnGpu(GLuint programID){
         glUseProgram(myProgId);

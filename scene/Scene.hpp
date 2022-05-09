@@ -13,6 +13,7 @@ typedef struct MOUSE{
 
     bool push;
     int pick = 0;
+    int drop = 0;
 }MOUSE;
 class Scene
 {

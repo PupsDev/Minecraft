@@ -450,6 +450,7 @@ class GodCraft : public Scene
             drag.pressedRight = mdrag.pressedRight;
             drag.push = mdrag.push;
             drag.pick = mdrag.pick;
+            drag.drop = mdrag.drop;
         }
         
         void update()
@@ -580,13 +581,45 @@ class GodCraft : public Scene
                 
                 if(drag.pick)
                 {
-                    cout<<"OUI"<<endl;
+                    cout<<"PICK"<<endl;
                     std::vector<pair<int,int>> chunksIds = map->findChunks(cube);
                     for(auto& chunkId : chunksIds)
                     {
                         Chunk* chonky  =map->getChunk(chunkId.first,chunkId.second);
-                        if(chonky)
-                            chonky->hideCube(cube);
+                        if(chonky->bendel.find(cube[0]) != chonky->bendel.end() )
+                        {
+                            if( chonky->bendel[cube[0]].find(cube[2]) != chonky->bendel[cube[0]].end() )
+                            {
+
+                                if( chonky->bendel[cube[0]][cube[2]].find(cube[1])!=chonky->bendel[cube[0]][cube[2]].end() )
+                                {
+                                    chonky->hideCube(ivec3(cube[0],cube[2],cube[1]));
+                                }
+                            }
+                        }
+                           
+                    }
+                   
+                }
+                if(drag.drop)
+                {
+                    cout<<"DROP"<<endl;
+                    std::vector<pair<int,int>> chunksIds = map->findChunks(cube);
+                    for(auto& chunkId : chunksIds)
+                    {
+                        Chunk* chonky  =map->getChunk(chunkId.first,chunkId.second);
+                        if(chonky->bendel.find(cube[0]) != chonky->bendel.end() )
+                        {
+                            if( chonky->bendel[cube[0]].find(cube[2]) != chonky->bendel[cube[0]].end() )
+                            {
+
+                                if( chonky->bendel[cube[0]][cube[2]].find(cube[1])!=chonky->bendel[cube[0]][cube[2]].end() )
+                                {
+                                    chonky->add(ivec3(cube[0],cube[2],cube[1]));
+                                }
+                            }
+                        }
+                           
                     }
                    
                 }
